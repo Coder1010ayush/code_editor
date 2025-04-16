@@ -31,7 +31,7 @@ const HomePage = () => {
 
             {/* Why Choose Us Section */}
             <section className={styles.features}>
-                <h1>Why Choose SparkX?</h1> {/* Changed from LeetCode Clone */}
+                <h1>Why Choose SparkX?</h1> 
                 <div className={styles.grid}>
                     {features.map((feature, index) => (
                         <div key={index} className={styles.gridItem}>
