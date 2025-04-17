@@ -9,20 +9,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer'; // Import Footer
 import HomePage from './pages/HomePage'; // Import HomePage if separated
 import ProblemsPage from './pages/ProblemsPage';
+import DashboardPage from './pages/DashBoard';
 
 // Keep DashboardPage and NotFoundPage (or move them to /pages too)
-const DashboardPage = () => {
-    const { user } = useAuth();
-    // Use traditional check if you didn't update react-scripts
-    const username = user && user.username ? user.username : 'User';
-    return (
-        <div style={{ minHeight: '60vh', padding: '20px' }}> {/* Ensure content pushes footer down */}
-            <h2>Dashboard</h2>
-            <p>Welcome back, {username}!</p>
-            {/* Dashboard content goes here */}
-        </div>
-    );
-};
 const NotFoundPage = () => <div style={{ minHeight: '60vh', textAlign: 'center', padding: '50px' }}><h1>404 - Page Not Found</h1></div>;
 
 // Placeholder pages for new nav links

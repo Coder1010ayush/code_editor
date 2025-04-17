@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './ProblemsPage.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'; 
+
 
 const ProblemsPage = () => {
     const [problems, setProblems] = useState([]);
@@ -48,21 +51,36 @@ const ProblemsPage = () => {
                     <option value="Arrays">Arrays</option>
                     <option value="Strings">Strings</option>
                     <option value="Dynamic Programming">Dynamic Programming</option>
-                    {/* Add more categories here */}
+                    <option value="Graph">Graph</option>
+                    <option value="Sorting">Sorting</option>
+                    <option value="Database">Database</option>
+                    <option value="Greedy">Greedy</option>
+                    <option value="Tees">Trees</option>
+                    <option value="Stack">Stack</option>
                 </select>
             </div>
 
             <div className={styles.problemList}>
                 {filteredProblems.map((problem, index) => (
                     <div key={problem._id} className={styles.card}>
-                        <Link to={`/problems/${problem._id}`} className={styles.cardTitle}>
-                            <h3>{problem.title}</h3>
+                       <Link to={`/problems/${problem._id}`} className={styles.cardTitle}>
+                            <h3>
+                                <FontAwesomeIcon icon={faPuzzlePiece} className={styles.icon} /> {/* Example */}
+                                {problem.title}
+                            </h3>
                         </Link>
                         <div className={styles.cardMeta}>
-                            <span className={styles[problem.difficulty.toLowerCase()]}>
+                            <span className={`${styles.difficulty} ${styles[problem.difficulty.toLowerCase()]}`}>
+                                {/* Example using a simple circle icon */}
+                                {problem.difficulty === 'Easy' && '🟢'}
+                                {problem.difficulty === 'Medium' && '🟡'}
+                                {problem.difficulty === 'Hard' && '🔴'}
                                 {problem.difficulty}
                             </span>
-                            <span className={styles.category}>{problem.category}</span>
+                            <span className={styles.category}>
+                                {/* You can add category-specific icons here similarly */}
+                                {problem.category}
+                            </span>
                         </div>
                     </div>
                 ))}

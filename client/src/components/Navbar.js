@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import styles from './Navbar.module.css'; // Use CSS Modules
+import {DashBoard} from '../pages/DashBoard';
 
 function Navbar() {
     const { user, logout, loading } = useAuth();
@@ -24,7 +25,7 @@ function Navbar() {
         if (user) {
             return (
                 <>
-                    <span className={styles.welcomeMessage}>Welcome, {user.username}!</span>
+                    <Link to="/DashBoard" className={styles.welcomeMessage} >Welcome, {user.username}!</Link>
                     <button onClick={handleLogout} className={`${styles.navButton} ${styles.logoutButton}`} disabled={loading}>
                         Logout
                     </button>

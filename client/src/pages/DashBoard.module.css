@@ -1,0 +1,161 @@
+.dashboardContainer {
+    display: flex;
+    background-color: #121212;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+.sidebar {
+    width: 260px;
+    background-color: #1e1e1e;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.profile {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.avatar {
+    font-size: 60px;
+    color: #6c6c6c;
+}
+
+.tag {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.rank {
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.editBtn {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #2a2a2a;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.stats, .languages, .skills {
+    margin-bottom: 1.5rem;
+}
+
+.stats h3, .languages h3, .skills h3 {
+    margin-bottom: 0.5rem;
+}
+
+.stats ul, .skills ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.stats li, .skills li {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.mainContent {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.progressSection {
+    display: flex;
+    gap: 1rem;
+}
+
+.progressCard, .badgeCard {
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    padding: 1rem;
+    flex: 1;
+}
+
+.solved {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.levels p {
+    font-size: 0.9rem;
+}
+
+.easy {
+    color: #00d395;
+}
+
+.medium {
+    color: #f4c430;
+}
+
+.hard {
+    color: #ff6b6b;
+}
+
+.badgeCard strong {
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.calendarSection {
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.calendar {
+    margin-top: 1rem;
+    background-color: #2a2a2a;
+    height: 120px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+}
+
+.submissionSection {
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.tabs {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.tabs button {
+    background: #2a2a2a;
+    border: none;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.tabs span {
+    margin-left: auto;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.noSubmissions {
+    text-align: center;
+    color: #666;
+}
