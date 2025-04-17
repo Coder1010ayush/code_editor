@@ -7,6 +7,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const problemRoutes = require('./routes/problemRoutes');
 
 // Load env vars
 dotenv.config();
@@ -56,6 +57,7 @@ dbConnectionPromise.then(mongooseConnection => {
 
     // --- Mount Routers ---
     app.use('/api/auth', authRoutes);
+    app.use('/api/problems', problemRoutes);
     // Add other routes here (e.g., for problems, submissions)
     // app.use('/api/problems', problemRoutes);
 

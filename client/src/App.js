@@ -8,6 +8,7 @@ import Register from './components/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer'; // Import Footer
 import HomePage from './pages/HomePage'; // Import HomePage if separated
+import ProblemsPage from './pages/ProblemsPage';
 
 // Keep DashboardPage and NotFoundPage (or move them to /pages too)
 const DashboardPage = () => {
@@ -25,7 +26,7 @@ const DashboardPage = () => {
 const NotFoundPage = () => <div style={{ minHeight: '60vh', textAlign: 'center', padding: '50px' }}><h1>404 - Page Not Found</h1></div>;
 
 // Placeholder pages for new nav links
-const ProblemsPage = () => <div style={{minHeight: '60vh', padding: '20px'}}><h2>Problems Page</h2><p>Problem listings would go here...</p></div>
+// const ProblemsPage = () => <div style={{minHeight: '60vh', padding: '20px'}}><h2>Problems Page</h2><p>Problem listings would go here...</p></div>
 const MockInterviewPage = () => <div style={{minHeight: '60vh', padding: '20px'}}><h2>Mock Interview Page</h2><p>Mock interview features would go here...</p></div>
 const ContestPage = () => <div style={{minHeight: '60vh', padding: '20px'}}><h2>Contest Page</h2><p>Contest listings/information would go here...</p></div>
 

@@ -14,6 +14,6 @@ export const logoutUser = () => api.post('/auth/logout');
 export const fetchCurrentUser = () => api.get('/auth/me');
 
 // You can add other API calls here (e.g., for problems)
-// export const fetchProblems = () => api.get('/problems');
+export const fetchProblems = () => api.get('/problems');
 
 export default api;
