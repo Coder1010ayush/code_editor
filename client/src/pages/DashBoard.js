@@ -73,6 +73,10 @@ import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 const DashboardPage = () => {
     const { user } = useAuth();
 
+    if (!user) {
+        return <div>Loading...</div>; // or a spinner
+    }
+
     return (
         <div className={styles.dashboardContainer}>
             {/* Left Sidebar */}
@@ -80,24 +84,32 @@ const DashboardPage = () => {
                 <div className={styles.profile}>
                     <FontAwesomeIcon icon={faUserCircle} className={styles.avatar} />
                     <h2>{user.username}</h2>
-                    <p className={styles.tag}>Internship</p>
-                    <p className={styles.rank}>Rank ~5,000,000</p>
+                    <p className={styles.tag}>Student</p>
+                    <p className={styles.rank}>Rank ~{user.rank ? user.rank : 'Unranked'}</p>
                     <button className={styles.editBtn}>Edit Profile</button>
                 </div>
 
                 <div className={styles.stats}>
                     <h3>Community Stats</h3>
                     <ul>
-                        <li>Views: <span>0</span></li>
-                        <li>Solutions: <span>0</span></li>
-                        <li>Discuss: <span>0</span></li>
-                        <li>Reputation: <span>0</span></li>
+                        <li>Views: <span>0</span></li> {/* You can make this dynamic later */}
+                        <li>Solutions: <span>{user.no_easy + user.no_med + user.no_hard}</span></li>
+                        <li>Discuss: <span>0</span></li> {/* Placeholder */}
+                        <li>Reputation: <span>0</span></li> {/* Placeholder */}
                     </ul>
                 </div>
 
                 <div className={styles.languages}>
                     <h3>Languages</h3>
-                    <p>Not enough data</p>
+                    {user.lang_used && user.lang_used.length > 0 ? (
+                        <ul>
+                            {user.lang_used.map((lang, index) => (
+                                <li key={index}>{lang}</li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>Not enough data</p>
+                    )}
                 </div>
 
                 <div className={styles.skills}>
@@ -115,23 +127,23 @@ const DashboardPage = () => {
                 <section className={styles.progressSection}>
                     <div className={styles.progressCard}>
                         <div className={styles.solved}>
-                            <p>0 / 3521</p>
+                            <p>{user.no_easy + user.no_med + user.no_hard} / 3521</p>
                             <span>Solved</span>
                         </div>
                         <div className={styles.levels}>
-                            <p><span className={styles.easy}>Easy:</span> 0 / 873</p>
-                            <p><span className={styles.medium}>Medium:</span> 0 / 1826</p>
-                            <p><span className={styles.hard}>Hard:</span> 0 / 822</p>
+                            <p><span className={styles.easy}>Easy:</span> {user.no_easy} / 873</p>
+                            <p><span className={styles.medium}>Medium:</span> {user.no_med} / 1826</p>
+                            <p><span className={styles.hard}>Hard:</span> {user.no_hard} / 822</p>
                         </div>
                     </div>
                     <div className={styles.badgeCard}>
                         <p>Locked Badge</p>
-                        <strong>Apr LeetCoding Challenge</strong>
+                        <strong>Apr Coding Challenge</strong>
                     </div>
                 </section>
 
                 <section className={styles.calendarSection}>
-                    <h3>0 submissions in the past one year</h3>
+                    <h3>{user.submissions ? user.submissions.length : 0} submissions in the past one year</h3>
                     <div className={styles.calendar}>
                         {/* Implement heatmap here */}
                         Calendar Placeholder
