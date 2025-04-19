@@ -397,12 +397,12 @@ const CodeEditorPage = () => {
                                             <pre className={styles.exampleCode}>{ex.output}</pre>
                                         </div>
                                     )}
-                                     {ex.explanation && (
+                                     {ex.explanation ? (
                                         <div className={styles.exampleExplanation}>
                                             <strong>Explanation:</strong>
                                             <p>{ex.explanation}</p>
                                         </div>
-                                    )}
+                                    ) : null}
                                 </div>
                             ))}
                         </div>
@@ -423,7 +423,7 @@ const CodeEditorPage = () => {
                     {problem.description?.extra && (
                         <div className={styles.descriptionExtra}>
                             {/* Check if label needed */}
-                            {problem.description.example || problem.description.constraints ? <h3>Follow-up</h3> : null}
+                            {problem.description.example || problem.description.extra ? <h3>Follow-up</h3> : null}
                             <p>{problem.description.extra}</p>
                         </div>
                     )}
