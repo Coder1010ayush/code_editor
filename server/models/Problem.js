@@ -6,11 +6,7 @@ const ProblemSchema = new mongoose.Schema({
     title: String,
     question: String,
     descr: String,
-    test_cases: {
-            type: [mongoose.Schema.Types.ObjectId],
-            ref: 'TestCases',
-            default: [],
-        },
+    test_cases: [mongoose.Schema.Types.Mixed],
     difficulty: String,
     category: String,
 });

@@ -1,0 +1,520 @@
+/* Editor.module.css */
+
+/* --- CSS Variables for Theming --- */
+/* Default (Dark Mode) Variables */
+:root {
+    --bg-primary: #1e1e1e; /* Main background, editor background */
+    --bg-secondary: #252526; /* Panel backgrounds, borders inside elements */
+    --bg-tertiary: #3c3c3c; /* Hover/Active states, subtle separators */
+    --text-primary: #cccccc; /* Main text color */
+    --text-secondary: #9cdcfe; /* Code-like text, secondary info */
+    --border-color: #333333; /* Major panel borders, separators */
+    --scrollbar-thumb: #5a5a5a;
+    --scrollbar-track: #2d2d30;
+  
+    --button-bg-run: #4CAF50; /* Green */
+    --button-text-run: white;
+    --button-bg-submit: #2196F3; /* Blue */
+    --button-text-submit: white;
+    --button-bg-disabled: #555;
+    --button-text-disabled: #aaa;
+  
+    --tab-inactive-text: #aaa;
+    --tab-active-text: #cccccc;
+    --tab-border-bottom-active: #2196F3; /* Blue accent for active tab */
+  
+    --difficulty-easy-bg: #4CAF50;
+    --difficulty-easy-text: white;
+    --difficulty-medium-bg: #FFC107;
+    --difficulty-medium-text: #333;
+    --difficulty-hard-bg: #F44336;
+    --difficulty-hard-text: white;
+  
+     /* Test Case Status Colors */
+    --test-passed: #4CAF50; /* Green */
+    --test-failed: #F44336; /* Red */
+    --test-running: #FFC107; /* Yellow */
+    --test-pending: #aaa; /* Gray */
+    --test-error: #F44336; /* Red */
+  }
+  
+  /* White Mode Variables (Override defaults when .whiteMode class is applied) */
+  .whiteMode {
+    --bg-primary: #ffffff; /* Editor background, main background */
+    --bg-secondary: #f3f3f3; /* Panel backgrounds, borders inside elements */
+    --bg-tertiary: #e0e0e0; /* Hover/Active states, subtle separators */
+    --text-primary: #333333; /* Main text color */
+    --text-secondary: #007acc; /* Code-like text, secondary info */
+    --border-color: #dddddd; /* Major panel borders, separators */
+    --scrollbar-thumb: #bbbbbb;
+    --scrollbar-track: #f0f0f0;
+  
+    --button-bg-run: #e8f5e9; /* Light Green */
+    --button-text-run: #2e7d32; /* Dark Green */
+    --button-bg-submit: #e3f2fd; /* Light Blue */
+    --button-text-submit: #1565c0; /* Dark Blue */
+    --button-bg-disabled: #eee;
+    --button-text-disabled: #999;
+  
+    --tab-inactive-text: #666;
+    --tab-active-text: #333;
+    --tab-border-bottom-active: #1565c0; /* Darker Blue accent */
+  
+    /* Difficulty colors might need adjustment for contrast on light background */
+     --difficulty-easy-bg: #a5d6a7; /* Lighter Green */
+     --difficulty-easy-text: #1b5e20; /* Darker Green */
+     --difficulty-medium-bg: #ffecb3; /* Lighter Yellow */
+     --difficulty-medium-text: #ff6f00; /* Darker Orange */
+     --difficulty-hard-bg: #ef9a9a; /* Lighter Red */
+     --difficulty-hard-text: #b71c1c; /* Darker Red */
+  
+      /* Test Case Status Colors - might need adjustment for white background */
+      --test-passed: #2e7d32; /* Dark Green */
+      --test-failed: #b71c1c; /* Dark Red */
+      --test-running: #ef6c00; /* Dark Orange */
+      --test-pending: #666; /* Dark Gray */
+       --test-error: #b71c1c; /* Dark Red */
+  }
+  
+  /* --- Layout and General Styles --- */
+  .editorLayout {
+    display: flex;
+    height: calc(100vh - var(--header-height, 50px)); /* Adjust based on actual header height */
+    background-color: var(--bg-primary); /* Use primary background variable */
+    color: var(--text-primary); /* Use primary text color variable */
+    overflow: hidden; /* Prevent layout overflow */
+    font-family: sans-serif; /* Or your preferred font */
+    line-height: 1.6;
+  }
+  
+  .leftPanel, .rightPanel {
+    flex: 1; /* Take equal space initially */
+    padding: 20px;
+    overflow-y: auto; /* Scroll individual panels */
+    background-color: var(--bg-secondary); /* Use secondary background variable */
+    border-right: 1px solid var(--border-color); /* Separator */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  }
+  
+  .rightPanel {
+      display: flex;
+      flex-direction: column;
+      border-right: none; /* No border on the rightmost panel */
+      box-sizing: border-box;
+  }
+  
+  /* --- Left Panel (Problem Description) Styles --- */
+  .leftPanel h1 {
+      margin-top: 0;
+      color: var(--text-primary); /* Ensure heading uses text color */
+      font-size: 1.8em;
+      margin-bottom: 10px;
+  }
+  
+  .meta {
+      margin-bottom: 15px;
+      font-size: 0.9em;
+      color: var(--text-primary); /* Ensure meta uses text color */
+      display: flex; /* Use flexbox for layout */
+      align-items: center;
+      gap: 10px; /* Space between meta items */
+  }
+  
+  .difficulty {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.9em;
+      text-transform: capitalize; /* Capitalize difficulty */
+  }
+  
+  .difficulty.difficultyeasy {
+      background-color: var(--difficulty-easy-bg);
+      color: var(--difficulty-easy-text);
+  }
+  
+  .difficulty.difficultymedium {
+      background-color: var(--difficulty-medium-bg);
+      color: var(--difficulty-medium-text);
+  }
+  
+  .difficulty.difficultyhard {
+      background-color: var(--difficulty-hard-bg);
+      color: var(--difficulty-hard-text);
+  }
+  
+  .category {
+      display: inline-block;
+      padding: 4px 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 0.9em;
+      color: var(--text-primary);
+  }
+  
+  
+  .description {
+      line-height: 1.6;
+      color: var(--text-primary); /* Ensure description uses text color */
+       /* Basic styling for potential HTML content */
+      & h2, & h3 {
+          color: var(--text-primary);
+          margin-top: 1.5em;
+          margin-bottom: 0.5em;
+          border-bottom: 1px solid var(--border-color);
+          padding-bottom: 5px;
+      }
+      & p {
+          margin-bottom: 1em;
+      }
+      & code {
+          background-color: var(--bg-primary); /* Use primary background for inline code */
+          padding: 2px 4px;
+          border-radius: 3px;
+          font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+          font-size: 0.9em;
+           color: var(--text-secondary); /* Use secondary text for code */
+      }
+      & pre {
+           background-color: var(--bg-primary); /* Use primary background for code blocks */
+           padding: 10px;
+           border-radius: 4px;
+           overflow-x: auto;
+           white-space: pre-wrap;
+           word-wrap: break-word;
+           font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+           font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 1em;
+      }
+      & ul, & ol {
+          margin-bottom: 1em;
+          padding-left: 20px;
+      }
+      & li {
+           margin-bottom: 0.5em;
+      }
+  }
+  
+  /* --- Right Panel (Editor & Results) Styles --- */
+  .editorControls {
+      display: flex;
+      justify-content: space-between; /* Space between theme toggle and language selector */
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 10px;
+  }
+  
+  .themeToggle {
+      background: none;
+      border: none;
+      color: var(--text-primary); /* Use primary text color */
+      cursor: pointer;
+      font-size: 1.2em;
+      padding: 5px;
+      border-radius: 4px;
+      transition: background-color 0.2s ease;
+      display: flex; /* Center icon */
+      align-items: center;
+      justify-content: center;
+  }
+  
+  .themeToggle:hover {
+       background-color: var(--bg-tertiary); /* Subtle hover effect */
+  }
+  
+  
+  .languageSelector {
+      display: flex;
+      align-items: center;
+      gap: 8px; /* Space between label and select */
+  }
+  
+  .languageSelector label {
+      color: var(--text-primary);
+      font-size: 0.9em;
+  }
+  
+  .languageSelector select {
+      padding: 5px 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background-color: var(--bg-secondary); /* Match panel background */
+      color: var(--text-primary); /* Use primary text color */
+      cursor: pointer;
+      outline: none; /* Remove default outline */
+      font-size: 0.9em;
+  }
+  
+  .languageSelector select:focus {
+      border-color: var(--tab-border-bottom-active); /* Accent color on focus */
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--tab-border-bottom-active) 50%, transparent); /* Subtle glow */
+  }
+  
+  
+  .editorContainer {
+      flex-grow: 1; /* Take remaining height */
+      margin-bottom: 15px;
+      border: 1px solid var(--border-color); /* Border around editor */
+      overflow: hidden; /* Contains Monaco's potentially complex layout */
+      border-radius: 5px; /* Slightly rounded corners */
+  }
+  
+  .editorPlaceholder {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      font-size: 1.2em;
+      color: var(--text-secondary); /* Use secondary text color */
+      background-color: var(--bg-primary); /* Match editor background */
+  }
+  
+  .resultsPanel {
+      height: 250px; /* Fixed height for results area */
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid var(--border-color);
+      background-color: var(--bg-secondary); /* Match panel background */
+      border-radius: 5px; /* Slightly rounded corners */
+       overflow: hidden; /* Contains children within rounded corners */
+  }
+  
+  .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+  }
+  
+  .tabButton {
+      background: none;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1em;
+      color: var(--tab-inactive-text); /* Use inactive tab text color */
+      border-bottom: 2px solid transparent; /* Space for active indicator */
+      transition: color 0.2s ease, border-bottom-color 0.2s ease, background-color 0.2s ease;
+      flex-grow: 1; /* Make tabs fill space */
+      text-align: center;
+      display: flex; /* Center icon and text */
+      align-items: center;
+      justify-content: center;
+      gap: 8px; /* Space between icon and text */
+  }
+  
+  .tabButton:hover:not(.tabButtonActive) {
+       background-color: var(--bg-tertiary); /* Subtle hover effect */
+       color: var(--tab-active-text); /* Darker on hover */
+  }
+  
+  
+  .tabButtonActive {
+      color: var(--tab-active-text); /* Use active tab text color */
+      border-bottom-color: var(--tab-border-bottom-active); /* Use active tab border color */
+      font-weight: bold;
+       background-color: var(--bg-tertiary); /* Slightly different background for active tab */
+  }
+  
+  .tabContent {
+      flex-grow: 1;
+      padding: 15px;
+      overflow-y: auto; /* Scroll results content */
+      font-size: 0.9em;
+      color: var(--text-primary); /* Use primary text color */
+       white-space: pre-wrap; /* Handle wrapping for general text in content */
+       word-wrap: break-word;
+  }
+  
+  .consoleOutput {
+      white-space: pre-wrap; /* Preserve whitespace and wrap lines */
+      word-wrap: break-word; /* Break long words */
+      font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; /* Monospaced font */
+      margin: 0; /* Remove default pre margin */
+      color: var(--text-primary); /* Ensure console text uses color */
+      font-size: 1em; /* Adjust font size if needed */
+  }
+  
+  .testCaseItem {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      background-color: var(--bg-primary); /* Slightly different background */
+  }
+  
+  .testCaseItem:last-child {
+      margin-bottom: 0; /* Remove margin for the last item */
+  }
+  
+  .testCaseItem h4 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: var(--text-primary); /* Ensure heading uses text color */
+      font-size: 1em;
+  }
+  
+  /* Test case status text colors using variables and classes */
+  .testCaseItem .testStatus_pending { color: var(--test-pending); }
+  .testCaseItem .testStatus_running { color: var(--test-running); }
+  .testCaseItem .testStatus_passed { color: var(--test-passed); }
+  .testCaseItem .testStatus_failed { color: var(--test-failed); }
+  .testCaseItem .testStatus_error { color: var(--test-error); }
+  
+  
+  .testCaseItem pre {
+       background-color: var(--bg-secondary); /* Match panel background for pre */
+       padding: 10px;
+       border-radius: 4px;
+       overflow-x: auto; /* Add horizontal scroll for long inputs/outputs */
+       white-space: pre-wrap; /* Wrap lines */
+       word-wrap: break-word;
+       font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+       font-size: 0.9em;
+        color: var(--text-secondary); /* Use secondary text color for code blocks */
+        margin-top: 5px; /* Small margin above pre blocks */
+        margin-bottom: 10px; /* Small margin below pre blocks */
+  }
+  .testCaseItem pre:last-child {
+      margin-bottom: 0; /* Remove margin if pre is the last element */
+  }
+  
+  
+  .actionButtons {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 15px; /* Add padding around buttons */
+      border-top: 1px solid var(--border-color);
+      gap: 10px; /* Space between buttons */
+      background-color: var(--bg-secondary); /* Match panel background */
+  }
+  
+  .button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s ease, opacity 0.2s ease;
+      font-weight: bold;
+  }
+  
+  .runButton {
+      background-color: var(--button-bg-run);
+      color: var(--button-text-run);
+  }
+  
+  .runButton:hover:not(:disabled) {
+      /* Subtle color change on hover */
+      background-color: color-mix(in srgb, var(--button-bg-run) 90%, black 10%);
+  }
+  
+  .submitButton {
+      background-color: var(--button-bg-submit);
+      color: var(--button-text-submit);
+  }
+  
+  .submitButton:hover:not(:disabled) {
+       /* Subtle color change on hover */
+      background-color: color-mix(in srgb, var(--button-bg-submit) 90%, black 10%);
+  }
+  
+  .button:disabled {
+      background-color: var(--button-bg-disabled);
+      color: var(--button-text-disabled);
+      cursor: not-allowed;
+      opacity: 0.6;
+  }
+  
+  .icon {
+      /* Icons within buttons/tabs/loading */
+  }
+  
+  
+  /* --- Scrollbar Styling (Optional but nice) --- */
+  /* Target Webkit browsers (Chrome, Safari) */
+  .leftPanel::-webkit-scrollbar,
+  .tabContent::-webkit-scrollbar,
+  .consoleOutput::-webkit-scrollbar,
+  .testCaseItem pre::-webkit-scrollbar {
+    width: 8px;
+    height: 8px; /* For horizontal scrollbars */
+  }
+  
+  .leftPanel::-webkit-scrollbar-track,
+  .tabContent::-webkit-scrollbar-track,
+  .consoleOutput::-webkit-scrollbar-track,
+  .testCaseItem pre::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+  
+  .leftPanel::-webkit-scrollbar-thumb,
+  .tabContent::-webkit-scrollbar-thumb,
+  .consoleOutput::-webkit-scrollbar-thumb,
+  .testCaseItem pre::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+  }
+  
+  .leftPanel::-webkit-scrollbar-thumb:hover,
+  .tabContent::-webkit-scrollbar-thumb:hover,
+  .consoleOutput::-webkit-scrollbar-thumb:hover,
+  .testCaseItem pre::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--scrollbar-thumb) 80%, white 20%); /* Lighten on hover */
+  }
+  
+  /* Firefox scrollbar styling */
+  .leftPanel,
+  .tabContent,
+  .consoleOutput,
+  .testCaseItem pre {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+  
+  
+  /* --- Loading and Error States --- */
+  .loading, .errorContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - var(--header-height, 50px));
+    font-size: 1.5em;
+    color: var(--text-primary);
+    background-color: var(--bg-secondary); /* Match panel background */
+  }
+  
+  .loading .icon {
+      margin-bottom: 15px;
+      font-size: 2em;
+      color: var(--tab-border-bottom-active); /* Use accent color for loading spinner */
+  }
+  
+  
+  .errorContainer {
+      padding: 20px;
+      box-sizing: border-box;
+  }
+  
+  .error {
+      color: var(--test-failed); /* Use failure color for errors */
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+  }
+  
+  .backLink {
+      color: var(--tab-border-bottom-active); /* Use accent color for links */
+      text-decoration: none;
+      font-size: 1em;
+      transition: text-decoration 0.2s ease;
+  }
+  
+  .backLink:hover {
+      text-decoration: underline;
+  }

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // No need for useLocation now
 import styles from './ProblemsPage.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons'; 
+import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
 
 
 const ProblemsPage = () => {
-    const [problems, setProblems] = useState([]);
+    // ... (filters state and useEffect fetch are the same) ...
+     const [problems, setProblems] = useState([]);
     const [filters, setFilters] = useState({
         difficulty: '',
         category: ''
@@ -19,19 +20,22 @@ const ProblemsPage = () => {
             .catch(err => console.error('Error fetching problems:', err));
     }, []);
 
-    const filteredProblems = problems.filter(problem => {
+     const filteredProblems = problems.filter(problem => {
         return (
             (filters.difficulty ? problem.difficulty.toLowerCase() === filters.difficulty : true) &&
             (filters.category ? problem.category === filters.category : true)
         );
     });
 
+
     return (
         <div className={styles.container}>
+            {/* ... (heading and filters are the same) ... */}
             <h1 className={styles.heading}>All Coding Problems</h1>
 
             <div className={styles.filters}>
-                <select
+                 {/* ... filter selects ... */}
+                 <select
                     className={styles.filterSelect}
                     onChange={(e) => setFilters({ ...filters, difficulty: e.target.value })}
                     value={filters.difficulty}
@@ -55,20 +59,24 @@ const ProblemsPage = () => {
                     <option value="Sorting">Sorting</option>
                     <option value="Database">Database</option>
                     <option value="Greedy">Greedy</option>
-                    <option value="Tees">Trees</option>
+                    <option value="Trees">Trees</option>
                     <option value="Stack">Stack</option>
                 </select>
             </div>
 
+
             <div className={styles.problemList}>
                 {filteredProblems.map((problem, index) => (
                     <div key={problem._id} className={styles.card}>
-                       <Link to={`/problems/${problem._id}`} className={styles.cardTitle}>
+                       {/* CHANGE THIS LINK BACK TO USE THE PROBLEM ID IN THE PATH */}
+                       {/* Use template literals to insert the ID */}
+                       <Link to={`/editor/${problem._id}`} className={styles.cardTitle}>
                             <h3>
-                                <FontAwesomeIcon icon={faPuzzlePiece} className={styles.icon} /> {/* Example */}
+                                <FontAwesomeIcon icon={faPuzzlePiece} className={styles.icon} />
                                 {problem.title}
                             </h3>
                         </Link>
+                        {/* ... rest of the card meta ... */}
                         <div className={styles.cardMeta}>
                             <span className={`${styles.difficulty} ${styles[problem.difficulty.toLowerCase()]}`}>
                                 {/* Example using a simple circle icon */}

@@ -10,6 +10,8 @@ import Footer from './components/Footer'; // Import Footer
 import HomePage from './pages/HomePage'; // Import HomePage if separated
 import ProblemsPage from './pages/ProblemsPage';
 import DashboardPage from './pages/DashBoard';
+// import CodeEditorPage from './pages/Editor';
+import CodeEditorPage from './pages/Editor';
 
 // Keep DashboardPage and NotFoundPage (or move them to /pages too)
 const NotFoundPage = () => <div style={{ minHeight: '60vh', textAlign: 'center', padding: '50px' }}><h1>404 - Page Not Found</h1></div>;
@@ -48,6 +50,11 @@ function App() {
                     <Route element={<ProtectedRoute />}>
                         <Route path="/dashboard" element={<DashboardPage />} />
                         {/* Add other protected routes here (e.g., user profile) */}
+                    </Route>
+
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="/editor/:problemId" element={<CodeEditorPage />} />
+                        {/* Add other protected routes here */}
                     </Route>
 
                     {/* Catch-all Not Found Route */}
