@@ -1,481 +1,671 @@
 /* Editor.module.css */
 
-/* --- CSS Variables for Theming --- */
-/* Default (Dark Mode) Variables */
-:root {
-    --bg-primary: #1e1e1e; /* Main background, editor background */
-    --bg-secondary: #252526; /* Panel backgrounds, borders inside elements */
-    --bg-tertiary: #3c3c3c; /* Hover/Active states, subtle separators */
-    --text-primary: #cccccc; /* Main text color */
-    --text-secondary: #9cdcfe; /* Code-like text, secondary info */
-    --border-color: #333333; /* Major panel borders, separators */
-    --scrollbar-thumb: #5a5a5a;
-    --scrollbar-track: #2d2d30;
-  
-    --button-bg-run: #4CAF50; /* Green */
-    --button-text-run: white;
-    --button-bg-submit: #2196F3; /* Blue */
-    --button-text-submit: white;
-    --button-bg-disabled: #555;
-    --button-text-disabled: #aaa;
-  
-    --tab-inactive-text: #aaa;
-    --tab-active-text: #cccccc;
-    --tab-border-bottom-active: #2196F3; /* Blue accent for active tab */
-  
-    --difficulty-easy-bg: #4CAF50;
-    --difficulty-easy-text: white;
-    --difficulty-medium-bg: #FFC107;
-    --difficulty-medium-text: #333;
-    --difficulty-hard-bg: #F44336;
-    --difficulty-hard-text: white;
-  
-     /* Test Case Status Colors */
-    --test-passed: #4CAF50; /* Green */
-    --test-failed: #F44336; /* Red */
-    --test-running: #FFC107; /* Yellow */
-    --test-pending: #aaa; /* Gray */
-    --test-error: #F44336; /* Red */
-  }
-  
-  /* White Mode Variables (Override defaults when .whiteMode class is applied) */
-  .whiteMode {
-    --bg-primary: #ffffff; /* Editor background, main background */
-    --bg-secondary: #f3f3f3; /* Panel backgrounds, borders inside elements */
-    --bg-tertiary: #e0e0e0; /* Hover/Active states, subtle separators */
-    --text-primary: #333333; /* Main text color */
-    --text-secondary: #007acc; /* Code-like text, secondary info */
-    --border-color: #dddddd; /* Major panel borders, separators */
-    --scrollbar-thumb: #bbbbbb;
-    --scrollbar-track: #f0f0f0;
-  
-    --button-bg-run: #e8f5e9; /* Light Green */
-    --button-text-run: #2e7d32; /* Dark Green */
-    --button-bg-submit: #e3f2fd; /* Light Blue */
-    --button-text-submit: #1565c0; /* Dark Blue */
-    --button-bg-disabled: #eee;
-    --button-text-disabled: #999;
-  
-    --tab-inactive-text: #666;
-    --tab-active-text: #333;
-    --tab-border-bottom-active: #1565c0; /* Darker Blue accent */
-  
-    /* Difficulty colors might need adjustment for contrast on light background */
-     --difficulty-easy-bg: #a5d6a7; /* Lighter Green */
-     --difficulty-easy-text: #1b5e20; /* Darker Green */
-     --difficulty-medium-bg: #ffecb3; /* Lighter Yellow */
-     --difficulty-medium-text: #ff6f00; /* Darker Orange */
-     --difficulty-hard-bg: #ef9a9a; /* Lighter Red */
-     --difficulty-hard-text: #b71c1c; /* Darker Red */
-  
-      /* Test Case Status Colors - might need adjustment for white background */
-      --test-passed: #2e7d32; /* Dark Green */
-      --test-failed: #b71c1c; /* Dark Red */
-      --test-running: #ef6c00; /* Dark Orange */
-      --test-pending: #666; /* Dark Gray */
-       --test-error: #b71c1c; /* Dark Red */
-  }
-  
-  /* --- Layout and General Styles --- */
-  .editorLayout {
+/* --- Base Layout --- */
+.editorLayout {
     display: flex;
-    height: calc(100vh - var(--header-height, 50px)); /* Adjust based on actual header height */
-    background-color: var(--bg-primary); /* Use primary background variable */
-    color: var(--text-primary); /* Use primary text color variable */
-    overflow: hidden; /* Prevent layout overflow */
-    font-family: sans-serif; /* Or your preferred font */
-    line-height: 1.6;
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    overflow: hidden; /* Prevent body scroll */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --border-color-light: #dee2e6;
+    --border-color-dark: #3f444e;
+    --left-panel-bg-light: #ffffff;
+    --left-panel-text-light: #212529;
+    --left-panel-bg-dark: #282c34;
+    --left-panel-text-dark: #abb2bf;
+    --example-bg-light: #f8f9fa;
+    --example-border-light: #e9ecef;
+    --code-bg-light: #e9ecef;
+    --code-text-light: #343a40;
+    --example-bg-dark: #31363f;
+    --example-border-dark: #3f444e;
+    --code-bg-dark: #21252b;
+    --code-text-dark: #dcdfe4;
+    --results-bg-light: #f8f9fa;
+    --results-bg-dark: #21252b;
+    --results-text-light: #212529;
+    --results-text-dark: #abb2bf;
+    --tab-border-light: #dee2e6;
+    --tab-border-dark: #3f444e;
+    --tab-active-bg-light: #ffffff;
+    --tab-active-bg-dark: #282c34;
+    --tab-inactive-bg-light: #e9ecef;
+    --tab-inactive-bg-dark: #31363f;
+    --button-run-bg-light: #28a745;
+    --button-run-hover-light: #218838;
+    --button-submit-bg-light: #007bff;
+    --button-submit-hover-light: #0056b3;
+    --button-run-bg-dark: #2a9d8f;
+    --button-run-hover-dark: #248a7f;
+    --button-submit-bg-dark: #4a90e2;
+    --button-submit-hover-dark: #3a7bc8;
+    --status-passed-text-light: #155724;
+    --status-passed-bg-light: #d4edda;
+    --status-passed-border-light: #c3e6cb;
+    --status-failed-text-light: #721c24;
+    --status-failed-bg-light: #f8d7da;
+    --status-failed-border-light: #f5c6cb;
+    --status-running-text-light: #004085;
+    --status-running-bg-light: #cce5ff;
+    --status-running-border-light: #b8daff;
+    --status-error-text-light: #721c24;
+    --status-error-bg-light: #f8d7da;
+    --status-error-border-light: #f5c6cb; /* Same as failed */
+    --status-pending-text-light: #383d41;
+    --status-pending-bg-light: #e2e3e5;
+    --status-pending-border-light: #d6d8db;
+    --status-passed-text-dark: #a3e9a4;
+    --status-passed-bg-dark: #2e4c30;
+    --status-passed-border-dark: #4a7f4c;
+    --status-failed-text-dark: #f8b4b7;
+    --status-failed-bg-dark: #5d2a2a;
+    --status-failed-border-dark: #9e4f4f;
+    --status-running-text-dark: #a6d8ff;
+    --status-running-bg-dark: #2a4b6e;
+    --status-running-border-dark: #4f7cae;
+    --status-error-text-dark: #f8b4b7; /* Same as failed */
+    --status-error-bg-dark: #5d2a2a;
+    --status-error-border-dark: #9e4f4f;
+    --status-pending-text-dark: #adb5bd;
+    --status-pending-bg-dark: #343a40;
+    --status-pending-border-dark: #495057;
+  
   }
   
-  .leftPanel, .rightPanel {
-    flex: 1; /* Take equal space initially */
-    padding: 20px;
-    overflow-y: auto; /* Scroll individual panels */
-    background-color: var(--bg-secondary); /* Use secondary background variable */
-    border-right: 1px solid var(--border-color); /* Separator */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  .darkMode {
+    background-color: var(--left-panel-bg-dark); /* Base dark background */
+  }
+  
+  .whiteMode {
+    background-color: var(--left-panel-bg-light); /* Base light background */
+  }
+  
+  .leftPanel {
+    width: 45%; /* Adjust width as needed */
+    padding: 25px;
+    overflow-y: auto; /* Enable scrolling for long descriptions */
+    border-right: 1px solid var(--border-color-light);
+    height: 100%;
+    background-color: var(--left-panel-bg-light);
+    color: var(--left-panel-text-light);
   }
   
   .rightPanel {
-      display: flex;
-      flex-direction: column;
-      border-right: none; /* No border on the rightmost panel */
-      box-sizing: border-box;
+    width: 55%; /* Adjust width as needed */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+     background-color: var(--results-bg-light); /* Match results panel bg */
   }
   
-  /* --- Left Panel (Problem Description) Styles --- */
-  .leftPanel h1 {
-      margin-top: 0;
-      color: var(--text-primary); /* Ensure heading uses text color */
-      font-size: 1.8em;
-      margin-bottom: 10px;
+  .darkMode .leftPanel {
+    background-color: var(--left-panel-bg-dark);
+    color: var(--left-panel-text-dark);
+    border-right-color: var(--border-color-dark);
+  }
+  .darkMode .rightPanel {
+     background-color: var(--results-bg-dark); /* Match results panel bg */
+  }
+  
+  
+  /* --- Left Panel: Problem Description --- */
+  
+  .title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.8em;
+    font-weight: 600;
+    color: inherit; /* Inherit from panel */
   }
   
   .meta {
-      margin-bottom: 15px;
-      font-size: 0.9em;
-      color: var(--text-primary); /* Ensure meta uses text color */
-      display: flex; /* Use flexbox for layout */
-      align-items: center;
-      gap: 10px; /* Space between meta items */
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    gap: 10px 15px; /* Row and column gap */
+    align-items: center;
   }
   
   .difficulty {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 0.9em;
-      text-transform: capitalize; /* Capitalize difficulty */
+    padding: 4px 10px;
+    border-radius: 12px; /* Pill shape */
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid transparent;
   }
+  /* Specific difficulty styles */
+  .difficultyeasy { background-color: #d4edda; color: #155724; border-color: #c3e6cb;}
+  .difficultymedium { background-color: #fff3cd; color: #856404; border-color: #ffeeba;}
+  .difficultyhard { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;}
+  .difficultyDefault { background-color: #e2e3e5; color: #383d41; border-color: #d6d8db; } /* Fallback */
   
-  .difficulty.difficultyeasy {
-      background-color: var(--difficulty-easy-bg);
-      color: var(--difficulty-easy-text);
-  }
-  
-  .difficulty.difficultymedium {
-      background-color: var(--difficulty-medium-bg);
-      color: var(--difficulty-medium-text);
-  }
-  
-  .difficulty.difficultyhard {
-      background-color: var(--difficulty-hard-bg);
-      color: var(--difficulty-hard-text);
-  }
+  .darkMode .difficultyeasy { background-color: #2e4c30; color: #a3e9a4; border-color: #4a7f4c;}
+  .darkMode .difficultymedium { background-color: #66512c; color: #ffe8a1; border-color: #a17d48;}
+  .darkMode .difficultyhard { background-color: #5d2a2a; color: #f8b4b7; border-color: #9e4f4f;}
+  .darkMode .difficultyDefault { background-color: #343a40; color: #adb5bd; border-color: #495057; }
   
   .category {
-      display: inline-block;
-      padding: 4px 8px;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      font-size: 0.9em;
-      color: var(--text-primary);
+      background-color: #e2e3e5;
+      color: #383d41;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8em;
+      font-weight: 500;
+  }
+  
+  .darkMode .category {
+      background-color: #495057;
+      color: #ced4da;
+  }
+  
+  /* Structured Description Styles */
+  .descriptionContainer {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin-top: 15px;
+  }
+  
+  .descriptionContainer code { /* Style for inline code like `nums` */
+    background-color: var(--code-bg-light);
+    color: var(--code-text-light);
+    padding: 0.2em 0.4em;
+    margin: 0 2px;
+    font-size: 85%;
+    border-radius: 3px;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  
+  .darkMode .descriptionContainer code {
+    background-color: var(--code-bg-dark);
+    color: var(--code-text-dark);
   }
   
   
-  .description {
-      line-height: 1.6;
-      color: var(--text-primary); /* Ensure description uses text color */
-       /* Basic styling for potential HTML content */
-      & h2, & h3 {
-          color: var(--text-primary);
-          margin-top: 1.5em;
-          margin-bottom: 0.5em;
-          border-bottom: 1px solid var(--border-color);
-          padding-bottom: 5px;
-      }
-      & p {
-          margin-bottom: 1em;
-      }
-      & code {
-          background-color: var(--bg-primary); /* Use primary background for inline code */
-          padding: 2px 4px;
-          border-radius: 3px;
-          font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-          font-size: 0.9em;
-           color: var(--text-secondary); /* Use secondary text for code */
-      }
-      & pre {
-           background-color: var(--bg-primary); /* Use primary background for code blocks */
-           padding: 10px;
-           border-radius: 4px;
-           overflow-x: auto;
-           white-space: pre-wrap;
-           word-wrap: break-word;
-           font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-           font-size: 0.9em;
-            color: var(--text-secondary);
-            margin-bottom: 1em;
-      }
-      & ul, & ol {
-          margin-bottom: 1em;
-          padding-left: 20px;
-      }
-      & li {
-           margin-bottom: 0.5em;
-      }
+  .descriptionContainer h3 {
+      margin-top: 25px;
+      margin-bottom: 12px;
+      font-size: 1.2em;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color-light);
+      padding-bottom: 6px;
+      color: inherit;
+  }
+  .darkMode .descriptionContainer h3 {
+      border-bottom-color: var(--border-color-dark);
   }
   
-  /* --- Right Panel (Editor & Results) Styles --- */
-  .editorControls {
-      display: flex;
-      justify-content: space-between; /* Space between theme toggle and language selector */
-      align-items: center;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border-color);
+  
+  .descriptionContainer h4 {
+      margin-top: 18px;
+      margin-bottom: 8px;
+      font-size: 1.05em;
+      font-weight: 600;
+       color: inherit;
+  }
+  
+  
+  .descriptionHeader {
+      margin-bottom: 20px;
+      white-space: pre-line; /* Respect newlines from the source string */
+  }
+  
+  .examplesSection, .constraintsSection, .descriptionExtra {
+      margin-top: 25px;
+  }
+  
+  .exampleItem {
+      background-color: var(--example-bg-light);
+      border: 1px solid var(--example-border-light);
+      border-radius: 6px;
+      padding: 15px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .darkMode .exampleItem {
+      background-color: var(--example-bg-dark);
+      border-color: var(--example-border-dark);
+       box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  
+  
+  .exampleIO {
       margin-bottom: 10px;
   }
   
-  .themeToggle {
-      background: none;
-      border: none;
-      color: var(--text-primary); /* Use primary text color */
-      cursor: pointer;
-      font-size: 1.2em;
-      padding: 5px;
-      border-radius: 4px;
-      transition: background-color 0.2s ease;
-      display: flex; /* Center icon */
-      align-items: center;
-      justify-content: center;
+  .exampleLabel {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      font-size: 0.9em;
+      color: inherit;
   }
   
-  .themeToggle:hover {
-       background-color: var(--bg-tertiary); /* Subtle hover effect */
+  .exampleCode {
+      background-color: var(--code-bg-light);
+      color: var(--code-text-light);
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.85em;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin: 0;
+      border: 1px solid var(--example-border-light); /* Subtle border */
+  }
+  
+  .darkMode .exampleCode {
+      background-color: var(--code-bg-dark);
+      color: var(--code-text-dark);
+      border-color: var(--border-color-dark);
+  }
+  
+  
+  .exampleExplanation {
+      margin-top: 12px;
+      font-size: 0.9em;
+      color: #5a6268;
+      border-left: 3px solid var(--border-color-light);
+      padding-left: 10px;
+  }
+  .darkMode .exampleExplanation {
+      color: #9da5b0;
+      border-left-color: var(--border-color-dark);
+  }
+  .exampleExplanation strong {
+      font-weight: 600;
+      color: inherit;
+  }
+  .exampleExplanation p {
+      margin: 5px 0 0 0;
+  }
+  
+  .constraintsList {
+      list-style-type: disc;
+      padding-left: 25px; /* Indent list */
+      margin-top: 10px;
+  }
+  
+  .constraintsList li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+  }
+  
+  .descriptionExtra {
+      padding-top: 15px;
+      margin-top: 30px;
+      border-top: 1px dashed var(--border-color-light);
+      font-size: 0.95rem;
+  }
+  .darkMode .descriptionExtra {
+       border-top-color: var(--border-color-dark);
+  }
+  
+  .descriptionExtra p {
+      margin: 0;
+  }
+  
+  /* Fallback style if description is just a string */
+  .description {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      white-space: pre-line;
+  }
+  
+  
+  /* --- Right Panel: Editor & Results --- */
+  
+  .editorControls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+    background-color: var(--results-bg-light); /* Match results panel */
+    border-bottom: 1px solid var(--border-color-light);
+  }
+  .darkMode .editorControls {
+    background-color: var(--results-bg-dark);
+    border-bottom-color: var(--border-color-dark);
+  }
+  
+  
+  .themeToggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 5px;
+    color: var(--results-text-light);
+  }
+  .darkMode .themeToggle {
+    color: var(--results-text-dark);
   }
   
   
   .languageSelector {
-      display: flex;
-      align-items: center;
-      gap: 8px; /* Space between label and select */
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   
   .languageSelector label {
-      color: var(--text-primary);
-      font-size: 0.9em;
+    font-size: 0.9em;
+     color: var(--results-text-light);
+  }
+  .darkMode .languageSelector label {
+     color: var(--results-text-dark);
   }
   
   .languageSelector select {
-      padding: 5px 8px;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      background-color: var(--bg-secondary); /* Match panel background */
-      color: var(--text-primary); /* Use primary text color */
-      cursor: pointer;
-      outline: none; /* Remove default outline */
-      font-size: 0.9em;
+    padding: 5px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color-light);
+    background-color: var(--left-panel-bg-light); /* Use panel bg for consistency */
+    color: var(--left-panel-text-light);
+    font-size: 0.9em;
   }
-  
-  .languageSelector select:focus {
-      border-color: var(--tab-border-bottom-active); /* Accent color on focus */
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--tab-border-bottom-active) 50%, transparent); /* Subtle glow */
+  .darkMode .languageSelector select {
+    background-color: var(--left-panel-bg-dark);
+    color: var(--left-panel-text-dark);
+    border-color: var(--border-color-dark);
   }
-  
   
   .editorContainer {
-      flex-grow: 1; /* Take remaining height */
-      margin-bottom: 15px;
-      border: 1px solid var(--border-color); /* Border around editor */
-      overflow: hidden; /* Contains Monaco's potentially complex layout */
-      border-radius: 5px; /* Slightly rounded corners */
+    flex-grow: 1; /* Takes remaining vertical space */
+    height: 60%; /* Adjust based on preference vs results panel */
+    overflow: hidden; /* Ace editor handles its own scroll */
+    position: relative; /* Needed for Ace */
   }
   
-  .editorPlaceholder {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      font-size: 1.2em;
-      color: var(--text-secondary); /* Use secondary text color */
-      background-color: var(--bg-primary); /* Match editor background */
+  /* Style Ace Editor itself */
+  .editorContainer .ace_editor {
+    font-family: "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important; /* Better coding font */
+    font-size: 14px !important; /* Override Ace inline styles if needed */
+    line-height: 1.5;
   }
   
   .resultsPanel {
-      height: 250px; /* Fixed height for results area */
-      display: flex;
-      flex-direction: column;
-      border-top: 1px solid var(--border-color);
-      background-color: var(--bg-secondary); /* Match panel background */
-      border-radius: 5px; /* Slightly rounded corners */
-       overflow: hidden; /* Contains children within rounded corners */
+    height: 40%; /* Adjust based on preference vs editor */
+    display: flex;
+    flex-direction: column;
+    background-color: var(--results-bg-light);
+    border-top: 1px solid var(--border-color-light);
+  }
+  .darkMode .resultsPanel {
+    background-color: var(--results-bg-dark);
+     border-top-color: var(--border-color-dark);
   }
   
   .tabs {
-      display: flex;
-      border-bottom: 1px solid var(--border-color);
+    display: flex;
+    border-bottom: 1px solid var(--tab-border-light);
+    background-color: var(--tab-inactive-bg-light); /* Background for the tab bar */
+  }
+  .darkMode .tabs {
+    border-bottom-color: var(--tab-border-dark);
+     background-color: var(--tab-inactive-bg-dark);
   }
   
   .tabButton {
-      background: none;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 1em;
-      color: var(--tab-inactive-text); /* Use inactive tab text color */
-      border-bottom: 2px solid transparent; /* Space for active indicator */
-      transition: color 0.2s ease, border-bottom-color 0.2s ease, background-color 0.2s ease;
-      flex-grow: 1; /* Make tabs fill space */
-      text-align: center;
-      display: flex; /* Center icon and text */
-      align-items: center;
-      justify-content: center;
-      gap: 8px; /* Space between icon and text */
+    padding: 10px 18px;
+    cursor: pointer;
+    background-color: transparent; /* Let tabs bar handle bg */
+    border: none;
+    border-bottom: 3px solid transparent; /* Indicator space */
+    margin-bottom: -1px; /* Overlap border */
+    font-size: 0.95em;
+    font-weight: 500;
+    color: var(--results-text-light);
+    opacity: 0.7;
+    transition: all 0.2s ease-in-out;
+  }
+  .darkMode .tabButton {
+    color: var(--results-text-dark);
   }
   
-  .tabButton:hover:not(.tabButtonActive) {
-       background-color: var(--bg-tertiary); /* Subtle hover effect */
-       color: var(--tab-active-text); /* Darker on hover */
+  .tabButton:hover {
+    opacity: 1;
+    background-color: rgba(0,0,0,0.05);
   }
-  
+  .darkMode .tabButton:hover {
+    background-color: rgba(255,255,255,0.08);
+  }
   
   .tabButtonActive {
-      color: var(--tab-active-text); /* Use active tab text color */
-      border-bottom-color: var(--tab-border-bottom-active); /* Use active tab border color */
-      font-weight: bold;
-       background-color: var(--bg-tertiary); /* Slightly different background for active tab */
+    background-color: var(--tab-active-bg-light); /* Make active tab match panel bg */
+    border-bottom: 3px solid var(--button-submit-bg-light); /* Active indicator */
+    opacity: 1;
+    font-weight: 600;
+  }
+  .darkMode .tabButtonActive {
+    background-color: var(--tab-active-bg-dark);
+     border-bottom-color: var(--button-submit-bg-dark);
+  }
+  
+  .tabButton .icon {
+    margin-right: 8px;
   }
   
   .tabContent {
-      flex-grow: 1;
-      padding: 15px;
-      overflow-y: auto; /* Scroll results content */
-      font-size: 0.9em;
-      color: var(--text-primary); /* Use primary text color */
-       white-space: pre-wrap; /* Handle wrapping for general text in content */
-       word-wrap: break-word;
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto; /* Scroll content */
+     background-color: var(--tab-active-bg-light); /* Match active tab bg */
+     color: var(--results-text-light);
+  }
+  .darkMode .tabContent {
+     background-color: var(--tab-active-bg-dark);
+     color: var(--results-text-dark);
   }
   
-  .consoleOutput {
-      white-space: pre-wrap; /* Preserve whitespace and wrap lines */
-      word-wrap: break-word; /* Break long words */
-      font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; /* Monospaced font */
-      margin: 0; /* Remove default pre margin */
-      color: var(--text-primary); /* Ensure console text uses color */
-      font-size: 1em; /* Adjust font size if needed */
+  /* Test Cases Specific Styles */
+  .testCasesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
   }
   
   .testCaseItem {
-      margin-bottom: 20px;
-      padding: 15px;
-      border: 1px solid var(--border-color);
-      border-radius: 5px;
-      background-color: var(--bg-primary); /* Slightly different background */
+    border-radius: 5px;
+    padding: 12px 15px;
+    border: 1px solid var(--status-pending-border-light); /* Default border */
+    background-color: var(--left-panel-bg-light); /* Use panel bg */
+    transition: border-color 0.3s ease;
+  }
+  .darkMode .testCaseItem {
+    background-color: var(--left-panel-bg-dark);
+    border-color: var(--status-pending-border-dark);
   }
   
-  .testCaseItem:last-child {
-      margin-bottom: 0; /* Remove margin for the last item */
+  /* Dynamic border based on status */
+  .testStatusBorder_passed { border-left: 4px solid var(--status-passed-border-light); }
+  .testStatusBorder_failed { border-left: 4px solid var(--status-failed-border-light); }
+  .testStatusBorder_running { border-left: 4px solid var(--status-running-border-light); }
+  .testStatusBorder_error { border-left: 4px solid var(--status-error-border-light); }
+  .testStatusBorder_pending { border-left: 4px solid var(--status-pending-border-light); }
+  
+  .darkMode .testStatusBorder_passed { border-left-color: var(--status-passed-border-dark); }
+  .darkMode .testStatusBorder_failed { border-left-color: var(--status-failed-border-dark); }
+  .darkMode .testStatusBorder_running { border-left-color: var(--status-running-border-dark); }
+  .darkMode .testStatusBorder_error { border-left-color: var(--status-error-border-dark); }
+  .darkMode .testStatusBorder_pending { border-left-color: var(--status-pending-border-dark); }
+  
+  
+  .testCaseHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
   }
   
   .testCaseItem h4 {
-      margin-top: 0;
-      margin-bottom: 10px;
-      color: var(--text-primary); /* Ensure heading uses text color */
-      font-size: 1em;
+    margin: 0;
+    font-size: 1em;
+    font-weight: 600;
   }
   
-  /* Test case status text colors using variables and classes */
-  .testCaseItem .testStatus_pending { color: var(--test-pending); }
-  .testCaseItem .testStatus_running { color: var(--test-running); }
-  .testCaseItem .testStatus_passed { color: var(--test-passed); }
-  .testCaseItem .testStatus_failed { color: var(--test-failed); }
-  .testCaseItem .testStatus_error { color: var(--test-error); }
-  
-  
-  .testCaseItem pre {
-       background-color: var(--bg-secondary); /* Match panel background for pre */
-       padding: 10px;
-       border-radius: 4px;
-       overflow-x: auto; /* Add horizontal scroll for long inputs/outputs */
-       white-space: pre-wrap; /* Wrap lines */
-       word-wrap: break-word;
-       font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-       font-size: 0.9em;
-        color: var(--text-secondary); /* Use secondary text color for code blocks */
-        margin-top: 5px; /* Small margin above pre blocks */
-        margin-bottom: 10px; /* Small margin below pre blocks */
-  }
-  .testCaseItem pre:last-child {
-      margin-bottom: 0; /* Remove margin if pre is the last element */
+  .testStatus {
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
   }
   
+  /* Status Badge Colors */
+  .testStatus_passed { color: var(--status-passed-text-light); background-color: var(--status-passed-bg-light); }
+  .testStatus_failed { color: var(--status-failed-text-light); background-color: var(--status-failed-bg-light); }
+  .testStatus_running { color: var(--status-running-text-light); background-color: var(--status-running-bg-light); }
+  .testStatus_error { color: var(--status-error-text-light); background-color: var(--status-error-bg-light); }
+  .testStatus_pending { color: var(--status-pending-text-light); background-color: var(--status-pending-bg-light); }
   
+  .darkMode .testStatus_passed { color: var(--status-passed-text-dark); background-color: var(--status-passed-bg-dark); }
+  .darkMode .testStatus_failed { color: var(--status-failed-text-dark); background-color: var(--status-failed-bg-dark); }
+  .darkMode .testStatus_running { color: var(--status-running-text-dark); background-color: var(--status-running-bg-dark); }
+  .darkMode .testStatus_error { color: var(--status-error-text-dark); background-color: var(--status-error-bg-dark); }
+  .darkMode .testStatus_pending { color: var(--status-pending-text-dark); background-color: var(--status-pending-bg-dark); }
+  
+  .testCaseDetail {
+    margin-bottom: 8px;
+    font-size: 0.9em;
+  }
+  .testCaseDetail strong {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+    color: inherit;
+  }
+  .testCaseDetail pre {
+    background-color: var(--code-bg-light);
+    color: var(--code-text-light);
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.9em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+    border: 1px solid var(--example-border-light);
+  }
+  
+  .darkMode .testCaseDetail pre {
+    background-color: var(--code-bg-dark);
+    color: var(--code-text-dark);
+    border-color: var(--border-color-dark);
+  }
+  
+  .failedOutput { /* Style for failed output pre */
+      color: var(--status-failed-text-light) !important; /* Use important if needed */
+      border-color: var(--status-failed-border-light);
+      background-color: rgba(248, 215, 218, 0.3); /* Light red bg */
+  }
+  .darkMode .failedOutput {
+       color: var(--status-failed-text-dark) !important;
+       border-color: var(--status-failed-border-dark);
+       background-color: rgba(93, 42, 42, 0.4); /* Darker red bg */
+  }
+  
+  .expectedOutput { /* Style for expected output pre when shown */
+     color: var(--status-passed-text-light) !important; /* Green text */
+     border-color: var(--status-passed-border-light);
+     background-color: rgba(212, 237, 218, 0.3); /* Light green bg */
+  }
+  .darkMode .expectedOutput {
+      color: var(--status-passed-text-dark) !important;
+      border-color: var(--status-passed-border-dark);
+      background-color: rgba(46, 76, 48, 0.4); /* Darker green bg */
+  }
+  
+  
+  .noTestsMessage {
+    text-align: center;
+    color: #6c757d;
+    margin-top: 20px;
+    font-style: italic;
+  }
+  .darkMode .noTestsMessage {
+     color: #9da5b0;
+  }
+  
+  
+  /* Console Output Styles */
+  .consoleOutput {
+    white-space: pre-wrap; /* Wrap long lines */
+    word-wrap: break-word;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+    height: 100%; /* Allow it to fill space if tabContent isn't restricting */
+    margin: 0;
+    color: inherit;
+  }
+  
+  /* --- Action Buttons --- */
   .actionButtons {
-      display: flex;
-      justify-content: flex-end;
-      padding: 10px 15px; /* Add padding around buttons */
-      border-top: 1px solid var(--border-color);
-      gap: 10px; /* Space between buttons */
-      background-color: var(--bg-secondary); /* Match panel background */
+    padding: 10px 15px;
+    border-top: 1px solid var(--tab-border-light);
+    background-color: var(--results-bg-light); /* Use results bg */
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px;
   }
+  .darkMode .actionButtons {
+    border-top-color: var(--tab-border-dark);
+    background-color: var(--results-bg-dark);
+  }
+  
   
   .button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: background-color 0.2s ease, opacity 0.2s ease;
-      font-weight: bold;
-  }
-  
-  .runButton {
-      background-color: var(--button-bg-run);
-      color: var(--button-text-run);
-  }
-  
-  .runButton:hover:not(:disabled) {
-      /* Subtle color change on hover */
-      background-color: color-mix(in srgb, var(--button-bg-run) 90%, black 10%);
-  }
-  
-  .submitButton {
-      background-color: var(--button-bg-submit);
-      color: var(--button-text-submit);
-  }
-  
-  .submitButton:hover:not(:disabled) {
-       /* Subtle color change on hover */
-      background-color: color-mix(in srgb, var(--button-bg-submit) 90%, black 10%);
+    padding: 8px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    color: #fff; /* White text for buttons */
   }
   
   .button:disabled {
-      background-color: var(--button-bg-disabled);
-      color: var(--button-text-disabled);
-      cursor: not-allowed;
-      opacity: 0.6;
+    opacity: 0.6;
+    cursor: not-allowed;
   }
   
-  .icon {
-      /* Icons within buttons/tabs/loading */
+  .runButton {
+    background-color: var(--button-run-bg-light);
+  }
+  .runButton:not(:disabled):hover {
+    background-color: var(--button-run-hover-light);
+  }
+  .darkMode .runButton {
+     background-color: var(--button-run-bg-dark);
+  }
+  .darkMode .runButton:not(:disabled):hover {
+    background-color: var(--button-run-hover-dark);
   }
   
   
-  /* --- Scrollbar Styling (Optional but nice) --- */
-  /* Target Webkit browsers (Chrome, Safari) */
-  .leftPanel::-webkit-scrollbar,
-  .tabContent::-webkit-scrollbar,
-  .consoleOutput::-webkit-scrollbar,
-  .testCaseItem pre::-webkit-scrollbar {
-    width: 8px;
-    height: 8px; /* For horizontal scrollbars */
+  .submitButton {
+    background-color: var(--button-submit-bg-light);
+  }
+  .submitButton:not(:disabled):hover {
+    background-color: var(--button-submit-hover-light);
+  }
+  .darkMode .submitButton {
+     background-color: var(--button-submit-bg-dark);
+  }
+  .darkMode .submitButton:not(:disabled):hover {
+    background-color: var(--button-submit-hover-dark);
   }
   
-  .leftPanel::-webkit-scrollbar-track,
-  .tabContent::-webkit-scrollbar-track,
-  .consoleOutput::-webkit-scrollbar-track,
-  .testCaseItem pre::-webkit-scrollbar-track {
-    background: var(--scrollbar-track);
-  }
   
-  .leftPanel::-webkit-scrollbar-thumb,
-  .tabContent::-webkit-scrollbar-thumb,
-  .consoleOutput::-webkit-scrollbar-thumb,
-  .testCaseItem pre::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: 4px;
+  .button .icon {
+    /* Icon styles within buttons if needed */
   }
-  
-  .leftPanel::-webkit-scrollbar-thumb:hover,
-  .tabContent::-webkit-scrollbar-thumb:hover,
-  .consoleOutput::-webkit-scrollbar-thumb:hover,
-  .testCaseItem pre::-webkit-scrollbar-thumb:hover {
-    background: color-mix(in srgb, var(--scrollbar-thumb) 80%, white 20%); /* Lighten on hover */
-  }
-  
-  /* Firefox scrollbar styling */
-  .leftPanel,
-  .tabContent,
-  .consoleOutput,
-  .testCaseItem pre {
-    scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-  }
-  
   
   /* --- Loading and Error States --- */
   .loading, .errorContainer {
@@ -483,38 +673,96 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - var(--header-height, 50px));
-    font-size: 1.5em;
-    color: var(--text-primary);
-    background-color: var(--bg-secondary); /* Match panel background */
+    height: 100vh;
+    text-align: center;
+    font-size: 1.2em;
+     background-color: var(--left-panel-bg-light);
+     color: var(--left-panel-text-light);
+  }
+  .darkMode .loading, .darkMode .errorContainer {
+       background-color: var(--left-panel-bg-dark);
+       color: var(--left-panel-text-dark);
   }
   
   .loading .icon {
-      margin-bottom: 15px;
-      font-size: 2em;
-      color: var(--tab-border-bottom-active); /* Use accent color for loading spinner */
-  }
-  
-  
-  .errorContainer {
-      padding: 20px;
-      box-sizing: border-box;
+    font-size: 1.5em;
+    margin-bottom: 15px;
   }
   
   .error {
-      color: var(--test-failed); /* Use failure color for errors */
-      text-align: center;
-      margin-bottom: 20px;
-      font-weight: bold;
+    color: var(--status-failed-text-light);
+    background-color: var(--status-failed-bg-light);
+    border: 1px solid var(--status-failed-border-light);
+    padding: 15px 25px;
+    border-radius: 6px;
+    max-width: 80%;
+  }
+  .darkMode .error {
+    color: var(--status-failed-text-dark);
+    background-color: var(--status-failed-bg-dark);
+    border-color: var(--status-failed-border-dark);
+  }
+  
+  .error .icon {
+    margin-right: 10px;
+    font-size: 1.2em;
   }
   
   .backLink {
-      color: var(--tab-border-bottom-active); /* Use accent color for links */
-      text-decoration: none;
-      font-size: 1em;
-      transition: text-decoration 0.2s ease;
+    margin-top: 20px;
+    color: var(--button-submit-bg-light);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 15px;
+    border: 1px solid var(--button-submit-bg-light);
+    border-radius: 5px;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
   
   .backLink:hover {
-      text-decoration: underline;
+     background-color: var(--button-submit-bg-light);
+     color: #fff;
+  }
+  
+  .darkMode .backLink {
+    color: var(--button-submit-bg-dark);
+    border-color: var(--button-submit-bg-dark);
+  }
+  .darkMode .backLink:hover {
+     background-color: var(--button-submit-bg-dark);
+     color: #fff; /* Assuming dark buttons still use light text */
+  }
+  
+  /* --- Responsive Adjustments (Optional) --- */
+  @media (max-width: 992px) {
+    .editorLayout {
+      flex-direction: column;
+      height: auto; /* Allow content to determine height */
+      overflow: auto; /* Allow scrolling on mobile */
+    }
+    .leftPanel, .rightPanel {
+      width: 100%;
+      height: auto; /* Adjust height for column layout */
+       border-right: none;
+    }
+    .leftPanel {
+       min-height: 300px; /* Ensure some min height */
+       border-bottom: 1px solid var(--border-color-light);
+    }
+     .darkMode .leftPanel {
+        border-bottom-color: var(--border-color-dark);
+     }
+  
+    .rightPanel {
+      height: calc(100vh - 50px); /* Example: Adjust based on header/footer */
+      min-height: 500px; /* Ensure editor/results are usable */
+    }
+  
+    .editorContainer {
+       height: 50%; /* Example split */
+    }
+    .resultsPanel {
+        height: 50%; /* Example split */
+    }
+  
   }
