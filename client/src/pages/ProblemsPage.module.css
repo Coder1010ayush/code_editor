@@ -1,176 +1,195 @@
-/* General Container */
+/* ==========================
+   Global Theme Variables
+   ========================== */
+body.light {
+  /* Light mode colors */
+  --bg-color: #f8f9fa;
+  --text-color: #212529;
+  --container-bg: #ffffff;
+  --card-bg: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.06);
+  --filter-bg: #ffffff;
+  --filter-border: #ced4da;
+  --primary-color: #6f42c1;
+  --easy-color: #28a745;
+  --medium-color: #ffc107;
+  --hard-color: #dc3545;
+}
+
+body.dark{
+  /* Dark mode overrides */
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --container-bg: #1c1c1c;
+  --card-bg: #1f1f1f;
+  --card-shadow: rgba(0, 0, 0, 0.6);
+  --filter-bg: #2c2c2c;
+  --filter-border: #444;
+  --primary-color: #9b59b6;
+  --easy-color: #66bb6a;
+  --medium-color: #ffca28;
+  --hard-color: #ef5350;
+}
+
+/* ==========================
+   Base Styles
+   ========================== */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Inter', 'Segoe UI', Tahoma, Verdana, sans-serif;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 .container {
-    padding: 3rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e9ecef; /* Light gray background */
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  background-color: var(--container-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px var(--card-shadow);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Heading */
 .heading {
-    text-align: center;
-    font-size: 3rem;
-    margin-bottom: 2.5rem;
-    color: #343a40;
+  font-size: 2.75rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: var(--text-color);
+  letter-spacing: -0.5px;
 }
 
-/* Filters Section */
+/* ==========================
+   Filters Section
+   ========================== */
 .filters {
-    display: flex;
-    gap: 1.5rem;
-    margin-bottom: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  justify-content: center;
 }
 
 .filterSelect {
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid #ced4da;
-    width: 220px;
-    background-color: #fff;
-    color: #495057;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--filter-border);
+  background-color: var(--filter-bg);
+  color: var(--text-color);
+  box-shadow: inset 0 1px 3px var(--card-shadow);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filterSelect:hover {
+  box-shadow: inset 0 2px 6px var(--card-shadow);
 }
 
 .filterSelect:focus {
-    border-color: #007bff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.25);
 }
 
-/* Problem List */
+/* ==========================
+   Problem List & Cards
+   ========================== */
 .problemList {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    width: 80%;
-    max-width: 960px;
-    padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 900px;
 }
 
-/* Problem Card */
 .card {
-    background: #fff;
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  background-color: var(--card-bg);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 6px 16px var(--card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
 .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px var(--card-shadow);
 }
 
-/* Card Title */
 .cardTitle {
-    text-decoration: none;
-    color: #212529;
-    margin-bottom: 0;
-    flex-grow: 1;
-    display: flex; /* Align icon and text */
-    align-items: center;
-    gap: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: color 0.3s ease;
 }
 
-.cardTitle h3 {
-    font-size: 1.3rem; /* Slightly smaller title */
-    font-weight: 600;
-    margin-bottom: 0;
+.cardTitle:hover {
+  color: var(--primary-color);
 }
 
-/* Card Meta Information */
 .cardMeta {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
 }
 
 .difficulty,
 .category {
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.3rem;
-    color: #fff;
-    font-size: 0.85rem;
-    font-weight: 500;
-    text-transform: capitalize;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  transition: background-color 0.3s ease;
 }
 
 .easy {
-    background-color: #28a745; /* Green */
+  background-color: var(--easy-color);
 }
 
 .medium {
-    background-color: #ffc107; /* Amber/Yellow */
-    color: #212529;
+  background-color: var(--medium-color);
+  color: var(--text-color);
 }
 
 .hard {
-    background-color: #dc3545; /* Red */
+  background-color: var(--hard-color);
 }
 
 .category {
-    background-color: #007bff; /* Blue */
-    color: #fff;
+  background-color: var(--primary-color);
 }
 
-/* --- Icons --- */
 .icon {
-    font-size: 1rem; /* Adjust icon size as needed */
+  font-size: 1.1rem;
 }
 
-/* You'll need to import an icon library like Font Awesome or Material Icons */
-/* For example, if using Font Awesome, you might have classes like "fas fa-puzzle-piece" */
-
-/* --- Category Specific Icons (Example - you'll need to add actual icons) --- */
-.category::before {
-    display: inline-block;
-    margin-right: 0.3rem;
-    /* Example using text-based icons - replace with actual icon classes */
-}
-
-.category:nth-child(1)::before { /* Math */
-    content: "∑"; /* Example - replace with actual icon class */
-}
-
-.category:nth-child(2)::before { /* Arrays */
-    content: "[]"; /* Example - replace with actual icon class */
-}
-
-.category:nth-child(3)::before { /* Strings */
-    content: "''"; /* Example - replace with actual icon class */
-}
-
-.category:nth-child(4)::before { /* Dynamic Programming */
-    content: "DP"; /* Example - replace with actual icon class */
-}
-
-/* --- Difficulty Specific Icons (Example) --- */
+.category::before,
 .difficulty::before {
-    display: inline-block;
-    margin-right: 0.3rem;
+  margin-right: 0.4rem;
+  font-weight: bold;
 }
 
-.easy::before {
-    content: "🟢"; /* Example - replace with actual icon class */
+.category::before {
+  content: attr(data-prefix);
 }
 
-.medium::before {
-    content: "🟡"; /* Example - replace with actual icon class */
-}
-
-.hard::before {
-    content: "🔴"; /* Example - replace with actual icon class */
+.difficulty::before {
+  content: attr(data-level);
 }

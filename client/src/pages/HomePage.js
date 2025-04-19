@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom'; // Use Link for internal navigation lik
 import styles from './HomePage.module.css'; // We'll create this CSS file next
 
 const HomePage = () => {
+
+    // const theme = localStorage.getItem('theme') ; 
+    // console.log('Current theme:', theme);
+    // const darkMode = theme === 'dark';
+    // const themeClass = darkMode ? styles.dark : styles.light;
+
     // Data for sections (can be fetched from API later)
     const features = [
         { title: 'Vast Problem Set', description: 'Access a wide range of coding problems across various difficulty levels and topics.' },
@@ -19,6 +25,7 @@ const HomePage = () => {
     ];
 
     return (
+        // <div className={themeClass}>
         <div className={styles.homePage}>
             {/* Hero Section */}
             <section className={styles.hero}>
@@ -54,6 +61,7 @@ const HomePage = () => {
                 </div>
             </section>
         </div>
+        // </div>
     );
 };
 

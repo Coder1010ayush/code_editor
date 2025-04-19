@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import styles from './Navbar.module.css'; // Use CSS Modules
 import {DashBoard} from '../pages/DashBoard';
-
+import DarkModeToggle from './DarkModeToggle';
 function Navbar() {
     const { user, logout, loading } = useAuth();
     const navigate = useNavigate();
@@ -55,6 +55,7 @@ function Navbar() {
                 </div>
 
                 <div className={styles.navAuth}>
+                    <DarkModeToggle />  
                     {renderAuthButtons()}
                 </div>
             </div>

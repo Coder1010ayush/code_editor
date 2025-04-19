@@ -1,5 +1,34 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+/* ==========================
+   1) Theme Variable Definitions
+   ========================== */
+
+/* Default – light theme */
+:root {
+  /* Light mode colors */
+  --bg-color: #f8f9fa;
+  --text-color: #212529;
+  --container-bg: #ffffff;
+  --card-bg: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.06);
+  --filter-bg: #ffffff;
+  --filter-border: #ced4da;
+  --primary-color: #6f42c1;
+  --easy-color: #28a745;
+  --medium-color: #ffc107;
+  --hard-color: #dc3545;
+}
+/* Dark theme */
+body.dark {
+  /* Dark mode overrides */
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --container-bg: #1c1c1c;
+  --card-bg: #1f1f1f;
+  --card-shadow: rgba(0, 0, 0, 0.6);
+  --filter-bg: #2c2c2c;
+  --filter-border: #444;
+  --primary-color: #9b59b6;
+  --easy-color: #66bb6a;
+  --medium-color: #ffca28;
+  --hard-color: #ef5350;
 }

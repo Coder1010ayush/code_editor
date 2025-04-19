@@ -3,9 +3,16 @@ import { Link } from 'react-router-dom'; // No need for useLocation now
 import styles from './ProblemsPage.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
+import { FaAppleAlt } from 'react-icons/fa';
 
 
 const ProblemsPage = () => {
+
+    // const theme = localStorage.getItem('theme') ; 
+    // console.log('Current theme:', theme);
+    // const darkMode = theme === 'dark';
+    // const themeClass = darkMode ? styles.dark : styles.light;
+
     // ... (filters state and useEffect fetch are the same) ...
      const [problems, setProblems] = useState([]);
     const [filters, setFilters] = useState({
@@ -29,6 +36,7 @@ const ProblemsPage = () => {
 
 
     return (
+        // <div className={themeClass}>
         <div className={styles.container}>
             {/* ... (heading and filters are the same) ... */}
             <h1 className={styles.heading}>All Coding Problems</h1>
@@ -94,6 +102,7 @@ const ProblemsPage = () => {
                 ))}
             </div>
         </div>
+        // </div>
     );
 };
 

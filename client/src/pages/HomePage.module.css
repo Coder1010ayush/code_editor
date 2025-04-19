@@ -1,93 +1,165 @@
-/* client/src/pages/HomePage.module.css */
-.homePage {
-    max-width: 1200px; /* Limit content width */
-    margin: 0 auto; /* Center content */
-    padding: 0 20px; /* Add padding on the sides */
-}
+/* HomePage.module.css */
 
-/* Hero Section */
-.hero {
+/* Theme variables scoped to this component */
+body.light {
+    /* Light mode colors */
+    --bg-color: #f8f9fa;
+    --text-color: #212529;
+    --container-bg: #ffffff;
+    --card-bg: #ffffff;
+    --card-shadow: rgba(0, 0, 0, 0.06);
+    --filter-bg: #ffffff;
+    --filter-border: #ced4da;
+    --primary-color: #6f42c1;
+    --easy-color: #28a745;
+    --medium-color: #ffc107;
+    --hard-color: #dc3545;
+    --cta-bg: #e9ecef; /* Light button background */
+    --cta-hover: #dee2e6; /* Light button hover background */
+    --cta-text-color: #212529; /* Light button text color */
+}
+  
+  body.dark {
+    /* Dark mode overrides */
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --container-bg: #1c1c1c;
+    --card-bg: #1f1f1f;
+    --card-shadow: rgba(0, 0, 0, 0.6);
+    --filter-bg: #2c2c2c;
+    --filter-border: #444;
+    --primary-color: #9b59b6;
+    --easy-color: #66bb6a;
+    --medium-color: #ffca28;
+    --hard-color: #ef5350;
+    --cta-bg: #6f42c1; /* Dark button background */
+    --cta-hover: #5a379e; /* Dark button hover background */
+    --cta-text-color: #fff; /* Dark button text color */   
+  }
+  
+
+
+
+  .homePage {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Hero Section */
+  .hero {
     text-align: center;
-    padding: 60px 20px;
-    background-color: #f8f9fa; /* Light background for hero */
+    padding: 80px 20px;
+    background-color: var(--hero-bg);
     margin-bottom: 40px;
-    border-radius: 8px;
-}
-
-.hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-    color: #007bff; /* Changed title color to blue */
-}
-
-.hero p {
-    font-size: 1.1rem;
-    color: #555;
-    margin-bottom: 30px;
-}
-
-.ctaButton {
-    display: inline-block;
-    padding: 12px 25px;
-    background-color: #007bff; /* Example blue */
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 5px;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px var(--card-shadow);
     transition: background-color 0.3s ease;
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+  }
+  
+  .hero p {
+    font-size: 1.125rem;
+    color: var(--text-color);
+    margin-bottom: 30px;
+    line-height: 1.5;
+  }
+  
+  .ctaButton {
+    display: inline-block;
+    padding: 14px 28px;
+    background-color: var(--cta-bg);
+    color: var(--cta-text-color); /* Use the theme variable for text color */
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 8px var(--card-shadow);
+    transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
 }
 
 .ctaButton:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: var(--cta-hover);
+    transform: translateY(-2px);
 }
-
-/* Features & Categories Sections */
-.features, .categories {
-    padding: 40px 0;
+  
+  /* Features & Categories Sections */
+  .features,
+  .categories {
+    padding: 60px 0;
     text-align: center;
-}
-
-.features h2, .categories h2 {
-    font-size: 2rem;
+  }
+  
+  .features h2,
+  .categories h2 {
+    font-size: 2.25rem;
     margin-bottom: 40px;
-    color: #007bff; /* Changed section title color to blue */
-}
-
-.grid {
+    color: var(--primary-color);
+  }
+  
+  .grid {
     display: grid;
-    /* Adjust grid columns for responsiveness */
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
-    gap: 25px; /* Space between grid items */
-}
-
-.gridItem {
-    background-color: #ffffff;
-    padding: 25px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+  }
+  
+  .gridItem {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border: 1px solid var(--card-border);
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px var(--card-shadow);
     text-align: left;
-}
-
-.gridItem h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    color: #007bff; /* Changed grid item title color to blue */
-}
-
-.gridItem p {
-    font-size: 0.95rem;
-    color: #555;
-    line-height: 1.5;
-}
-
-.categoryItem {
-    text-align: center; /* Center text for category boxes */
-    cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.categoryItem:hover {
-   transform: translateY(-3px);
-   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+  }
+  
+  .gridItem:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px var(--card-shadow);
+  }
+  
+  .gridItem h3 {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+    color: var(--primary-color);
+  }
+  
+  .gridItem p {
+    font-size: 1rem;
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+  
+  .categoryItem {
+    text-align: center;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 1rem;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 4px 8px var(--card-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .categoryItem:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px var(--card-shadow);
+  }
+  
+  .categoryItem h3 {
+    margin-bottom: 8px;
+    color: var(--primary-color);
+  }
+  
+  .categoryItem p {
+    color: var(--text-color);
+  }
+  
