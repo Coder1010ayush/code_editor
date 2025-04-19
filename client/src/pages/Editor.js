@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import AceEditor from 'react-ace';
 
-// Import base modes and themes
 import 'brace/mode/javascript';
 import 'brace/mode/python';
 import 'brace/mode/c_cpp';
@@ -10,9 +9,8 @@ import 'brace/theme/monokai';
 import 'brace/theme/github';
 import 'brace/theme/dracula';
 import 'brace/theme/eclipse';
-// Import Ace editor features you might need (optional)
-import 'brace/ext/language_tools'; // For autocompletion
-import 'brace/ext/searchbox'; // For search functionality
+import 'brace/ext/language_tools'; 
+import 'brace/ext/searchbox'; 
 
 import styles from './Editor.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,18 +21,16 @@ const supportedLanguages = ['javascript', 'python', 'c++'];
 const languageMap = {
     javascript: 'javascript',
     python: 'python',
-    'c++': 'c_cpp', // Ace uses 'c_cpp' for C++
+    'c++': 'c_cpp', 
 };
 
-// Function to safely parse JSON description
 const parseDescription = (description) => {
     if (typeof description === 'object' && description !== null) {
-        return description; // Already an object
+        return description; 
     }
     if (typeof description === 'string') {
         try {
             const parsed = JSON.parse(description);
-            // Basic validation to ensure it has expected keys
             if (typeof parsed === 'object' && parsed !== null && parsed.header) {
                 return parsed;
             }
@@ -42,8 +38,7 @@ const parseDescription = (description) => {
             console.error("Failed to parse description JSON:", e);
         }
     }
-    // Fallback: return as-is or wrap in a basic structure
-    return { header: description }; // Treat the whole string as header if parsing fails
+    return { header: description }; 
 };
 
 
@@ -56,11 +51,11 @@ const CodeEditorPage = () => {
 
     const [selectedLanguage, setSelectedLanguage] = useState('javascript');
     const [code, setCode] = useState('');
-    const [activeTab, setActiveTab] = useState('testcase'); // Default to testcase
+    const [activeTab, setActiveTab] = useState('testcase'); 
     const [consoleOutput, setConsoleOutput] = useState('');
     const [testResults, setTestResults] = useState([]);
 
-    const [isWhiteMode, setIsWhiteMode] = useState(false); // Default to dark mode
+    const [isWhiteMode, setIsWhiteMode] = useState(false); 
     const editorRef = useRef(null);
 
     useEffect(() => {
@@ -72,7 +67,6 @@ const CodeEditorPage = () => {
 
         setLoading(true);
         setError(null);
-        // Reset previous problem state
         setProblem(null);
         setCode('');
         setConsoleOutput('');
@@ -82,18 +76,14 @@ const CodeEditorPage = () => {
 
         const fetchProblem = async () => {
             try {
-                // --- IMPORTANT: Replace with your actual API endpoint ---
                 const res = await fetch(`/api/problems/${problemId}`);
-                // --- MOCK IMPLEMENTATION FOR TESTING ---
                 // await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
                 // const mockData = getMockProblemData(problemId);
                 // if (!mockData) {
                 //      throw new Error('Problem not found (Mock).');
                 // }
                 // const data = res; // Use mock data
-                // --- END MOCK IMPLEMENTATION ---
 
-                // Original fetch logic (uncomment when using a real API)
                 if (!res.ok) {
                     if (res.status === 404) {
                         throw new Error('Problem not found.');
@@ -101,42 +91,34 @@ const CodeEditorPage = () => {
                     throw new Error(`Failed to fetch problem data: ${res.statusText}`);
                 }
                 const data = await res.json();
-                // --- End Original Fetch Logic ---
-
-                // Parse description safely
                 const parsedDescription = parseDescription(data.description);
                 const processedData = { ...data, description: parsedDescription };
 
                 setProblem(processedData);
 
-                // Set initial language and code based on fetched data
                 const initialLang = supportedLanguages.find(lang => processedData.defaultCode?.[lang]) || 'javascript';
                 setSelectedLanguage(initialLang);
                 setCode(processedData.defaultCode?.[initialLang] || getDefaultCodeComment(initialLang));
 
-                // Process test cases (assuming structure might vary slightly)
-                // This part needs adjustment based on your EXACT API response structure
-                const testCasesInput = processedData.testCases; // e.g., [{ input: "...", expectedOutput: "..." }, ...]
+                const testCasesInput = processedData.testCases; 
                 let formattedTestCases = [];
                 if (Array.isArray(testCasesInput)) {
                      formattedTestCases = testCasesInput.map((tc, index) => ({
                         id: index,
-                        status: 'pending', // Initial status
+                        status: 'pending', 
                         input: tc.input,
-                        expected: tc.expectedOutput, // Use expectedOutput field
-                        output: null, // Will be filled after running/submitting
+                        expected: tc.expectedOutput, 
+                        output: null, 
                     }));
                 }
-                // --- Adjust the logic above if your API structure for testCases is different ---
                  else if (testCasesInput && typeof testCasesInput === 'object') {
-                    // Handle the older structure if necessary
                      console.warn("Processing potentially older test case structure.");
                      formattedTestCases = Object.values(testCasesInput).map((tc, index) => ({
                         id: index,
                         status: 'pending',
-                        output: null, // Initially no output
-                        expected: tc.ans, // Adapt if needed
-                        input: tc.tc, // Adapt if needed
+                        output: null,
+                        expected: tc.ans, 
+                        input: tc.tc, 
                     }));
                  }
 
@@ -151,9 +133,7 @@ const CodeEditorPage = () => {
 
         fetchProblem();
 
-    }, [problemId]); // Re-run effect when problemId changes
-
-    // Effect to update code in editor when language changes
+    }, [problemId]); 
     useEffect(() => {
         if (problem) {
             setCode(problem.defaultCode?.[selectedLanguage] || getDefaultCodeComment(selectedLanguage));
@@ -178,8 +158,6 @@ const CodeEditorPage = () => {
         const newLanguage = event.target.value;
         if (supportedLanguages.includes(newLanguage)) {
             setSelectedLanguage(newLanguage);
-            // Dynamically import the mode for the selected language if needed
-            // Ace usually bundles common modes, but this ensures it's loaded
             const aceLanguage = languageMap[newLanguage];
             if (aceLanguage) {
                 import(`brace/mode/${aceLanguage}`)
@@ -197,7 +175,6 @@ const CodeEditorPage = () => {
         setIsWhiteMode(prevMode => !prevMode);
     };
 
-    // --- MOCK: Replace with actual code execution API call ---
     const handleRunCode = async () => {
         if (!problem) {
             setConsoleOutput('Cannot run: Problem data is not loaded.');
@@ -205,29 +182,18 @@ const CodeEditorPage = () => {
             return;
         }
 
-        // Use the first test case's input for the run simulation
         const firstInput = testResults[0]?.input || 'No input provided for run';
         console.log('Running code:', selectedLanguage, code, 'with input:', firstInput);
         setConsoleOutput(`Running code with input:\n${firstInput}\n...\n`);
         setActiveTab('console');
 
         try {
-            // Simulate API call delay
             await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // --- Replace with actual API call ---
-            // const response = await fetch('/api/run', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ language: selectedLanguage, code, input: firstInput })
-            // });
-            // const result = await response.json();
-            // --- Mock result ---
             const mockResult = {
                 output: `Simulated output for ${selectedLanguage}:\nHello World! Input was: ${firstInput.substring(0, 50)}...`, // Mock output
-                error: null // Simulate no error
+                error: null 
             };
-            // --- End Mock Result ---
 
             if (mockResult.error) {
                  setConsoleOutput(prev => prev + `Execution Error:\n${mockResult.error}`);
@@ -240,46 +206,36 @@ const CodeEditorPage = () => {
         }
     };
 
-    // --- MOCK: Replace with actual submission API call ---
     const handleSubmitCode = async () => {
         if (!problem || !testResults || testResults.length === 0) {
             setConsoleOutput('Cannot submit: Problem data or test cases are missing.');
-            setError('Cannot submit: Problem data or test cases are missing.'); // Also set error state
+            setError('Cannot submit: Problem data or test cases are missing.'); 
             setActiveTab('console');
             return;
         }
 
         console.log('Submitting code:', selectedLanguage, code);
-        setConsoleOutput('Submitting code and running test cases...\n'); // Add to console
-        setActiveTab('testcase'); // Switch view to test cases
+        setConsoleOutput('Submitting code and running test cases...\n'); 
+        setActiveTab('testcase'); 
 
-        // Reset test results status to 'running'
         const runningTests = testResults.map(tc => ({ ...tc, status: 'running', output: 'Running...' }));
         setTestResults(runningTests);
 
         try {
-            // Simulate API call delay for submission
             await new Promise(resolve => setTimeout(resolve, 500));
 
-            // --- Replace with actual API call to submit ---
             const response = await fetch(`/api/submit/${problemId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ language: selectedLanguage, code })
             });
-            const submissionResult = await response.json(); // Expects an array of results
-            // --- Mock results ---
-            // const mockSubmissionResult = await runMockTests(code, testResults);
-            // --- End Mock Results ---
-
-            // Update test results based on the response
+            const submissionResult = await response.json(); 
             setTestResults(submissionResult);
-            setConsoleOutput(prev => prev + 'Finished running all test cases.\nSee Testcase tab for results.\n'); // Update console
+            setConsoleOutput(prev => prev + 'Finished running all test cases.\nSee Testcase tab for results.\n');
 
         } catch (err) {
             console.error('Submit Error:', err);
             setConsoleOutput(prev => prev + `Submission Error:\n${err.message || 'Failed to submit code.'}`);
-            // Set all running tests to error status
             setTestResults(prev => prev.map(tc =>
                 tc.status === 'running' ? { ...tc, status: 'error', output: `Submission failed: ${err.message}` } : tc
             ));
@@ -287,43 +243,35 @@ const CodeEditorPage = () => {
     };
 
 
-    // --- MOCK TEST EXECUTION LOGIC ---
     const runMockTests = async (userCode, tests) => {
          const results = [];
          for (const testCase of tests) {
-             await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 300)); // Simulate test run time
+             await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 300)); 
 
              let status = 'failed';
              let output = `Mock Output for Input: ${testCase.input?.substring(0,30)}...`;
 
-             // Simulate pass/fail based on expected output
              if (testCase.expected) {
-                 if (Math.random() > 0.35) { // Simulate ~65% pass rate
+                 if (Math.random() > 0.35) { 
                      status = 'passed';
-                     output = testCase.expected; // Show expected as actual output on pass
+                     output = testCase.expected; 
                  } else {
                      status = 'failed';
-                     // Generate a slightly different mock output for failure
                      output = `Wrong Answer. Got: "${testCase.expected.split('').reverse().join('').substring(0,15)}..."`;
                  }
              } else {
-                 // If no expected output, consider it passed (e.g., for code structure checks)
                  status = 'passed';
                  output = 'Execution Completed (No specific output check)';
              }
 
              results.push({
-                 ...testCase, // Keep original id, input, expected
+                 ...testCase, 
                  status: status,
                  output: output,
              });
          }
          return results;
     };
-    // --- END MOCK TEST LOGIC ---
-
-
-    // --- MOCK PROBLEM DATA FUNCTION ---
     const getMockProblemData = (id) => {
         const problems = {
             '1': {
@@ -331,7 +279,7 @@ const CodeEditorPage = () => {
                 title: 'Two Sum',
                 difficulty: 'Easy',
                 category: 'Array',
-                description: { // Structured description
+                description: { 
                     header: "Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`.\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\nYou can return the answer in any order.",
                     example: [
                         { input: "nums = [2, 7, 11, 15], target = 9", output: "[0, 1]", explanation: "Because nums[0] + nums[1] == 9, we return [0, 1]." },
@@ -379,14 +327,9 @@ const CodeEditorPage = () => {
                      { input: "l1 = [9,9,9], l2 = [1]", expectedOutput: "[0,0,0,1]" },
                  ]
             }
-            // Add more mock problems as needed
         };
         return problems[id];
     };
-    // --- END MOCK PROBLEM DATA ---
-
-
-    // --- RENDER LOGIC ---
     if (loading) {
         return <div className={styles.loading}><FontAwesomeIcon icon={faSync} spin className={styles.icon} /> Loading Problem...</div>;
     }
@@ -396,13 +339,11 @@ const CodeEditorPage = () => {
                 <div className={styles.error}>
                     <FontAwesomeIcon icon={faExclamationTriangle} className={styles.icon} /> Error: {error}
                 </div>
-                {/* Provide a link back to a problems list page */}
                 <Link to="/" className={styles.backLink}>Go back to Problems List</Link>
             </div>
         );
     }
     if (!problem) {
-        // This case should ideally be covered by the loading/error states, but good as a fallback
         return (
             <div className={styles.errorContainer}>
                 <div className={styles.error}>
@@ -413,7 +354,6 @@ const CodeEditorPage = () => {
         );
     }
 
-    // Determine difficulty class safely
     const difficultyClass = styles[`difficulty${problem.difficulty?.toLowerCase()}`] || styles.difficultyDefault;
     const editorTheme = isWhiteMode ? 'github' : 'monokai'; // Simple theme toggle
 
@@ -429,7 +369,6 @@ const CodeEditorPage = () => {
                     {problem.category && (
                         <span className={styles.category}>{problem.category}</span>
                     )}
-                     {/* Add more meta info if needed, e.g., tags, source */}
                 </div>
 
                 {/* Structured Description Rendering */}
@@ -536,21 +475,21 @@ const CodeEditorPage = () => {
                         theme={editorTheme}
                         onChange={handleEditorChange}
                         value={code}
-                        name="UNIQUE_ID_OF_DIV" // Required by Ace
-                        editorProps={{ $blockScrolling: true }} // Recommended setting
+                        name="UNIQUE_ID_OF_DIV" 
+                        editorProps={{ $blockScrolling: true }}
                         width="100%"
-                        height="100%" // Fill container
+                        height="100%" 
                         fontSize={14}
                         showPrintMargin={false}
                         showGutter={true}
                         highlightActiveLine={true}
                         setOptions={{
-                            enableBasicAutocompletion: true, // Enable basic suggestions
-                            enableLiveAutocompletion: true, // Enable live suggestions
-                            enableSnippets: false, // Disable snippets if not needed
+                            enableBasicAutocompletion: true, 
+                            enableLiveAutocompletion: true, 
+                            enableSnippets: false,
                             showLineNumbers: true,
-                            tabSize: 4, // Use 4 spaces for tabs
-                            useWorker: false // Disable worker to avoid potential issues in some environments
+                            tabSize: 4, 
+                            useWorker: false 
                         }}
                     />
                 </div>
@@ -627,7 +566,7 @@ const CodeEditorPage = () => {
                         <button
                             className={`${styles.button} ${styles.runButton}`}
                             onClick={handleRunCode}
-                            disabled={loading || !problem} // Disable if loading or no problem data
+                            disabled={loading || !problem}
                             title="Run code with the first test case input"
                         >
                             <FontAwesomeIcon icon={faPlay} className={styles.icon} /> Run
@@ -635,7 +574,7 @@ const CodeEditorPage = () => {
                         <button
                             className={`${styles.button} ${styles.submitButton}`}
                             onClick={handleSubmitCode}
-                            disabled={loading || !problem || !testResults || testResults.length === 0} // Disable if loading, no problem, or no test cases
+                            disabled={loading || !problem || !testResults || testResults.length === 0} 
                             title="Submit code to run against all test cases"
                         >
                             <FontAwesomeIcon icon={faPaperPlane} className={styles.icon} /> Submit
@@ -643,7 +582,7 @@ const CodeEditorPage = () => {
                     </div>
                 </div> {/* End Results Panel */}
             </div> {/* End Right Panel */}
-        </div> // End Editor Layout
+        </div> 
     );
 };
 
