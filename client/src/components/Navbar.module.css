@@ -1,59 +1,63 @@
 /* client/src/components/Navbar.module.css */
-.navbar {
-    background-color: #ffffff; /* White background */
-    padding: 10px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    position: sticky; /* Make navbar sticky */
-    top: 0;
-    z-index: 1000; /* Ensure it's above other content */
-    width: 100%;
-}
 
-.navContainer {
+/* ==========================
+   Default (Light) Styles
+   ========================== */
+    
+   .navbar {
+    background-color: #ffffff;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+  }
+  
+  .navContainer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
     display: flex;
-    justify-content: space-between; /* Space out logo, links, auth */
+    justify-content: space-between;
     align-items: center;
-}
-
-.navLogo {
+  }
+  
+  .navLogo {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #333; /* Dark text color */
+    color: #333;
     text-decoration: none;
-}
-
-.navLinks {
-   display: flex;
-   gap: 25px; /* Space between links */
-}
-
-.navLink {
-    color: #555; /* Slightly lighter text for links */
+  }
+  
+  .navLinks {
+    display: flex;
+    gap: 25px;
+  }
+  
+  .navLink {
+    color: #555;
     text-decoration: none;
     font-size: 1rem;
     padding: 5px 0;
     transition: color 0.3s ease;
-}
-
-.navLink:hover {
-    color: #007bff; /* Blue on hover */
-}
-
-.navAuth {
+  }
+  .navLink:hover {
+    color: #007bff;
+  }
+  
+  .navAuth {
     display: flex;
     align-items: center;
-    gap: 15px; /* Space between auth buttons/message */
-}
-
-.welcomeMessage {
-   color: #0c0101;
-   margin-right: 10px; /* Space before logout button */
-}
-
-.navButton {
+    gap: 15px;
+  }
+  
+  .welcomeMessage {
+    color: #0c0101;
+    margin-right: 10px;
+  }
+  
+  .navButton {
     padding: 8px 15px;
     border: none;
     border-radius: 5px;
@@ -63,39 +67,101 @@
     font-size: 0.9rem;
     font-weight: 500;
     transition: background-color 0.3s ease, opacity 0.3s ease;
-}
-.navButton:disabled {
+  }
+  .navButton:disabled {
     opacity: 0.7;
     cursor: not-allowed;
-}
-
-
-.loginButton {
+  }
+  
+  .loginButton {
     background-color: transparent;
     border: 1px solid #007bff;
     color: #007bff;
-}
-.loginButton:hover {
-   background-color: rgba(0, 123, 255, 0.1);
-}
-
-.signupButton {
-   background-color: #007bff; /* Blue background */
-   color: white;
-}
-.signupButton:hover {
-    background-color: #0056b3; /* Darker blue */
-}
-
-.logoutButton {
-    background-color: #dc3545; /* Red */
+  }
+  .loginButton:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+  }
+  
+  .signupButton {
+    background-color: #007bff;
     color: white;
-}
-.logoutButton:hover {
-   background-color: #c82333; /* Darker red */
-}
-
-.loadingPlaceholder {
-    width: 100px; /* Estimate space needed by buttons to prevent layout jump */
-    height: 34px; /* Match button height */
-}
+  }
+  .signupButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .logoutButton {
+    background-color: #dc3545;
+    color: white;
+  }
+  .logoutButton:hover {
+    background-color: #c82333;
+  }
+  
+  .loadingPlaceholder {
+    width: 100px;
+    height: 34px;
+  }
+  
+  
+  /* ==========================
+     Dark‑Mode Overrides
+     ========================== */
+  
+  :global(.dark) :local(.navbar) {
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  
+  :global(.dark) :local(.navLogo) {
+    color: #f1f1f1;
+  }
+  .navLogo:hover {
+    color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.25);
+    border-radius: 4px; /* Optional: soft rounding for glow edges */
+    transition: box-shadow 0.3s ease, color 0.3s ease;
+  }
+  
+  
+  :global(.dark) :local(.navLink) {
+    color: #ccc;
+  }
+.navLink:hover {
+    color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.25);
+    border-radius: 4px; /* Optional: soft rounding for glow edges */
+    transition: box-shadow 0.3s ease, color 0.3s ease;
+  }
+  
+  
+  
+  :global(.dark) :local(.welcomeMessage) {
+    color: #f1f1f1;
+  }
+  
+  /* Buttons in dark mode */
+  :global(.dark) :local(.loginButton) {
+    border-color: #4dabf7;
+    color: #4dabf7;
+  }
+  :global(.dark) :local(.loginButton):hover {
+    background-color: rgba(77, 171, 247, 0.1);
+  }
+  
+  :global(.dark) :local(.signupButton) {
+    background-color: #4dabf7;
+    color: #1e1e1e;
+  }
+  :global(.dark) :local(.signupButton):hover {
+    background-color: #339af0;
+  }
+  
+  :global(.dark) :local(.logoutButton) {
+    background-color: #ef5350;
+    color: #1e1e1e;
+  }
+  :global(.dark) :local(.logoutButton):hover {
+    background-color: #d7393d;
+  }
+  

@@ -160,13 +160,7 @@ const CodeEditorPage = () => {
             setSelectedLanguage(newLanguage);
             const aceLanguage = languageMap[newLanguage];
             if (aceLanguage) {
-                import(`brace/mode/${aceLanguage}`)
-                    .then(() => {
-                         if (editorRef.current) {
-                             editorRef.current.editor.getSession().setMode(`ace/mode/${aceLanguage}`);
-                         }
-                    })
-                    .catch(error => console.error(`Failed to load mode for ${newLanguage}`, error));
+                editorRef.current.editor.getSession().setMode(`ace/mode/${aceLanguage}`);
             }
         }
     };
