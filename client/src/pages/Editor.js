@@ -422,8 +422,7 @@ const CodeEditorPage = () => {
 
                     {problem.description?.extra && (
                         <div className={styles.descriptionExtra}>
-                            {/* Check if label needed */}
-                            {problem.description.example || problem.description.extra ? <h3>Follow-up</h3> : null}
+                            <h3>Follow-up</h3>
                             <p>{problem.description.extra}</p>
                         </div>
                     )}
