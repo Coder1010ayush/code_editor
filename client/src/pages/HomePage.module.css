@@ -19,7 +19,7 @@ body.light {
     --cta-text-color: #ffffff; /* White text for contrast */
 }
   
-  body.dark {
+body.dark {
     /* Dark mode overrides */
     --bg-color: #121212;
     --text-color: #e0e0e0;
@@ -35,132 +35,179 @@ body.light {
     --cta-bg: #9b59b6; /* Light purple button background */
     --cta-hover: #8e4fa8; /* Slightly darker purple for hover */
     --cta-text-color: #ffffff; /* White text for contrast */   
-  }
-  
+}
 
+body.dark .hero {
+    box-shadow: 0 6px 14px rgba(255, 255, 255, 0.1);
+}
 
+body.dark .gridItem:hover,
+body.dark .categoryItem:hover {
+    box-shadow: 0 12px 24px rgba(255, 255, 255, 0.2);
+}
 
-  .homePage {
+.homePage {
     background-color: var(--bg-color);
     color: var(--text-color);
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  /* Hero Section */
-  .hero {
+}
+
+/* Subtle Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hero Section */
+.hero {
     text-align: center;
-    padding: 80px 20px;
-    background-color: var(--hero-bg);
+    padding: 100px 30px;
+    background-color: var(--card-bg);
     margin-bottom: 40px;
     border-radius: 1rem;
     box-shadow: 0 4px 12px var(--card-shadow);
     transition: background-color 0.3s ease;
-  }
-  
-  .hero h1 {
-    font-size: 3rem;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
     margin-bottom: 20px;
     color: var(--primary-color);
-  }
-  
-  .hero p {
-    font-size: 1.125rem;
+    font-weight: bold;
+}
+
+.hero p {
+    font-size: 1.25rem;
     color: var(--text-color);
     margin-bottom: 30px;
-    line-height: 1.5;
-  }
-  
-  .ctaButton {
+    line-height: 1.8;
+}
+
+.ctaButton {
     display: inline-block;
-    padding: 14px 28px;
+    padding: 16px 32px;
     background-color: var(--primary-color); /* Use primary color for button background */
     color: var(--cta-text-color); /* Ensure text color remains consistent */
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     text-decoration: none;
     border-radius: 0.75rem;
     box-shadow: 0 4px 8px var(--card-shadow);
     transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+    letter-spacing: 0.5px;
 }
 
 .ctaButton:hover {
     background-color: var(--cta-hover); /* Keep hover effect consistent */
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.05);
     outline: 2px solid var(--primary-color); /* Add outline on hover */
     outline-offset: 2px; /* Slight offset for better visibility */
 }
-  
-  /* Features & Categories Sections */
-  .features,
-  .categories {
-    padding: 60px 0;
+
+/* Features & Categories Sections */
+.features,
+.categories {
+    padding: 80px 0;
     text-align: center;
-  }
-  
-  .features h2,
-  .categories h2 {
-    font-size: 2.25rem;
+}
+
+.features h2,
+.categories h2 {
+    font-size: 2.5rem;
     margin-bottom: 40px;
     color: var(--primary-color);
-  }
-  
-  .grid {
+    font-weight: bold;
+}
+
+.grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
-  }
-  
-  .gridItem {
+}
+
+.gridItem {
     background-color: var(--card-bg);
-    padding: 30px;
+    padding: 40px;
     border: 1px solid var(--card-border);
     border-radius: 1rem;
     box-shadow: 0 4px 8px var(--card-shadow);
     text-align: left;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .gridItem:hover {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.gridItem:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 16px var(--card-shadow);
-  }
-  
-  .gridItem h3 {
-    font-size: 1.25rem;
+}
+
+.gridItem h3 {
+    font-size: 1.5rem;
     margin-bottom: 12px;
     color: var(--primary-color);
-  }
-  
-  .gridItem p {
+    font-weight: 600;
+}
+
+.gridItem p {
     font-size: 1rem;
     color: var(--text-color);
     line-height: 1.6;
-  }
-  
-  .categoryItem {
+}
+
+.categoryItem {
     text-align: center;
     cursor: pointer;
-    padding: 20px;
+    padding: 30px;
     border-radius: 1rem;
     background-color: var(--card-bg);
     border: 1px solid var(--card-border);
     box-shadow: 0 4px 8px var(--card-shadow);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .categoryItem:hover {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+.categoryItem:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 16px var(--card-shadow);
-  }
-  
-  .categoryItem h3 {
+}
+
+.categoryItem h3 {
     margin-bottom: 8px;
     color: var(--primary-color);
-  }
-  
-  .categoryItem p {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.categoryItem p {
     color: var(--text-color);
-  }
+}
+
+/* Footer Section */
+.footer {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: var(--container-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--filter-border);
+}
+
+.footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
