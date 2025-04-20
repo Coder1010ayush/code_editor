@@ -370,9 +370,17 @@ const CodeEditorPage = () => {
                         <span className={styles.category}>{problem.category}</span>
                     )}
                 </div>
+                
+                
 
                 {/* Structured Description Rendering */}
                 <div className={styles.descriptionContainer}>
+                    {problem.question && (
+                        <p className={styles.Question} dangerouslySetInnerHTML={{ __html: problem.question.replace(/`([^`]+)`/g, '<code>$1</code>') }}>
+                           {/* Using dangerouslySetInnerHTML here ONLY for simple inline code formatting */}
+                        </p>
+                    )}
+
                     {problem.description?.header && (
                         <p className={styles.descriptionHeader} dangerouslySetInnerHTML={{ __html: problem.description.header.replace(/`([^`]+)`/g, '<code>$1</code>') }}>
                            {/* Using dangerouslySetInnerHTML here ONLY for simple inline code formatting */}

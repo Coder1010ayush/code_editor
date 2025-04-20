@@ -9,6 +9,7 @@ const ProblemSchema = new mongoose.Schema({
     test_cases: [mongoose.Schema.Types.Mixed],
     difficulty: String,
     category: String,
+    test_cases: [mongoose.Schema.Types.Mixed]
 });
 
 module.exports = mongoose.model('Problem', ProblemSchema, 'Questions');

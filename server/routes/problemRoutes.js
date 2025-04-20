@@ -28,6 +28,7 @@ router.get('/:problemId', async (req, res) => {
         const problemForClient = {
              _id: problem._id,
              title: problem.title,
+             question: problem.question,
              difficulty: problem.difficulty,
              category: problem.category,
              description: problem.descr, 
