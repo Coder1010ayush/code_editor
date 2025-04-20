@@ -3,20 +3,20 @@
 /* Theme variables scoped to this component */
 body.light {
     /* Light mode colors */
-    --bg-color: #f8f9fa;
-    --text-color: #212529;
-    --container-bg: #ffffff;
-    --card-bg: #ffffff;
-    --card-shadow: rgba(0, 0, 0, 0.06);
-    --filter-bg: #ffffff;
-    --filter-border: #ced4da;
-    --primary-color: #6f42c1;
-    --easy-color: #28a745;
-    --medium-color: #ffc107;
-    --hard-color: #dc3545;
-    --cta-bg: #e9ecef; /* Light button background */
-    --cta-hover: #dee2e6; /* Light button hover background */
-    --cta-text-color: #212529; /* Light button text color */
+    --bg-color: #ffffff; /* Changed to pure white for a cleaner look */
+    --text-color: #343a40; /* Slightly darker text for better readability */
+    --container-bg: #f8f9fa; /* Softer container background */
+    --card-bg: #f8f9fa; /* Match container background for consistency */
+    --card-shadow: rgba(0, 0, 0, 0.1); /* Slightly darker shadow for better depth */
+    --filter-bg: #f1f3f5; /* Subtle gray for filter background */
+    --filter-border: #adb5bd; /* Softer border color */
+    --primary-color: #5a3d99; /* Slightly muted purple for a modern look */
+    --easy-color: #218838; /* Slightly darker green for better contrast */
+    --medium-color: #e0a800; /* Muted yellow for a softer tone */
+    --hard-color: #c82333; /* Slightly darker red for better contrast */
+    --cta-bg: #5a3d99; /* Purple button background */
+    --cta-hover: #4e3388; /* Darker purple for hover */
+    --cta-text-color: #ffffff; /* White text for contrast */
 }
   
   body.dark {
@@ -32,9 +32,9 @@ body.light {
     --easy-color: #66bb6a;
     --medium-color: #ffca28;
     --hard-color: #ef5350;
-    --cta-bg: #6f42c1; /* Dark button background */
-    --cta-hover: #5a379e; /* Dark button hover background */
-    --cta-text-color: #fff; /* Dark button text color */   
+    --cta-bg: #9b59b6; /* Light purple button background */
+    --cta-hover: #8e4fa8; /* Slightly darker purple for hover */
+    --cta-text-color: #ffffff; /* White text for contrast */   
   }
   
 
@@ -76,8 +76,8 @@ body.light {
   .ctaButton {
     display: inline-block;
     padding: 14px 28px;
-    background-color: var(--cta-bg);
-    color: var(--cta-text-color); /* Use the theme variable for text color */
+    background-color: var(--primary-color); /* Use primary color for button background */
+    color: var(--cta-text-color); /* Ensure text color remains consistent */
     font-size: 1rem;
     font-weight: 600;
     text-decoration: none;
@@ -87,8 +87,10 @@ body.light {
 }
 
 .ctaButton:hover {
-    background-color: var(--cta-hover);
+    background-color: var(--cta-hover); /* Keep hover effect consistent */
     transform: translateY(-2px);
+    outline: 2px solid var(--primary-color); /* Add outline on hover */
+    outline-offset: 2px; /* Slight offset for better visibility */
 }
   
   /* Features & Categories Sections */
@@ -162,4 +164,3 @@ body.light {
   .categoryItem p {
     color: var(--text-color);
   }
-  
