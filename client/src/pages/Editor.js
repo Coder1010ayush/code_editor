@@ -101,16 +101,23 @@ const CodeEditorPage = () => {
                 setCode(processedData.defaultCode?.[initialLang] || getDefaultCodeComment(initialLang));
 
                 const testCasesInput = processedData.testCases; 
+                console.log("test cases are " , testCasesInput);
                 let formattedTestCases = [];
                 if (Array.isArray(testCasesInput)) {
-                     formattedTestCases = testCasesInput.map((tc, index) => ({
-                        id: index,
-                        status: 'pending', 
-                        input: tc.input,
-                        expected: tc.expectedOutput, 
-                        output: null, 
-                    }));
+                    formattedTestCases = testCasesInput.map((tc, index) => {
+                        const { output, keys, ...rest } = tc;                
+                        return {
+                            id: index,
+                            status: 'pending',
+                            input: rest,
+                            expected: output,
+                            output: null,
+                            keys : keys
+                        };
+                    });
+                    console.log("formattedTestCases is looking like this " , formattedTestCases);
                 }
+                
                  else if (testCasesInput && typeof testCasesInput === 'object') {
                      console.warn("Processing potentially older test case structure.");
                      formattedTestCases = Object.values(testCasesInput).map((tc, index) => ({
@@ -175,29 +182,77 @@ const CodeEditorPage = () => {
             setActiveTab('console');
             return;
         }
+    
+        // let firstInput = testResults[0]?.input;
+        // const firstInput = testResults.map(result => result.input);
+        // let keys = testResults[0]?.keys;
+        // console.log("first input is " , firstInput);
+        // if (!firstInput) {
+        //     setConsoleOutput('No input available from test cases to run.');
+        //     setActiveTab('console');
+        //     return;
+        // }
 
-        const firstInput = testResults[0]?.input || 'No input provided for run';
+        const firstInput = [
+        {
+            nums: [2, 7, 11, 15],
+            target: 9,
+        },
+        {
+            nums: [1, 2, 11, 15],
+            target: 3,
+            
+        }
+        ];
+        let vps = ["nums" , "target"]
+    
         console.log('Running code:', selectedLanguage, code, 'with input:', firstInput);
-        setConsoleOutput(`Running code with input:\n${firstInput}\n...\n`);
+        setConsoleOutput(`Running code with input:\n${JSON.stringify(firstInput)}\n...\n`); 
         setActiveTab('console');
-
+    
         try {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            const mockResult = {
-                output: `Simulated output for ${selectedLanguage}:\nHello World! Input was: ${firstInput.substring(0, 50)}...`, // Mock output
-                error: null 
-            };
-
-            if (mockResult.error) {
-                 setConsoleOutput(prev => prev + `Execution Error:\n${mockResult.error}`);
-            } else {
-                 setConsoleOutput(prev => prev + `Execution Finished:\n${mockResult.output}`);
+            const response = await fetch('/api/run-test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    code: code,
+                    input: firstInput,
+                    keys: vps
+                }),
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Server error: ${response.status} - ${errorData?.message || 'Failed to run code on server.'}`);
             }
+            const result = await response.json();
+            if (result.error) {
+                setConsoleOutput(prev => prev + `Execution Error:\n${result.error}`);
+            } else if (result.results) { // Assuming the backend sends back { results: [...] }
+                 let outputString = 'Execution Finished:\n';
+                 result.results.forEach((testResult, index) => {
+                     outputString += `\nTest Case ${index + 1}:\n`;
+                     outputString += `  Input: ${JSON.stringify(testResult.input, null, 2)}\n`;
+                     if (testResult.error) {
+                         outputString += `  Error: ${testResult.error}\n`;
+                     } else {
+                         outputString += `  Output: ${JSON.stringify(testResult.actualOutput, null, 2)}\n`;
+                     }
+                 });
+                 setConsoleOutput(prev => prev + outputString);
+    
+            } else {
+                 setConsoleOutput(prev => prev + `Execution Finished:\nUnexpected result format: ${JSON.stringify(result)}`);
+            }
+    
+    
         } catch (err) {
             console.error('Run Error:', err);
-            setConsoleOutput(prev => prev + `Execution Error:\n${err.message || 'Failed to run code.'}`);
+            setConsoleOutput(prev => prev + `Execution Error:\n${err.message || 'Failed to communicate with the server.'}`);
         }
+    
     };
 
     const handleSubmitCode = async () => {
@@ -349,7 +404,7 @@ const CodeEditorPage = () => {
     }
 
     const difficultyClass = styles[`difficulty${problem.difficulty?.toLowerCase()}`] || styles.difficultyDefault;
-    const editorTheme = isWhiteMode ? 'github' : 'monokai'; // Simple theme toggle
+    const editorTheme = isWhiteMode ? 'github' : 'monokai'; 
 
     return (
         <div className={`${styles.editorLayout} ${isWhiteMode ? styles.whiteMode : styles.darkMode}`}>
@@ -365,8 +420,6 @@ const CodeEditorPage = () => {
                     )}
                 </div>
                 
-                
-
                 {/* Structured Description Rendering */}
                 <div className={styles.descriptionContainer}>
                     {problem.question && (
@@ -516,6 +569,7 @@ const CodeEditorPage = () => {
 
                     {/* Tab Content Area */}
                     <div className={styles.tabContent}>
+                        {/* {console.log("test case is " , testResults)} */}
                         {activeTab === 'testcase' && (
                             <div className={styles.testCasesContainer}>
                                 {testResults.length > 0 ? (
@@ -530,8 +584,14 @@ const CodeEditorPage = () => {
                                             {/* Show Input always */}
                                             <div className={styles.testCaseDetail}>
                                                 <strong>Input:</strong>
-                                                <pre>{tc.input !== null && tc.input !== undefined ? String(tc.input) : 'N/A'}</pre>
+                                                <pre>
+                                                    {console.log("tc.input is " , tc.input)}
+                                                    {tc.input && 
+                                                        JSON.stringify(tc.input, null, 2)
+                                                        }
+                                                </pre>
                                             </div>
+
                                             {/* Show Output only if not pending */}
                                             {tc.status !== 'pending' && (
                                                  <div className={styles.testCaseDetail}>
