@@ -78,7 +78,7 @@ dbConnectionPromise.then(mongooseConnection => {
     
                 const context = {
                     output: undefined,
-                    console // allows user code to use console.log if needed
+                    console 
                 };
     
                 const script = new vm.Script(scriptContent);
