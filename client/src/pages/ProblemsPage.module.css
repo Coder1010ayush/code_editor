@@ -7,7 +7,7 @@ body.light {
   --text-color: #212529;
   --container-bg: #ffffff;
   --card-bg: #ffffff;
-  --card-shadow: rgba(0, 0, 0, 0.06);
+  --card-shadow: rgba(0, 0, 0, 0.1);
   --filter-bg: #ffffff;
   --filter-border: #ced4da;
   --primary-color: #6f42c1;
@@ -16,13 +16,13 @@ body.light {
   --hard-color: #dc3545;
 }
 
-body.dark{
+body.dark {
   /* Dark mode overrides */
   --bg-color: #121212;
   --text-color: #e0e0e0;
   --container-bg: #1c1c1c;
-  --card-bg: #1f1f1f;
-  --card-shadow: rgba(0, 0, 0, 0.6);
+  --card-bg: #242424;
+  --card-shadow: rgba(0, 0, 0, 0.8);
   --filter-bg: #2c2c2c;
   --filter-border: #444;
   --primary-color: #9b59b6;
@@ -41,173 +41,219 @@ body {
   color: var(--text-color);
   font-family: 'Inter', 'Segoe UI', Tahoma, Verdana, sans-serif;
   line-height: 1.6;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 3rem 1.5rem;
+  padding: 3rem 2rem;
   background-color: var(--container-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 1rem;
-  box-shadow: 0 4px 12px var(--card-shadow);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 20px var(--card-shadow);
+  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle background gradient for depth */
+.container::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, var(--primary-color)22, transparent 70%);
+  opacity: 0.05;
+  pointer-events: none;
+  border-radius: 1.25rem;
 }
 
 .heading {
-  font-size: 2.75rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 2.5rem;
   text-align: center;
   color: var(--text-color);
-  letter-spacing: -0.5px;
+  letter-spacing: -0.75px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 /* ==========================
    Filters Section
    ========================== */
-/* Enhanced Filters Section */
 .filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
+  gap: 1.75rem;
+  margin-bottom: 3.5rem;
   justify-content: center;
 }
 
 .filterSelect {
-  padding: 0.85rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 1rem;
-  border: 1px solid var(--filter-border);
+  padding: 1rem 1.75rem;
+  font-size: 1.1rem;
+  border-radius: 1.25rem;
+  border: 1.5px solid var(--filter-border);
   background-color: var(--filter-bg);
   color: var(--text-color);
-  box-shadow: inset 0 1px 4px var(--card-shadow);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  box-shadow: inset 0 2px 6px var(--card-shadow);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+  cursor: pointer;
+  font-weight: 600;
+  user-select: none;
 }
 
 .filterSelect:hover {
-  box-shadow: inset 0 2px 8px var(--card-shadow);
-  transform: scale(1.02);
+  box-shadow: inset 0 3px 10px var(--card-shadow);
+  transform: scale(1.05);
+  border-color: var(--primary-color);
 }
 
 .filterSelect:focus {
   border-color: var(--primary-color);
   outline: none;
-  box-shadow: 0 0 0 4px rgba(111, 66, 193, 0.3);
+  box-shadow: 0 0 0 5px rgba(111, 66, 193, 0.35);
 }
 
 /* ==========================
    Problem List & Cards
    ========================== */
-/* Enhanced Problem List */
 .problemList {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.5rem;
   width: 100%;
   max-width: 1000px;
 }
 
-/* Improved Card Styles */
+/* Card Styles */
 .card {
   background-color: var(--card-bg);
-  border-radius: 1.5rem;
-  padding: 2rem;
+  border-radius: 2rem;
+  padding: 2.25rem 2.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 8px 20px var(--card-shadow);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px var(--card-shadow);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s ease;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 32px var(--card-shadow);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px var(--card-shadow);
 }
 
+/* Subtle animated underline on card title hover */
 .cardTitle {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   color: var(--text-color);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
+  position: relative;
   transition: color 0.3s ease;
+}
+
+.cardTitle::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background-color: var(--primary-color);
+  border-radius: 2px;
+  transition: width 0.3s ease;
 }
 
 .cardTitle:hover {
   color: var(--primary-color);
 }
 
-/* Enhanced Difficulty and Category Styles */
+.cardTitle:hover::after {
+  width: 100%;
+}
+
+/* Difficulty and Category Styles */
 .difficulty,
 .category {
-  padding: 0.6rem 1rem;
-  border-radius: 0.75rem;
-  font-size: 0.85rem;
-  font-weight: 600;
+  padding: 0.7rem 1.2rem;
+  border-radius: 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   white-space: nowrap;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: default;
+  user-select: none;
 }
 
 .difficulty:hover,
 .category:hover {
-  transform: scale(1.05);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .easy {
   background-color: var(--easy-color);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.5);
 }
 
 .medium {
   background-color: var(--medium-color);
-  color: var(--text-color);
+  color: #212529;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.5);
 }
 
 .hard {
   background-color: var(--hard-color);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.5);
 }
 
 .category {
   background-color: var(--primary-color);
   color: #fff;
+  box-shadow: 0 2px 8px rgba(111, 66, 193, 0.5);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
-    padding: 2rem 1rem;
+    padding: 2.5rem 1.5rem;
   }
 
   .filters {
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .problemList {
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
   .card {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 1.25rem;
+    padding: 1.75rem 1.5rem;
   }
 
   .cardTitle {
-    font-size: 1.2rem;
-  }
-
-  .difficulty,
-  .category {
-    font-size: 0.8rem;
-    padding: 0.5rem 0.8rem;
+    font-size: 1.3rem;
   }
 }

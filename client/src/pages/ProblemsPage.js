@@ -39,7 +39,7 @@ const ProblemsPage = () => {
         // <div className={themeClass}>
         <div className={styles.container}>
             {/* ... (heading and filters are the same) ... */}
-            <h1 className={styles.heading}>All Coding Problems</h1>
+            <h1 className={styles.heading}>Coding Problems</h1>
 
             <div className={styles.filters}>
                  {/* ... filter selects ... */}

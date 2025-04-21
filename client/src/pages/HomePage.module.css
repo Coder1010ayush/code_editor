@@ -3,38 +3,38 @@
 /* Theme variables scoped to this component */
 body.light {
     /* Light mode colors */
-    --bg-color: #ffffff; /* Changed to pure white for a cleaner look */
-    --text-color: #343a40; /* Slightly darker text for better readability */
-    --container-bg: #f8f9fa; /* Softer container background */
-    --card-bg: #f8f9fa; /* Match container background for consistency */
-    --card-shadow: rgba(0, 0, 0, 0.1); /* Slightly darker shadow for better depth */
-    --filter-bg: #f1f3f5; /* Subtle gray for filter background */
-    --filter-border: #adb5bd; /* Softer border color */
-    --primary-color: #5a3d99; /* Slightly muted purple for a modern look */
-    --easy-color: #218838; /* Slightly darker green for better contrast */
-    --medium-color: #e0a800; /* Muted yellow for a softer tone */
-    --hard-color: #c82333; /* Slightly darker red for better contrast */
+    --bg-color: #ffffff; /* Pure white for clean look */
+    --text-color: #2c2c2c; /* Darker text for better readability */
+    --container-bg: #f9f9fb; /* Slightly off-white for subtle contrast */
+    --card-bg: #ffffff; /* White cards for clarity */
+    --card-shadow: rgba(0, 0, 0, 0.12); /* Softer shadow for depth */
+    --filter-bg: #f1f3f5; /* Light gray for filter background */
+    --filter-border: #ced4da; /* Soft border color */
+    --primary-color: #5a3d99; /* Muted purple for modern look */
+    --easy-color: #218838; /* Dark green for contrast */
+    --medium-color: #e0a800; /* Muted yellow */
+    --hard-color: #c82333; /* Dark red */
     --cta-bg: #5a3d99; /* Purple button background */
-    --cta-hover: #4e3388; /* Darker purple for hover */
-    --cta-text-color: #ffffff; /* White text for contrast */
+    --cta-hover: #4e3388; /* Darker purple hover */
+    --cta-text-color: #ffffff; /* White text */
 }
-  
+
 body.dark {
     /* Dark mode overrides */
     --bg-color: #121212;
     --text-color: #e0e0e0;
     --container-bg: #1c1c1c;
-    --card-bg: #1f1f1f;
-    --card-shadow: rgba(0, 0, 0, 0.6);
+    --card-bg: #242424;
+    --card-shadow: rgba(0, 0, 0, 0.8);
     --filter-bg: #2c2c2c;
     --filter-border: #444;
     --primary-color: #9b59b6;
     --easy-color: #66bb6a;
     --medium-color: #ffca28;
     --hard-color: #ef5350;
-    --cta-bg: #9b59b6; /* Light purple button background */
-    --cta-hover: #8e4fa8; /* Slightly darker purple for hover */
-    --cta-text-color: #ffffff; /* White text for contrast */   
+    --cta-bg: #9b59b6;
+    --cta-hover: #8e4fa8;
+    --cta-text-color: #ffffff;
 }
 
 body.dark .hero {
@@ -51,15 +51,18 @@ body.dark .categoryItem:hover {
     color: var(--text-color);
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 30px 25px;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Verdana, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Subtle Animations */
-@keyframes fadeIn {
+@keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(15px);
     }
     to {
         opacity: 1;
@@ -70,144 +73,253 @@ body.dark .categoryItem:hover {
 /* Hero Section */
 .hero {
     text-align: center;
-    padding: 100px 30px;
+    padding: 120px 40px 80px;
     background-color: var(--card-bg);
-    margin-bottom: 40px;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px var(--card-shadow);
-    transition: background-color 0.3s ease;
-    animation: fadeIn 0.8s ease-in-out;
+    margin-bottom: 50px;
+    border-radius: 1.25rem;
+    box-shadow: 0 6px 20px var(--card-shadow);
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+    animation: fadeInUp 0.8s ease forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle gradient overlay for depth */
+.hero::before {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: -30%;
+    width: 160%;
+    height: 160%;
+    background: radial-gradient(circle at center, var(--primary-color)22, transparent 75%);
+    opacity: 0.07;
+    pointer-events: none;
+    border-radius: 1.25rem;
 }
 
 .hero h1 {
-    font-size: 3.5rem;
-    margin-bottom: 20px;
+    font-size: 3.75rem;
+    margin-bottom: 25px;
     color: var(--primary-color);
-    font-weight: bold;
+    font-weight: 900;
+    letter-spacing: -1px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .hero p {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     color: var(--text-color);
-    margin-bottom: 30px;
-    line-height: 1.8;
+    margin-bottom: 40px;
+    line-height: 1.9;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+/* Call to Action Button */
 .ctaButton {
     display: inline-block;
-    padding: 16px 32px;
-    background-color: var(--primary-color); /* Use primary color for button background */
-    color: var(--cta-text-color); /* Ensure text color remains consistent */
-    font-size: 1.1rem;
-    font-weight: 600;
+    padding: 18px 36px;
+    background-color: var(--cta-bg);
+    color: var(--cta-text-color);
+    font-size: 1.2rem;
+    font-weight: 700;
     text-decoration: none;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 8px var(--card-shadow);
-    transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
-    letter-spacing: 0.5px;
+    border-radius: 1rem;
+    box-shadow: 0 6px 14px rgba(90, 61, 153, 0.5);
+    transition: background-color 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
+    letter-spacing: 0.75px;
+    user-select: none;
+    cursor: pointer;
 }
 
-.ctaButton:hover {
-    background-color: var(--cta-hover); /* Keep hover effect consistent */
-    transform: translateY(-3px) scale(1.05);
-    outline: 2px solid var(--primary-color); /* Add outline on hover */
-    outline-offset: 2px; /* Slight offset for better visibility */
+.ctaButton:hover,
+.ctaButton:focus {
+    background-color: var(--cta-hover);
+    transform: translateY(-4px) scale(1.07);
+    box-shadow: 0 10px 24px rgba(78, 51, 136, 0.7);
+    outline: none;
 }
 
 /* Features & Categories Sections */
 .features,
 .categories {
-    padding: 80px 0;
+    padding: 90px 0;
     text-align: center;
 }
 
 .features h2,
 .categories h2 {
-    font-size: 2.5rem;
-    margin-bottom: 40px;
+    font-size: 2.75rem;
+    margin-bottom: 45px;
     color: var(--primary-color);
-    font-weight: bold;
+    font-weight: 900;
+    letter-spacing: -0.5px;
 }
 
+/* Grid Layout */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 35px;
 }
 
+/* Grid Items */
 .gridItem {
     background-color: var(--card-bg);
-    padding: 40px;
-    border: 1px solid var(--card-border);
-    border-radius: 1rem;
-    box-shadow: 0 4px 8px var(--card-shadow);
+    padding: 45px 40px;
+    border-radius: 1.25rem;
+    box-shadow: 0 6px 18px var(--card-shadow);
     text-align: left;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    animation: fadeIn 0.6s ease-in-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.6s ease forwards;
+    cursor: default;
+    user-select: none;
 }
 
-.gridItem:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px var(--card-shadow);
+.gridItem:hover,
+.gridItem:focus {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px var(--card-shadow);
+    outline: none;
 }
 
 .gridItem h3 {
-    font-size: 1.5rem;
-    margin-bottom: 12px;
+    font-size: 1.75rem;
+    margin-bottom: 15px;
     color: var(--primary-color);
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: -0.25px;
 }
 
 .gridItem p {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: var(--text-color);
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
+/* Category Items */
 .categoryItem {
     text-align: center;
     cursor: pointer;
-    padding: 30px;
-    border-radius: 1rem;
+    padding: 35px 30px;
+    border-radius: 1.25rem;
     background-color: var(--card-bg);
-    border: 1px solid var(--card-border);
-    box-shadow: 0 4px 8px var(--card-shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    animation: fadeIn 0.6s ease-in-out;
+    border: 1px solid var(--filter-border);
+    box-shadow: 0 6px 18px var(--card-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.6s ease forwards;
+    user-select: none;
 }
 
-.categoryItem:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 16px var(--card-shadow);
+.categoryItem:hover,
+.categoryItem:focus {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 32px var(--card-shadow);
+    outline: none;
 }
 
 .categoryItem h3 {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     color: var(--primary-color);
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.25px;
 }
 
 .categoryItem p {
     color: var(--text-color);
+    font-size: 1.05rem;
+    line-height: 1.6;
 }
 
 /* Footer Section */
 .footer {
     text-align: center;
-    padding: 40px 20px;
+    padding: 50px 25px;
     background-color: var(--container-bg);
     color: var(--text-color);
-    font-size: 0.9rem;
+    font-size: 1rem;
     border-top: 1px solid var(--filter-border);
+    user-select: none;
 }
 
 .footer a {
     color: var(--primary-color);
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
+    transition: color 0.3s ease;
 }
 
-.footer a:hover {
+.footer a:hover,
+.footer a:focus {
     text-decoration: underline;
+    color: var(--primary-color);
+    outline: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .homePage {
+        padding: 25px 20px;
+    }
+
+    .hero {
+        padding: 90px 25px 60px;
+    }
+
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+        max-width: 100%;
+    }
+
+    .ctaButton {
+        padding: 14px 28px;
+        font-size: 1rem;
+    }
+
+    .features h2,
+    .categories h2 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+    }
+
+    .gridItem {
+        padding: 30px 25px;
+    }
+
+    .gridItem h3 {
+        font-size: 1.4rem;
+    }
+
+    .gridItem p {
+        font-size: 1rem;
+    }
+
+    .categoryItem {
+        padding: 25px 20px;
+    }
+
+    .categoryItem h3 {
+        font-size: 1.4rem;
+    }
+
+    .categoryItem p {
+        font-size: 0.95rem;
+    }
+
+    .footer {
+        padding: 35px 20px;
+        font-size: 0.9rem;
+    }
 }
