@@ -184,27 +184,16 @@ const CodeEditorPage = () => {
         }
     
         // let firstInput = testResults[0]?.input;
-        // const firstInput = testResults.map(result => result.input);
-        // let keys = testResults[0]?.keys;
-        // console.log("first input is " , firstInput);
-        // if (!firstInput) {
-        //     setConsoleOutput('No input available from test cases to run.');
-        //     setActiveTab('console');
-        //     return;
-        // }
-
-        const firstInput = [
-        {
-            nums: [2, 7, 11, 15],
-            target: 9,
-        },
-        {
-            nums: [1, 2, 11, 15],
-            target: 3,
-            
+        const firstInput = testResults.map(result => result.input);
+        let vps = testResults[0]?.keys;
+        console.log("first input is " , firstInput);
+        if (!firstInput) {
+            setConsoleOutput('No input available from test cases to run.');
+            setActiveTab('console');
+            return;
         }
-        ];
-        let vps = ["nums" , "target"]
+
+        
     
         console.log('Running code:', selectedLanguage, code, 'with input:', firstInput);
         setConsoleOutput(`Running code with input:\n${JSON.stringify(firstInput)}\n...\n`); 
