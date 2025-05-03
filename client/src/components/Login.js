@@ -19,6 +19,8 @@ function Login() {
         try {
             await login({ emailOrUsername, password });
             navigate('/dashboard');
+            
+            
         } catch (err) {
             console.error("Login component error catch:", err);
             const message = err.response?.data?.message || err.message || 'Login failed. Please check credentials.';

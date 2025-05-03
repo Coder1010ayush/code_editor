@@ -1,72 +1,8 @@
-// import React from 'react';
-// import { useAuth } from '../context/AuthContext';
-// import styles from './DashBoard.module.css'; // We'll create this CSS file next
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faUserCircle, faTrophy, faCheckCircle, faStar, faChartBar } from '@fortawesome/free-solid-svg-icons';
-
-// const DashboardPage = () => {
-//     const { user } = useAuth();
-//     const username = user && user.username ? user.username : 'User';
-
-//     // Placeholder data for profile information
-//     const solvedProblems = 150;
-//     const ranking = 1250;
-//     const completionRate = 75;
-//     const streak = 30;
-//     const badges = [
-//         { name: 'Problem Solver', icon: faCheckCircle },
-//         { name: 'Top 15%', icon: faTrophy },
-//         { name: 'Consistent Coder', icon: faStar },
-//     ];
-
-//     return (
-//         <div className={styles.dashboardContainer}>
-//             <div className={styles.profileCard}>
-//                 <div className={styles.profileHeader}>
-//                     <FontAwesomeIcon icon={faUserCircle} className={styles.profileAvatar} />
-//                     <h2 className={styles.username}>{username}</h2>
-//                 </div>
-//                 <div className={styles.profileStats}>
-//                     <div className={styles.statItem}>
-//                         <FontAwesomeIcon icon={faCheckCircle} className={styles.statIcon} />
-//                         <span>{solvedProblems} Problems Solved</span>
-//                     </div>
-//                     <div className={styles.statItem}>
-//                         <FontAwesomeIcon icon={faTrophy} className={styles.statIcon} />
-//                         <span>Ranking: #{ranking}</span>
-//                     </div>
-//                     <div className={styles.statItem}>
-//                         <FontAwesomeIcon icon={faChartBar} className={styles.statIcon} />
-//                         <span>Completion Rate: {completionRate}%</span>
-//                     </div>
-//                     <div className={styles.statItem}>
-//                         <FontAwesomeIcon icon={faStar} className={styles.statIcon} />
-//                         <span>Current Streak: {streak} days</span>
-//                     </div>
-//                 </div>
-//                 <div className={styles.profileBadges}>
-//                     <h3>Badges</h3>
-//                     <div className={styles.badgeList}>
-//                         {badges.map((badge, index) => (
-//                             <div key={index} className={styles.badgeItem}>
-//                                 <FontAwesomeIcon icon={badge.icon} className={styles.badgeIcon} />
-//                                 <span>{badge.name}</span>
-//                             </div>
-//                         ))}
-//                     </div>
-//                 </div>
-//             </div>
-//             {/* You can add more dashboard content below the profile */}
-//         </div>
-//     );
-// };
-
-// export default DashboardPage;
 
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import styles from './DashBoard.module.css';
+import styless from './AdminDashboard.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
@@ -74,8 +10,59 @@ const DashboardPage = () => {
     const { user } = useAuth();
 
     if (!user) {
-        return <div>Loading...</div>; // or a spinner
-    }
+        return <div>Loading...</div>; 
+    } 
+    console.log("user.role is " , user.role);
+
+    if (user.role == "Admin"){
+        let avatarUrl = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"
+        const options = [
+            { id: 1, name: 'Add Problem Statement', action: 'add_problem' },
+            { id: 2, name: 'Create a Contest', action: 'create_contest' },
+            { id: 3, name: 'See Previous Contests', action: 'view_contests' },
+        ];
+
+        const handleOptionClick = (optionAction) => {
+            console.log(`Option clicked: ${optionAction}`);
+        };
+
+        return (
+                <div className={styless.dashboardContainer}>
+                    {/* Admin Info Section */}
+                    <div className={styless.userInfo}>
+                        <img
+                            src={avatarUrl}
+                            alt={`${avatarUrl}'s avatar`}
+                            className={styless.avatar}
+                        />
+                        <div className={styless.userName}>
+                            <h2>Welcome, {user.name}!</h2>
+                        </div>
+                    </div>
+        
+                    {/* Options Section */}
+                    <div className={styless.optionsList}>
+                        {options.map(option => (
+                            <div
+                                key={option.id}
+                                className={styless.optionItem}
+                                onClick={() => handleOptionClick(option.action)}
+                                role="button"
+                                tabIndex={0} 
+                                onKeyPress={(e) => { 
+                                  if (e.key === 'Enter' || e.key === ' ') {
+                                    handleOptionClick(option.action);
+                                  }
+                                }}
+                            >
+                                {option.name}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+        );
+
+    }else{
 
     return (
         <div className={styles.dashboardContainer}>
@@ -165,6 +152,7 @@ const DashboardPage = () => {
             </main>
         </div>
     );
+}
 };
 
 export default DashboardPage;

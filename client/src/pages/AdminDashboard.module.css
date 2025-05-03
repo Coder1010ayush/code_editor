@@ -1,0 +1,63 @@
+/* pages/AdminDashboard.module.css */
+
+.dashboardContainer {
+    max-width: 900px; /* Limit the width for better readability */
+    margin: 40px auto; /* Center the container */
+    padding: 30px;
+    background-color: #ffffff; /* White background */
+    border-radius: 12px; /* Slightly rounded corners for the container */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+    font-family: sans-serif; /* Use a common sans-serif font */
+}
+
+.userInfo {
+    display: flex; /* Arrange image and name side-by-side */
+    align-items: center; /* Vertically align items */
+    padding-bottom: 20px; /* Space below user info */
+    margin-bottom: 30px; /* Space before options list */
+    border-bottom: 1px solid #eee; /* Separator line */
+}
+
+.avatar {
+    width: 80px; /* Size of the image */
+    height: 80px;
+    border-radius: 50%; /* Make it round */
+    object-fit: cover; /* Crop image to fit without distortion */
+    margin-right: 20px; /* Space between image and name */
+    border: 3px solid #0070f3; /* Add a small border with a brand color */
+}
+
+.userName h2 {
+    margin: 0; /* Remove default margin from h2 */
+    font-size: 1.8em; /* Larger font for name */
+    color: #333; /* Darker text color */
+}
+
+.optionsList {
+    display: grid; /* Use grid for flexible layout */
+    gap: 20px; /* Space between grid items */
+    /* You can adjust columns based on preference or screen size */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    list-style: none; /* Remove default list bullets */
+    padding: 0; /* Remove default padding */
+}
+
+.optionItem {
+    background-color: #f9f9f9; /* Light background for each option */
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners for options */
+    border: 1px solid #ddd; /* Subtle border */
+    cursor: pointer; /* Indicate it's clickable */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transition for hover effects */
+    text-align: center; /* Center the text */
+    font-size: 1.1em;
+    color: #555;
+    font-weight: 600;
+}
+
+.optionItem:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* More prominent shadow on hover */
+    background-color: #eef; /* Slightly different background on hover */
+    color: #005bb5; /* Change text color on hover */
+}
