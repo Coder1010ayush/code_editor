@@ -126,6 +126,59 @@ body {
     margin-bottom: 0;
   }
   
+  /* Styles for rows within sections */
+  .testCaseRow {
+      display: flex;
+      gap: 15px; /* Space between elements in the row */
+      align-items: center; /* Vertically align items */
+      margin-bottom: 15px; /* Space below the row */
+      flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+  }
+  
+  .testCaseRow > * {
+      flex-grow: 1; /* Allow children to grow */
+      min-width: 150px; /* Minimum width for flex items before wrapping */
+  }
+  
+  .testCaseRow .label {
+      margin-bottom: 0; /* Adjust label margin in flex row */
+      min-width: 100px; /* Give labels a minimum width */
+  }
+  
+  .testCaseRow .select {
+      width: auto; /* Allow select to size based on content */
+      min-width: 120px; /* Minimum width for the type dropdown */
+  }
+  
+  /* Container for individual argument inputs within a test case */
+  .argumentInputContainer {
+      border: 1px solid #5a5a5a; /* Border for each argument section */
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px; /* Space between argument sections */
+      background-color: #4a4a4a; /* Darker background for argument sections */
+  }
+  
+  .argumentInputContainer:last-child {
+      margin-bottom: 0;
+  }
+  
+  /* Flex container for argument name, type, and value */
+  .argumentDetailsRow {
+      display: flex;
+      gap: 15px; /* Space between argument details */
+      flex-wrap: wrap; /* Allow items to wrap */
+  }
+  
+  .argumentDetailsRow .inputGroup {
+      flex: 1; /* Allow input groups to take equal space */
+      margin-bottom: 0; /* Remove bottom margin from input groups */
+  }
+  
+  .argumentDetailsRow .inputGroup .label {
+      margin-bottom: 5px; /* Smaller margin for labels within the row */
+  }
+  
   
   .submitButton {
     display: block;
