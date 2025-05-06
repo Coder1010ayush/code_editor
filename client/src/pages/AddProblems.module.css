@@ -1,0 +1,152 @@
+/* pages/AddProblems.module.css - Dark Mode and Enhanced Styling */
+
+body {
+    /* Apply dark background to the body as well for a full dark theme experience */
+    background-color: #1e1e1e;
+    color: #e0e0e0; /* Default text color */
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 30px auto; /* Increased margin for better spacing */
+    padding: 30px; /* Increased padding */
+    background-color: #2d2d2d; /* Darker background for the container */
+    border-radius: 12px; /* More rounded corners */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Stronger shadow for depth */
+    font-family: 'Roboto', sans-serif; /* Changed font for a modern feel */
+    color: #e0e0e0; /* Text color within the container */
+  }
+  
+  .title {
+    text-align: center;
+    color: #4CAF50; /* Accent color for the title */
+    margin-bottom: 40px; /* Increased bottom margin */
+    font-size: 2.2rem; /* Larger title font size */
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Increased gap between sections */
+  }
+  
+  .section {
+    background-color: #3c3c3c; /* Slightly lighter dark background for sections */
+    padding: 25px; /* Increased padding */
+    border-radius: 10px; /* Rounded corners for sections */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); /* Shadow for sections */
+    border: 1px solid #4a4a4a; /* Subtle border */
+  }
+  
+  .subTitle {
+    margin-top: 0;
+    color: #81C784; /* Accent color for subtitles */
+    border-bottom: 1px solid #5a5a5a; /* Darker border */
+    padding-bottom: 12px; /* Increased padding */
+    margin-bottom: 20px; /* Increased bottom margin */
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+  
+  .subSection {
+    margin-bottom: 20px; /* Increased bottom margin */
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 10px; /* Increased bottom margin */
+    font-weight: bold;
+    color: #b0b0b0; /* Lighter color for labels */
+    font-size: 1.05rem;
+  }
+  
+  .input,
+  .textarea,
+  .select {
+    width: 100%;
+    padding: 12px; /* Increased padding */
+    border: 1px solid #5a5a5a; /* Darker border */
+    border-radius: 6px; /* Rounded corners */
+    font-size: 1rem;
+    box-sizing: border-box;
+    background-color: #4a4a4a; /* Darker background for inputs */
+    color: #e0e0e0; /* Text color */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .input:focus,
+  .textarea:focus,
+  .select:focus {
+    border-color: #4CAF50; /* Accent color on focus */
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.4); /* Glow effect on focus */
+    outline: none; /* Remove default outline */
+  }
+  
+  
+  .textarea {
+    min-height: 150px; /* Increased min-height */
+    resize: vertical;
+  }
+  
+  .select {
+    cursor: pointer;
+    appearance: none; /* Remove default select arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23e0e0e0'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' /%3E%3C/svg%3E"); /* Custom arrow */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 1em;
+    padding-right: 30px; /* Make space for the arrow */
+  }
+  
+  
+  .testCaseInput,
+  .exampleInput {
+    border: 1px dashed #6a6a6a; /* Darker dashed border */
+    padding: 20px; /* Increased padding */
+    margin-top: 20px; /* Increased top margin */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #333333; /* Darker background */
+  }
+  
+  .inputGroupTitle {
+    margin-top: 0;
+    margin-bottom: 15px; /* Increased bottom margin */
+    color: #b0b0b0; /* Lighter color */
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  
+  .inputGroup {
+    margin-bottom: 20px; /* Increased bottom margin */
+  }
+  
+  .inputGroup:last-child {
+    margin-bottom: 0;
+  }
+  
+  
+  .submitButton {
+    display: block;
+    width: 100%;
+    padding: 14px; /* Increased padding */
+    background-color: #4CAF50; /* Accent color for the button */
+    color: white;
+    border: none;
+    border-radius: 6px; /* Rounded corners */
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  .submitButton:hover {
+    background-color: #388E3C; /* Darker accent color on hover */
+  }
+  
+  .submitButton:active {
+    transform: scale(0.98); /* Slightly shrink on click */
+  }
+  

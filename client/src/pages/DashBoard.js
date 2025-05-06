@@ -2,12 +2,14 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import styles from './DashBoard.module.css';
+import { useNavigate, Link } from 'react-router-dom';
 import styless from './AdminDashboard.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 const DashboardPage = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     if (!user) {
         return <div>Loading...</div>; 
@@ -24,6 +26,9 @@ const DashboardPage = () => {
 
         const handleOptionClick = (optionAction) => {
             console.log(`Option clicked: ${optionAction}`);
+            if (optionAction == "add_problem"){
+                navigate("/addProblem")
+            }
         };
 
         return (

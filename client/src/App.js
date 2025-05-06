@@ -13,6 +13,7 @@ import DashboardPage from './pages/DashBoard';
 // import CodeEditorPage from './pages/Editor';
 import CodeEditorPage from './pages/Editor';
 import AdminDashboard from './pages/AdminDashboard';
+import AddProblems from './pages/AddProblems';
 
 // Keep DashboardPage and NotFoundPage (or move them to /pages too)
 const NotFoundPage = () => <div style={{ minHeight: '60vh', textAlign: 'center', padding: '50px' }}><h1>404 - Page Not Found</h1></div>;
@@ -60,6 +61,11 @@ function App() {
 
                     <Route element={<ProtectedRoute />}>
                         <Route path="/adminDashboard" element={<AdminDashboard />} />
+                        {/* Add other protected routes here */}
+                    </Route>
+
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="/addProblem" element={<AddProblems />} />
                         {/* Add other protected routes here */}
                     </Route>
 
