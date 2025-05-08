@@ -202,4 +202,3 @@ body {
   .submitButton:active {
     transform: scale(0.98); /* Slightly shrink on click */
   }
-  

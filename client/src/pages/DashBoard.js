@@ -28,6 +28,9 @@ const DashboardPage = () => {
             console.log(`Option clicked: ${optionAction}`);
             if (optionAction == "add_problem"){
                 navigate("/addProblem")
+            }else if(optionAction == "create_contest"){
+                console.log("we are here to parse the tree.")
+                navigate("/addContest")
             }
         };
 

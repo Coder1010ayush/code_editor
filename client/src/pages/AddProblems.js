@@ -1,59 +1,62 @@
 import React, { useState } from 'react';
-import styles from './AddProblems.module.css'; 
+import styles from './AddProblems.module.css';
 
 const AddProblems = () => {
-  // State for basic problem details
   const [title, setTitle] = useState('');
   const [question, setQuestion] = useState('');
   const [difficulty, setDifficulty] = useState('Easy');
   const [category, setCategory] = useState('');
 
-  // State for description sections
   const [extra, setExtra] = useState('');
   const [header, setHeader] = useState('');
   const [constraints, setConstraints] = useState('');
   const [numTestCases, setNumTestCases] = useState(0);
-  const [testCases, setTestCases] = useState([]); // Array of { numArguments: number, arguments: Array<{ name: string, type: string, value: string }> }
-
-  // State for examples - Using 'input' and 'output'
+  const [testCases, setTestCases] = useState([]);
   const [numExamples, setNumExamples] = useState(0);
-  const [examples, setExamples] = useState([]); 
-
-  // Options for argument types in test cases
+  const [examples, setExamples] = useState([]);
   const argumentTypes = ['String', 'Number', 'Array', 'Object', 'Boolean', 'Null', 'Other'];
 
-  // Handle changes for a specific argument within a test case - Updated to handle 'name'
+  // Handles changes to individual arguments within a test case
   const handleArgumentChange = (testCaseIndex, argumentIndex, field, value) => {
     const newTestCases = [...testCases];
     newTestCases[testCaseIndex].arguments[argumentIndex][field] = value;
     setTestCases(newTestCases);
   };
 
-  // Handle change in the number of arguments for a specific test case
+  // Handles changes to the number of arguments for a specific test case
   const handleNumArgumentsChange = (testCaseIndex, count) => {
     const newTestCases = [...testCases];
     newTestCases[testCaseIndex].numArguments = count;
-    newTestCases[testCaseIndex].arguments = Array.from({ length: count }, () => ({ name: '', type: 'String', value: '' })); 
+    // Initialize arguments array based on the new count
+    newTestCases[testCaseIndex].arguments = Array.from({ length: count }, () => ({ name: '', type: 'String', value: '' }));
     setTestCases(newTestCases);
   };
 
-
-  // Handle change in number of test cases dropdown
+  // Handles changes to the total number of test cases
   const handleNumTestCasesChange = (e) => {
     const count = parseInt(e.target.value, 10);
     setNumTestCases(count);
-    setTestCases(Array.from({ length: count }, () => ({ numArguments: 1, arguments: [{ name: '', type: 'String', value: '' }] }))); 
+    // Initialize testCases array based on the new count
+    setTestCases(Array.from({ length: count }, () => ({ numArguments: 1, arguments: [{ name: '', type: 'String', value: '' }] })));
   };
 
-  // Handle change in number of examples dropdown
+  // Handles changes to the total number of examples
   const handleNumExamplesChange = (e) => {
     const count = parseInt(e.target.value, 10);
     setNumExamples(count);
-    // Initialize examples array with empty objects based on the count
+    // Initialize examples array based on the new count
     setExamples(Array.from({ length: count }, () => ({ input: '', output: '' })));
   };
 
-  // Handle form submission 
+  // **FIXED:** Handles changes to individual example input or output fields
+  const handleExampleChange = (index, field, value) => {
+    const newExamples = [...examples];
+    newExamples[index][field] = value;
+    setExamples(newExamples);
+  };
+
+
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     const problemData = {
@@ -66,10 +69,11 @@ const AddProblems = () => {
         header,
         constraints,
       },
-      test_cases: testCases, 
+      test_cases: testCases,
       example: examples,
     };
     console.log('Problem Data:', problemData);
+    // Here you would typically send problemData to your backend API
   };
 
   return (
@@ -138,6 +142,7 @@ const AddProblems = () => {
               className={`${styles.input} ${styles.textarea}`}
             ></textarea>
           </div>
+
           <div className={styles.subSection}>
             <label htmlFor="header" className={styles.label}>Header:</label>
             <textarea
@@ -147,6 +152,7 @@ const AddProblems = () => {
               className={`${styles.input} ${styles.textarea}`}
             ></textarea>
           </div>
+
           <div className={styles.subSection}>
             <label htmlFor="constraints" className={styles.label}>Constraints:</label>
             <textarea
@@ -169,7 +175,7 @@ const AddProblems = () => {
               onChange={handleNumTestCasesChange}
               className={styles.select}
             >
-              {[...Array(11).keys()].map(num => ( // Options from 0 to 10
+              {[...Array(11).keys()].map(num => (
                 <option key={num} value={num}>{num}</option>
               ))}
             </select>
@@ -188,7 +194,7 @@ const AddProblems = () => {
                     onChange={(e) => handleNumArgumentsChange(testCaseIndex, parseInt(e.target.value, 10))}
                     className={styles.select}
                  >
-                    {[...Array(6).keys()].map(num => ( // Options from 0 to 5 arguments
+                    {[...Array(6).keys()].map(num => ( // Options from 0 to 5
                        <option key={num} value={num}>{num}</option>
                     ))}
                  </select>
@@ -249,7 +255,7 @@ const AddProblems = () => {
             <select
               id="numExamples"
               value={numExamples}
-              onChange={handleNumExamplesChange}
+              onChange={handleNumExamplesChange} // This handles changing the COUNT of examples
               className={styles.select}
             >
               {[...Array(6).keys()].map(num => ( // Options from 0 to 5
@@ -267,6 +273,7 @@ const AddProblems = () => {
                   type="text"
                   id={`exampleInput${index}`}
                   value={example.input}
+                  // **FIXED:** Use the new handleExampleChange function
                   onChange={(e) => handleExampleChange(index, 'input', e.target.value)}
                   className={styles.input}
                   required
@@ -278,6 +285,7 @@ const AddProblems = () => {
                   type="text"
                   id={`exampleOutput${index}`}
                   value={example.output}
+                  // **FIXED:** Use the new handleExampleChange function
                   onChange={(e) => handleExampleChange(index, 'output', e.target.value)}
                   className={styles.input}
                   required

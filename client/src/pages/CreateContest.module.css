@@ -1,0 +1,243 @@
+/* General container and form styling */
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+    /* Dark Mode Colors */
+    background-color: #282c34; /* A common dark background color */
+    color: #abb2bf; /* Light gray text color */
+    border-radius: 10px; /* Slightly more rounded corners */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3); /* More pronounced dark shadow */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+  }
+  
+  .title {
+    text-align: center;
+    color: #61dafb; /* A vibrant color for the title */
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: lighter;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between form groups */
+  }
+  
+  .formGroup {
+    margin-bottom: 15px;
+    /* Optional: add a subtle border or bottom margin to separate groups */
+    /* border-bottom: 1px solid #3a3f47; */
+    /* padding-bottom: 20px; */
+  }
+  
+  .formGroup label {
+    display: block;
+    margin-bottom: 10px; /* Slightly increased space */
+    font-weight: bold;
+    color: #e0e0e0; /* Lighter color for labels */
+    font-size: 1.05em;
+  }
+  
+  /* Input and Select styling */
+  .formGroup input[type="text"],
+  .formGroup input[type="datetime-local"],
+  .formGroup input[type="number"],
+  .formGroup textarea,
+  .formGroup select {
+    width: 100%;
+    padding: 12px; /* Increased padding */
+    /* Dark Mode Colors */
+    background-color: #3a3f47; /* Darker input background */
+    color: #e0e0e0; /* Light input text color */
+    border: 1px solid #5a6069; /* Subtle border */
+    border-radius: 5px; /* Slightly rounded corners */
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+  }
+  
+  .formGroup input[type="number"] {
+      /* Handled specifically in .markingInputs */
+  }
+  
+  .formGroup textarea {
+    resize: vertical; /* Allow vertical resizing */
+    min-height: 120px; /* Slightly increased minimum height */
+  }
+  
+  /* Marking inputs layout */
+  .markingInputs {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Increased space */
+    flex-wrap: wrap; /* Allow items to wrap if container is too small */
+  }
+  
+  .markingInputs label {
+      font-weight: normal; /* Reduce font weight for internal labels */
+      margin-bottom: 0;
+      color: #e0e0e0; /* Keep label color consistent */
+      flex-shrink: 0; /* Prevent labels from shrinking */
+  }
+  
+  /* Style for the inputs specifically within the markingInputs flex container */
+  .markingInputs input[type="number"] {
+      flex-grow: 1; /* Allow inputs to grow and take up available space */
+      flex-shrink: 1; /* Allow inputs to shrink if needed */
+      flex-basis: 0; /* Start with a base size of 0, distributing space based on flex-grow */
+      min-width: 60px; /* Ensure a minimum width so they don't disappear */
+      padding: 10px; /* Slightly smaller padding than main inputs */
+      /* Inherit dark mode styling from general input rule */
+      background-color: #3a3f47;
+      color: #e0e0e0;
+      border: 1px solid #5a6069;
+      border-radius: 5px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  
+  /* Submit button styling */
+  .submitButton {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    /* Dark Mode Button */
+    background-color: #61dafb; /* Use the vibrant color */
+    color: #282c34; /* Dark text for contrast */
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease; /* Smooth transition */
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+  
+  .submitButton:hover {
+    background-color: #21a1f1; /* Slightly darker shade on hover */
+    opacity: 0.9; /* Subtle opacity change */
+  }
+  
+  .submitButton:active {
+      background-color: #007bff; /* Even darker on active */
+  }
+  
+  
+  /* Error message styling */
+  .error {
+    color: #ff6b6b; /* A visible red for dark mode */
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  /* Focus styles for inputs */
+  .formGroup input:focus,
+  .formGroup textarea:focus,
+  .formGroup select:focus {
+      outline: none;
+      border-color: #61dafb; /* Use the vibrant color for focus border */
+      box-shadow: 0 0 8px rgba(97, 218, 251, 0.5); /* Glow effect on focus */
+      background-color: #454b54; /* Slightly lighter background on focus */
+  }
+  
+  
+  /* --- Problem Selection Area Styles --- */
+  .problemSelectionArea {
+      display: flex; /* Use flexbox to align dropdown and button */
+      gap: 15px; /* Space between dropdown and button */
+      align-items: center; /* Vertically align items */
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  }
+  
+  .problemDropdown {
+      flex-grow: 1; /* Allow dropdown to grow */
+      /* Inherit dark mode styling from general select */
+  }
+  
+  .addProblemButton {
+      padding: 10px 15px;
+      background-color: #2ecc71; /* A green color for add */
+      color: #282c34;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, opacity 0.3s ease;
+      flex-shrink: 0; /* Prevent button from shrinking too much */
+  }
+  
+  .addProblemButton:hover {
+      background-color: #27ae60;
+      opacity: 0.9;
+  }
+  
+  .addProblemButton:active {
+      background-color: #229954;
+  }
+  
+  .addProblemButton:disabled {
+      background-color: #555;
+      cursor: not-allowed;
+      opacity: 0.6;
+  }
+  
+  /* Styles for the list of Selected Problems */
+  .selectedProblemsList {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #3a3f47; /* Match input background */
+      border-radius: 5px;
+      border: 1px solid #5a6069;
+  }
+  
+  .selectedProblemsList h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #61dafb; /* Use accent color for heading */
+      font-size: 1.2em;
+  }
+  
+  .selectedProblemsList ul {
+      list-style: none; /* Remove default list bullets */
+      padding: 0;
+      margin: 0;
+  }
+  
+  .selectedProblemItem {
+      display: flex; /* Use flexbox to align problem name and remove button */
+      justify-content: space-between; /* Space out name and button */
+      align-items: center; /* Vertically align items */
+      padding: 10px 0;
+      border-bottom: 1px solid #454b54; /* Separator between items */
+  }
+  
+  .selectedProblemItem:last-child {
+      border-bottom: none; /* No border after the last item */
+  }
+  
+  
+  .removeProblemButton {
+      padding: 5px 10px;
+      background-color: #e74c3c; /* A red color for remove */
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      flex-shrink: 0; /* Prevent button from shrinking */
+      margin-left: 15px; /* Add space between problem name and button */
+  }
+  
+  .removeProblemButton:hover {
+      background-color: #c0392b;
+  }
+  
+  .removeProblemButton:active {
+      background-color: #a93226;
+  }

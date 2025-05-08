@@ -18,11 +18,8 @@ const AdminDashboard = () => {
         { id: 3, name: 'See Previous Contests', action: 'view_contests' },
     ];
 
-    // Handler for option clicks (placeholder for now)
     const handleOptionClick = (optionAction) => {
         console.log(`Option clicked: ${optionAction}`);
-        // In a real application, you would navigate or trigger an action here
-        // Example: router.push('/admin/add-problem');
     };
 
     return (
