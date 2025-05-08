@@ -7,6 +7,8 @@ const MongoStore = require('connect-mongo');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const problemRoutes = require('./routes/problemRoutes');
+const contestRoutes = require('./routes/contestRoutes');
+const addContestRoutes = require('./routes/addContestRoutes');
 const vm = require('vm'); 
 const Problem = require('./models/Problem'); 
 dotenv.config();
@@ -105,6 +107,9 @@ dbConnectionPromise.then(mongooseConnection => {
     // --- Mount Routers ---
     app.use('/api/auth', authRoutes);
     app.use('/api/problems', problemRoutes);
+    app.use('/api/contests', contestRoutes);
+    app.use('/api/add-contest', addContestRoutes);
+
 
     // Simple Root Route (Optional)
     app.get('/', (req, res) => {
