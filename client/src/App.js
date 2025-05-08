@@ -15,6 +15,7 @@ import CodeEditorPage from './pages/Editor';
 import AdminDashboard from './pages/AdminDashboard';
 import AddProblems from './pages/AddProblems';
 import CreateContest from './pages/CreateContest';
+import ContestPage from './pages/ContestPage';
 
 // Keep DashboardPage and NotFoundPage (or move them to /pages too)
 const NotFoundPage = () => <div style={{ minHeight: '60vh', textAlign: 'center', padding: '50px' }}><h1>404 - Page Not Found</h1></div>;
@@ -22,7 +23,7 @@ const NotFoundPage = () => <div style={{ minHeight: '60vh', textAlign: 'center',
 // Placeholder pages for new nav links
 // const ProblemsPage = () => <div style={{minHeight: '60vh', padding: '20px'}}><h2>Problems Page</h2><p>Problem listings would go here...</p></div>
 const MockInterviewPage = () => <div style={{minHeight: '60vh', padding: '20px'}}><h2>Mock Interview Page</h2><p>Mock interview features would go here...</p></div>
-const ContestPage = () => <div style={{minHeight: '60vh', padding: '20px'}}><h2>Contest Page</h2><p>Contest listings/information would go here...</p></div>
+// const ContestPage = () => <div style={{minHeight: '60vh', padding: '20px'}}><h2>Contest Page</h2><p>Contest listings/information would go here...</p></div>
 
 
 function App() {
