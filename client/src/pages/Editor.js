@@ -200,7 +200,7 @@ const CodeEditorPage = () => {
         setActiveTab('console');
     
         try {
-            const response = await fetch('/api/run-test', {
+            const response = await fetch('/api/run-python-test', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
