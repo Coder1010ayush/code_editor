@@ -13,6 +13,11 @@ const bodyParser = require('body-parser');
 const addContestRoutes = require('./routes/addContestRoutes');
 const vm = require('vm'); 
 const Problem = require('./models/Problem'); 
+const fs = require('fs').promises; // Using promises for async file operations
+const path = require('path');
+const os = require('os');
+const { v4: uuidv4 } = require('uuid');
+
 dotenv.config();
 const dbConnectionPromise = connectDB();
 

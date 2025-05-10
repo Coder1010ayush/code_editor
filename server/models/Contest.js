@@ -22,7 +22,8 @@ const contestSchema = new mongoose.Schema({
     ],
     questions: [
         {
-            type: mongoose.Schema.Types.ObjectId,
+            // type: mongoose.Schema.Types.ObjectId,
+            type: String,
             ref: 'Question',
         }
     ],

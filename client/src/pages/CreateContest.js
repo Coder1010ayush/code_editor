@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+
 import styles from './CreateContest.module.css';
 
 // Simulate fetching problems - Replace with your actual API call
 const fetchProblems = async () => {
   return new Promise((resolve) => {
     setTimeout(() => {
+      
       resolve([
-        { id: 'prob1', name: 'Two Sum' },
-        { id: 'prob2', name: 'Add Two Numbers' },
-        { id: 'prob3', name: 'Longest Substring Without Repeating Characters' },
-        { id: 'prob4', name: 'Median of Two Sorted Arrays' },
-        { id: 'prob5', name: 'Longest Palindromic Substring' },
-        { id: 'prob6', name: 'Reverse Integer' },
-        { id: 'prob7', name: 'String to Integer (atoi)' },
-        { id: 'prob8', name: 'Palindrome Number' },
-        { id: 'prob9', name: 'Regular Expression Matching' },
-        { id: 'prob10', name: 'Container With Most Water' },
+        { id: '67ff3d85744ab8bff1d91f93', name: 'Two Sum' },
+        { id: '67ff3d85744ab8bff1d91f93', name: 'Add Two Numbers' },
+        { id: '67ff3d85744ab8bff1d91f93', name: 'Longest Substring Without Repeating Characters' },
+        { id: '67ff3d85744ab8bff1d91f93', name: 'Median of Two Sorted Arrays' },
+        { id: '67ff3d85744ab8bff1d91f93', name: 'Longest Palindromic Substring' },
+        { id: '67ff3d85744ab8bff1d91f93', name: 'Reverse Integer' },
+        { id: '67ff3d85744ab8bff1d91f93', name: 'String to Integer (atoi)' },
+        { id: '67ff3d85744ab8bff1d91f93', name: 'Palindrome Number' },
+        { id: '67ff3d85744ab8bff1d91f93', name: 'Regular Expression Matching' },
+        { id: '67ff3d85744ab8bff1d91f93' , name: 'Container With Most Water' },
       ]);
     }, 500); // Simulate network delay
   });
@@ -25,7 +29,7 @@ const CreateContest = () => {
   const [contestName, setContestName] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
-  const [contestNumber, setContestNumber] = useState('');
+  const [contestNumber, setContestNumber] = useState(1);
   const [description, setDescription] = useState('');
   const [rules, setRules] = useState(''); // Using a single textarea for simplicity
   const [markingEasy, setMarkingEasy] = useState('');
@@ -46,7 +50,6 @@ const CreateContest = () => {
       try {
         const problems = await fetchProblems();
         setAvailableProblems(problems);
-        // Set default selected problem to the first one if available
         if (problems.length > 0) {
           setSelectedProblemIdToAdd(problems[0].id);
         }
@@ -72,8 +75,6 @@ const CreateContest = () => {
 
         if (!problemAlreadyAdded) {
              setSelectedProblems([...selectedProblems, selectedProblemIdToAdd]);
-             // Optional: Reset dropdown to default or keep current selection
-             // setSelectedProblemIdToAdd(availableProblems.length > 0 ? availableProblems[0].id : '');
         } else {
             alert("Problem already added to the contest.");
         }
@@ -85,7 +86,6 @@ const CreateContest = () => {
     setSelectedProblems(selectedProblems.filter(problemId => problemId !== problemIdToRemove));
   };
 
-  // Helper function to get problem name from ID
   const getProblemNameById = (id) => {
     const problem = availableProblems.find(p => p.id === id);
     return problem ? problem.name : 'Unknown Problem';
@@ -95,7 +95,11 @@ const CreateContest = () => {
     event.preventDefault();
 
     // Basic validation
-    if (!contestName || !startTime || !endTime || !contestNumber || !description || selectedProblems.length === 0) {
+    console.log(selectedProblems);
+    console.log(contestName);
+    console.log(startTime);
+    console.log(endTime);
+    if (!contestName || !startTime || !endTime || !description || selectedProblems.length === 0) {
       alert("Please fill in all required fields and select at least one problem.");
       return;
     }
@@ -115,22 +119,21 @@ const CreateContest = () => {
       questions: selectedProblems, // Array of problem IDs
       status: status,
       visibility: visibility,
-      participants: [], // Assuming participants are added later
-      // _id and participants will likely be assigned by the backend
+      participants: [], 
     };
 
     console.log("New Contest Data:", newContest);
 
     // TODO: Add your API call here to send newContest data to your backend
-    // Example: axios.post('/api/createContest', newContest)
-    //   .then(response => {
-    //     console.log('Contest created successfully:', response.data);
-    //     // Redirect or show success message
-    //   })
-    //   .catch(error => {
-    //     console.error('Error creating contest:', error);
-    //     // Show error message
-    //   });
+    axios.post('/api/add-contest', newContest)
+      .then(response => {
+        console.log('Contest created successfully:', response.data);
+        // Redirect or show success message
+      })
+      .catch(error => {
+        console.error('Error creating contest:', error);
+        // Show error message
+      });
 
     alert("Contest data logged to console. Implement API call to create contest.");
 
