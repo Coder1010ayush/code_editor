@@ -13,19 +13,19 @@ router.get("/", async (req, res) => {
 });
 
 // Get a specific contest by ID
-router.get("/:id", async (req, res) => {
-  try {
-    const contest = await Contest.findById(req.params.id).populate("questions"); // populate problem details
-    if (!contest) {
-      return res.status(404).json({ message: "Contest not found" });
+router.get('/:id', async (req, res) => {
+    try {
+        const contest = await Contest.findById(req.params.id);
+        if (!contest) {
+            return res.status(404).json({ message: 'Contest not found' });
+        }
+        res.json(contest);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
     }
-
-    res.json(contest);
-  } catch (error) {
-    console.error("Error fetching contest:", error);
-    res.status(500).json({ message: "Server error" });
-  }
 });
+
 
 // Create a new contest
 router.post("/", async (req, res) => {

@@ -1,74 +1,92 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import axios from "axios";
-import styles from "./ContestDetail.module.css";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import styles from './ContestDetail.module.css';
+import axios from 'axios';
+import CodeEditorPage from './Editor.js'; // Make sure this is the correct relative path
 
 const ContestDetail = () => {
-  const { id } = useParams(); // contest ID from route
-  const [contest, setContest] = useState(null);
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+    const { id } = useParams();
+    const [contest, setContest] = useState(null);
+    const [questions, setQuestions] = useState([]);
+    const [selectedQuestion, setSelectedQuestion] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  // Fetch contest and then fetch each question
-  useEffect(() => {
-    const fetchContestAndQuestions = async () => {
-      try {
-        // 1. Fetch contest by ID
-        const contestRes = await axios.get(`/api/contests/${id}`);
-        setContest(contestRes.data);
+    useEffect(() => {
+        const fetchContestDetails = async () => {
+            try {
+                setLoading(true);
+                setError(null);
 
-        // 2. Fetch each question by its ID
-        const questionIds = contestRes.data.questions || [];
+                const contestResponse = await axios.get(`/api/contests/${id}`);
+                const contestData = contestResponse.data;
+                setContest(contestData);
 
-        const questionPromises = questionIds.map((qid) =>
-          axios.get(`/api/problems/${qid}`).then((res) => res.data)
-        );
+                const questionIds = contestData.questions || [];
+                console.log("Question IDs:", questionIds);
 
-        const questionDetails = await Promise.all(questionPromises);
-        setQuestions(questionDetails);
-      } catch (err) {
-        console.error("Error loading contest or questions:", err);
-        setError("Failed to load contest or questions");
-      } finally {
-        setLoading(false);
-      }
+                const questionPromises = questionIds.map(qid =>
+                    axios.get(`/api/problems/${qid}`)
+                );
+                const questionsData = await Promise.all(questionPromises);
+
+                const fullQuestions = questionsData.map(q => q.data);
+                setQuestions(fullQuestions);
+
+                // Automatically select the first question if available
+                if (fullQuestions.length > 0) {
+                    setSelectedQuestion(fullQuestions[0]);
+                }
+            } catch (error) {
+                setError("Error fetching contest details. Please try again later.");
+                console.error("Error fetching contest details:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchContestDetails();
+    }, [id]);
+
+    const handleQuestionSelect = (question) => {
+        setSelectedQuestion(question);
     };
 
-    fetchContestAndQuestions();
-  }, [id]);
+    return (
+        <div className={styles.container}>
+            <h1>{loading ? 'Loading contest details...' : contest ? contest.name : 'Contest not found'}</h1>
 
-  if (loading)
-    return <div className={styles.statusText}>Loading contest...</div>;
-  if (error) return <div className={styles.statusText}>{error}</div>;
-  if (!contest)
-    return <div className={styles.statusText}>Contest not found</div>;
+            {error && <div className={styles.error}>{error}</div>}
 
-  return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>{contest.name}</h2>
-      <p className={styles.description}>{contest.description}</p>
+            {loading ? (
+                <div className={styles.loading}>Loading questions...</div>
+            ) : (
+                <div className={styles.questionsList}>
+                    {questions.length > 0 ? (
+                        questions.map((question) => (
+                            <div
+                                key={question._id}
+                                className={`${styles.questionItem} ${selectedQuestion && selectedQuestion._id === question._id ? styles.selected : ''}`}
+                                onClick={() => handleQuestionSelect(question)}
+                            >
+                                {question.title}
+                            </div>
+                        ))
+                    ) : (
+                        <div>No questions available for this contest</div>
+                    )}
+                </div>
+            )}
 
-      <h3 className={styles.problemHeader}>Questions</h3>
-      {questions.length > 0 ? (
-        <ul className={styles.problemList}>
-          {questions.map((question) => (
-            <li key={question._id} className={styles.problemItem}>
-              <Link
-                to={`/problems/${question._id}`}
-                className={styles.problemLink}
-              >
-                {question.name}
-              </Link>
-              <p className={styles.problemInfo}>{question.difficulty}</p>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className={styles.noProblems}>No questions assigned yet.</p>
-      )}
-    </div>
-  );
+            <div className={styles.editorContainer}>
+                {selectedQuestion ? (
+                    <CodeEditorPage question={selectedQuestion} />
+                ) : (
+                    !loading && <div>Select a question to start solving!</div>
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default ContestDetail;

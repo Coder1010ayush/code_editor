@@ -1,52 +1,60 @@
 .container {
+    display: flex;
+    height: 100vh;
+    background-color: #121212;
+    color: #fff;
     padding: 20px;
-    max-width: 800px;
-    margin: auto;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .title {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .description {
-    font-size: 16px;
-    margin-bottom: 30px;
-  }
-  
-  .problemHeader {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .problemList {
-    list-style-type: none;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #1f1f1f;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-right: 20px;
+}
+
+.sidebar h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #f39c12;
+}
+
+.questionList {
+    list-style: none;
     padding: 0;
-  }
-  
-  .problemItem {
-    margin-bottom: 10px;
-  }
-  
-  .problemLink {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: 500;
-  }
-  
-  .problemLink:hover {
-    text-decoration: underline;
-  }
-  
-  .statusText {
+}
+
+.questionItem {
+    padding: 10px;
+    margin: 8px 0;
+    background-color: #2c2c2c;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.questionItem:hover {
+    background-color: #34495e;
+}
+
+.editorContainer {
+    flex-grow: 1;
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.loading {
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.selectMessage {
+    color: #ccc;
+    font-size: 1.5rem;
     text-align: center;
-    font-size: 18px;
-    color: gray;
-  }
-  
-  .noProblems {
-    color: #999;
-  }
-  
+    margin-top: 50px;
+}
