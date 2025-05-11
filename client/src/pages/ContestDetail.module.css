@@ -1,0 +1,52 @@
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .description {
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+  
+  .problemHeader {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .problemList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .problemItem {
+    margin-bottom: 10px;
+  }
+  
+  .problemLink {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 500;
+  }
+  
+  .problemLink:hover {
+    text-decoration: underline;
+  }
+  
+  .statusText {
+    text-align: center;
+    font-size: 18px;
+    color: gray;
+  }
+  
+  .noProblems {
+    color: #999;
+  }
+  

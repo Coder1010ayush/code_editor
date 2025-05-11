@@ -1,45 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-
-import styles from './CreateContest.module.css';
+import styles from "./CreateContest.module.css";
 
 // Simulate fetching problems - Replace with your actual API call
 const fetchProblems = async () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      
-      resolve([
-        { id: '67ff3d85744ab8bff1d91f93', name: 'Two Sum' },
-        { id: '67ff3d85744ab8bff1d91f93', name: 'Add Two Numbers' },
-        { id: '67ff3d85744ab8bff1d91f93', name: 'Longest Substring Without Repeating Characters' },
-        { id: '67ff3d85744ab8bff1d91f93', name: 'Median of Two Sorted Arrays' },
-        { id: '67ff3d85744ab8bff1d91f93', name: 'Longest Palindromic Substring' },
-        { id: '67ff3d85744ab8bff1d91f93', name: 'Reverse Integer' },
-        { id: '67ff3d85744ab8bff1d91f93', name: 'String to Integer (atoi)' },
-        { id: '67ff3d85744ab8bff1d91f93', name: 'Palindrome Number' },
-        { id: '67ff3d85744ab8bff1d91f93', name: 'Regular Expression Matching' },
-        { id: '67ff3d85744ab8bff1d91f93' , name: 'Container With Most Water' },
-      ]);
-    }, 500); // Simulate network delay
-  });
+  try {
+    const response = await fetch("/api/problems");
+    if (!response.ok) {
+      throw new Error("Failed to fetch problems");
+    }
+
+    const problems = await response.json();
+
+    // Convert each problem to the required format { id, name }
+    return problems.map((problem) => ({
+      id: problem._id, // Use _id from database
+      name: problem.title, // Problem name
+    }));
+  } catch (error) {
+    console.error("Error fetching problems:", error);
+    return []; // Return empty array if there's an error
+  }
 };
 
 const CreateContest = () => {
-  const [contestName, setContestName] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [contestName, setContestName] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [contestNumber, setContestNumber] = useState(1);
-  const [description, setDescription] = useState('');
-  const [rules, setRules] = useState(''); // Using a single textarea for simplicity
-  const [markingEasy, setMarkingEasy] = useState('');
-  const [markingMedium, setMarkingMedium] = useState('');
-  const [markingHard, setMarkingHard] = useState('');
-  const [status, setStatus] = useState('open'); // Default status
-  const [visibility, setVisibility] = useState('public'); // Default visibility
+  const [description, setDescription] = useState("");
+  const [rules, setRules] = useState(""); // Using a single textarea for simplicity
+  const [markingEasy, setMarkingEasy] = useState("");
+  const [markingMedium, setMarkingMedium] = useState("");
+  const [markingHard, setMarkingHard] = useState("");
+  const [status, setStatus] = useState("open"); // Default status
+  const [visibility, setVisibility] = useState("public"); // Default visibility
 
   const [availableProblems, setAvailableProblems] = useState([]);
-  const [selectedProblemIdToAdd, setSelectedProblemIdToAdd] = useState(''); // State for the currently selected problem in the dropdown
+  const [selectedProblemIdToAdd, setSelectedProblemIdToAdd] = useState(""); // State for the currently selected problem in the dropdown
   const [selectedProblems, setSelectedProblems] = useState([]); // State for the list of problems added to the contest
 
   const [loading, setLoading] = useState(true);
@@ -70,25 +69,28 @@ const CreateContest = () => {
 
   const handleAddProblem = () => {
     if (selectedProblemIdToAdd) {
-        // Check if the problem is already added
-        const problemAlreadyAdded = selectedProblems.some(problemId => problemId === selectedProblemIdToAdd);
+      // Check if the problem is already added
+      const problemAlreadyAdded = selectedProblems.some(
+        (problemId) => problemId === selectedProblemIdToAdd
+      );
 
-        if (!problemAlreadyAdded) {
-             setSelectedProblems([...selectedProblems, selectedProblemIdToAdd]);
-        } else {
-            alert("Problem already added to the contest.");
-        }
+      if (!problemAlreadyAdded) {
+        setSelectedProblems([...selectedProblems, selectedProblemIdToAdd]);
+      } else {
+        alert("Problem already added to the contest.");
+      }
     }
   };
 
-
   const handleRemoveProblem = (problemIdToRemove) => {
-    setSelectedProblems(selectedProblems.filter(problemId => problemId !== problemIdToRemove));
+    setSelectedProblems(
+      selectedProblems.filter((problemId) => problemId !== problemIdToRemove)
+    );
   };
 
   const getProblemNameById = (id) => {
-    const problem = availableProblems.find(p => p.id === id);
-    return problem ? problem.name : 'Unknown Problem';
+    const problem = availableProblems.find((p) => p.id === id);
+    return problem ? problem.name : "Unknown Problem";
   };
 
   const handleSubmit = (event) => {
@@ -99,8 +101,16 @@ const CreateContest = () => {
     console.log(contestName);
     console.log(startTime);
     console.log(endTime);
-    if (!contestName || !startTime || !endTime || !description || selectedProblems.length === 0) {
-      alert("Please fill in all required fields and select at least one problem.");
+    if (
+      !contestName ||
+      !startTime ||
+      !endTime ||
+      !description ||
+      selectedProblems.length === 0
+    ) {
+      alert(
+        "Please fill in all required fields and select at least one problem."
+      );
       return;
     }
 
@@ -110,7 +120,7 @@ const CreateContest = () => {
       end_time: endTime,
       contest_no: parseInt(contestNumber, 10), // Ensure it's a number
       descr: description,
-      rules: rules.split('\n').filter(rule => rule.trim() !== ''), // Split rules by newline
+      rules: rules.split("\n").filter((rule) => rule.trim() !== ""), // Split rules by newline
       marking: {
         Easy: parseInt(markingEasy, 10) || 0, // Default to 0 if empty or invalid
         Medium: parseInt(markingMedium, 10) || 0,
@@ -119,23 +129,26 @@ const CreateContest = () => {
       questions: selectedProblems, // Array of problem IDs
       status: status,
       visibility: visibility,
-      participants: [], 
+      participants: [],
     };
 
     console.log("New Contest Data:", newContest);
 
     // TODO: Add your API call here to send newContest data to your backend
-    axios.post('/api/add-contest', newContest)
-      .then(response => {
-        console.log('Contest created successfully:', response.data);
+    axios
+      .post("/api/add-contest", newContest)
+      .then((response) => {
+        console.log("Contest created successfully:", response.data);
         // Redirect or show success message
       })
-      .catch(error => {
-        console.error('Error creating contest:', error);
+      .catch((error) => {
+        console.error("Error creating contest:", error);
         // Show error message
       });
 
-    alert("Contest data logged to console. Implement API call to create contest.");
+    alert(
+      "Contest data logged to console. Implement API call to create contest."
+    );
 
     // Reset form (optional - uncomment to clear form after submission)
     // setContestName('');
@@ -250,60 +263,59 @@ const CreateContest = () => {
 
         {/* --- Problem Selection Section --- */}
         <div className={styles.formGroup}>
-            <label htmlFor="selectProblem">Select Problems:</label>
-            <div className={styles.problemSelectionArea}>
-                {availableProblems.length > 0 ? (
-                    <>
-                        <select
-                            id="selectProblem"
-                            value={selectedProblemIdToAdd}
-                            onChange={handleProblemSelectChange}
-                            className={styles.problemDropdown}
-                            // No 'required' here, as the list below is checked for length
-                        >
-                            {availableProblems.map((problem) => (
-                                <option key={problem.id} value={problem.id}>
-                                    {problem.name}
-                                </option>
-                            ))}
-                        </select>
-                        <button
-                            type="button"
-                            onClick={handleAddProblem}
-                            className={styles.addProblemButton}
-                            disabled={!selectedProblemIdToAdd} // Disable if nothing is selected
-                        >
-                            Add Problem
-                        </button>
-                    </>
-                ) : (
-                  <p>No problems available to select.</p>
-                )}
-            </div>
-
-            {/* Display Selected Problems */}
-            {selectedProblems.length > 0 && (
-              <div className={styles.selectedProblemsList}>
-                <h3>Selected Problems:</h3>
-                <ul>
-                  {selectedProblems.map(problemId => (
-                    <li key={problemId} className={styles.selectedProblemItem}>
-                      {getProblemNameById(problemId)}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveProblem(problemId)}
-                        className={styles.removeProblemButton}
-                      >
-                        Remove
-                      </button>
-                    </li>
+          <label htmlFor="selectProblem">Select Problems:</label>
+          <div className={styles.problemSelectionArea}>
+            {availableProblems.length > 0 ? (
+              <>
+                <select
+                  id="selectProblem"
+                  value={selectedProblemIdToAdd}
+                  onChange={handleProblemSelectChange}
+                  className={styles.problemDropdown}
+                  // No 'required' here, as the list below is checked for length
+                >
+                  {availableProblems.map((problem) => (
+                    <option key={problem.id} value={problem.id}>
+                      {problem.name}
+                    </option>
                   ))}
-                </ul>
-              </div>
+                </select>
+                <button
+                  type="button"
+                  onClick={handleAddProblem}
+                  className={styles.addProblemButton}
+                  disabled={!selectedProblemIdToAdd} // Disable if nothing is selected
+                >
+                  Add Problem
+                </button>
+              </>
+            ) : (
+              <p>No problems available to select.</p>
             )}
+          </div>
+
+          {/* Display Selected Problems */}
+          {selectedProblems.length > 0 && (
+            <div className={styles.selectedProblemsList}>
+              <h3>Selected Problems:</h3>
+              <ul>
+                {selectedProblems.map((problemId) => (
+                  <li key={problemId} className={styles.selectedProblemItem}>
+                    {getProblemNameById(problemId)}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveProblem(problemId)}
+                      className={styles.removeProblemButton}
+                    >
+                      Remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
         {/* --- End Problem Selection Section --- */}
-
 
         <div className={styles.formGroup}>
           <label htmlFor="status">Status:</label>
@@ -330,8 +342,9 @@ const CreateContest = () => {
           </select>
         </div>
 
-
-        <button type="submit" className={styles.submitButton}>Create Contest</button>
+        <button type="submit" className={styles.submitButton}>
+          Create Contest
+        </button>
       </form>
     </div>
   );
