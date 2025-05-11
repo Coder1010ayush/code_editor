@@ -1,10 +1,5 @@
 /* pages/AddProblems.module.css - Dark Mode and Enhanced Styling */
 
-body {
-    /* Apply dark background to the body as well for a full dark theme experience */
-    background-color: #1e1e1e;
-    color: #e0e0e0; /* Default text color */
-  }
   
   .container {
     max-width: 800px;
