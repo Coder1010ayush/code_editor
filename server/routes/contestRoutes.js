@@ -16,6 +16,7 @@ router.get("/", async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const contest = await Contest.findById(req.params.id);
+        console.log("in server side contest data is " , contest);
         if (!contest) {
             return res.status(404).json({ message: 'Contest not found' });
         }

@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './ContestDetail.module.css';
 import axios from 'axios';
+import { Link } from 'react-router-dom'; // No need for useLocation now
 import CodeEditorPage from './Editor.js'; // Make sure this is the correct relative path
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
+import { FaAppleAlt } from 'react-icons/fa';
+
 
 const ContestDetail = () => {
     const { id } = useParams();
@@ -12,6 +17,7 @@ const ContestDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // console.log("contest id is ", id);
     useEffect(() => {
         const fetchContestDetails = async () => {
             try {
@@ -19,11 +25,12 @@ const ContestDetail = () => {
                 setError(null);
 
                 const contestResponse = await axios.get(`/api/contests/${id}`);
+                // console.log("contest response is " , contestResponse);
                 const contestData = contestResponse.data;
                 setContest(contestData);
 
                 const questionIds = contestData.questions || [];
-                console.log("Question IDs:", questionIds);
+                // console.log("Question IDs:", questionIds);
 
                 const questionPromises = questionIds.map(qid =>
                     axios.get(`/api/problems/${qid}`)
@@ -37,6 +44,7 @@ const ContestDetail = () => {
                 if (fullQuestions.length > 0) {
                     setSelectedQuestion(fullQuestions[0]);
                 }
+                console.log("selected questions are " , fullQuestions[0]);
             } catch (error) {
                 setError("Error fetching contest details. Please try again later.");
                 console.error("Error fetching contest details:", error);
@@ -80,7 +88,14 @@ const ContestDetail = () => {
 
             <div className={styles.editorContainer}>
                 {selectedQuestion ? (
-                    <CodeEditorPage question={selectedQuestion} />
+                    <CodeEditorPage problemId={selectedQuestion._id} />
+
+                    // <Link to={`/editor/${selectedQuestion._id}`} className={styles.cardTitle}>
+                    //     <h3>
+                    //         <FontAwesomeIcon icon={faPuzzlePiece} className={styles.icon} />
+                    //             {selectedQuestion.title}
+                    //     </h3>
+                    // </Link>
                 ) : (
                     !loading && <div>Select a question to start solving!</div>
                 )}

@@ -50,8 +50,10 @@ const parseDescription = (description) => {
   return { header: description };
 };
 
-const CodeEditorPage = () => {
-  const { problemId } = useParams();
+const CodeEditorPage = ({ problemId: propProblemId }) => {
+
+  const { problemId: paramProblemId } = useParams();
+  const problemId = propProblemId || paramProblemId;
 
   const [problem, setProblem] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -65,6 +67,8 @@ const CodeEditorPage = () => {
 
   const [isWhiteMode, setIsWhiteMode] = useState(false);
   const editorRef = useRef(null);
+
+  console.log("problem ids are ", problemId);
 
   useEffect(() => {
     if (!problemId) {
