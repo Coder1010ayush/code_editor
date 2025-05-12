@@ -16,14 +16,6 @@ const AttemptedSchema = new mongoose.Schema({
     marks: {
         type: Number,
         default: 0
-    },
-    latest_time: {
-        type: Date,
-        default: Date.now
-    },
-    curr_score: {
-        type: Number,
-        default: 0
     }
 }, { _id: false });
 
@@ -36,6 +28,14 @@ const ParticipantSchema = new mongoose.Schema({
     attempted: {
         type: [AttemptedSchema],
         default: []
+    },
+    latest_time: {
+        type: Date,
+        default: Date.now
+    },
+    curr_score: {
+        type: Number,
+        default: 0
     }
 }, { _id: false });
 
