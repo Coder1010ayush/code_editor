@@ -1,0 +1,131 @@
+/* styles/LeaderBoard.module.css */
+
+/* --- Dark Theme Basic Styles --- */
+.leaderboardContainer {
+    font-family: 'Arial', sans-serif; /* Or your preferred font */
+    background-color: #1a1a2e; /* Dark background */
+    color: #e0e0e0; /* Light text */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    max-width: 800px; /* Limit width for better readability */
+    margin: 40px auto; /* Center the container */
+    text-align: center;
+  }
+  
+  .leaderboardTitle {
+    color: #bb86fc; /* Purple accent */
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-shadow: 0 0 5px rgba(187, 134, 252, 0.5);
+  }
+  
+  .noDataMessage {
+    font-size: 1.2em;
+    color: #8a8a8a; /* Muted color */
+  }
+  
+  /* --- Table Styles --- */
+  .leaderboardTable {
+    width: 100%;
+    border-collapse: collapse; /* Remove space between borders */
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    overflow: hidden; /* Helps rounded corners look better */
+    border-radius: 8px;
+  }
+  
+  .tableHeader th {
+    background-color: #3a2a55; /* Slightly lighter dark purple */
+    color: #ffffff; /* White text for headers */
+    padding: 15px 10px;
+    text-align: left;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  
+  .tableHeader th:first-child {
+      border-top-left-radius: 8px; /* Rounded top-left corner */
+  }
+  
+  .tableHeader th:last-child {
+      border-top-right-radius: 8px; /* Rounded top-right corner */
+  }
+  
+  
+  .tableRow {
+    border-bottom: 1px solid #3a3a55; /* Subtle separator line */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    opacity: 0; /* Start invisible for fade-in animation */
+    animation: fadeIn 0.5s ease-out forwards;
+    /* Animation delay based on CSS variable --index */
+    animation-delay: calc(var(--index) * 0.08s); /* Staggered animation */
+  }
+  
+  /* Alternating row background (optional) */
+  .tableRow:nth-child(even) {
+    background-color: #2a2a4a; /* Slightly different dark shade */
+  }
+  
+  .tableRow:hover {
+    background-color: #4a4a6a; /* Lighter shade on hover */
+  }
+  
+  .tableRow td {
+    padding: 12px 10px;
+    text-align: left;
+    /* Add some bottom border radius to the last row */
+    border-bottom: 1px solid #3a3a55;
+  }
+  
+  /* Remove bottom border for the very last row */
+  .leaderboardTable tbody tr:last-child td {
+      border-bottom: none;
+  }
+  
+  /* Align specific columns */
+  .rankCell {
+    text-align: center;
+    width: 10%; /* Give rank column less space */
+    font-weight: bold;
+  }
+  
+  .scoreCell {
+      text-align: center;
+      width: 15%; /* Score column */
+      font-weight: bold;
+  }
+  
+  .timeCell {
+      font-size: 0.9em;
+      color: #b0b0b0; /* Muted time color */
+      width: 25%; /* Time column */
+  }
+  
+  .usernameCell {
+      width: 50%; /* Username gets remaining space */
+  }
+  
+  /* --- Top Ranks Styling --- */
+  .topRank {
+      font-weight: bold;
+  }
+  
+  /* Specific styles for top 3 ranks */
+  .leaderboardTable tbody tr:nth-child(1) .rankCell { color: gold; font-size: 1.2em;} /* 1st place */
+  .leaderboardTable tbody tr:nth-child(2) .rankCell { color: silver; font-size: 1.15em;} /* 2nd place */
+  .leaderboardTable tbody tr:nth-child(3) .rankCell { color: #cd7f32; font-size: 1.1em;} /* 3rd place (bronze) */
+  
+  
+  /* --- Animation --- */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px); /* Start slightly lower */
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0); /* End at natural position */
+    }
+  }
