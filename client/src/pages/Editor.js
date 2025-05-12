@@ -68,6 +68,8 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
   const [isWhiteMode, setIsWhiteMode] = useState(false);
   const editorRef = useRef(null);
 
+  const [arguments_in_function , setArgumentFunc] = useState("");
+
   console.log("problem ids are ", problemId);
 
   useEffect(() => {
@@ -112,17 +114,15 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
             (lang) => processedData.defaultCode?.[lang]
           ) || "javascript";
         setSelectedLanguage(initialLang);
-        setCode(
-          processedData.defaultCode?.[initialLang] ||
-            getDefaultCodeComment(initialLang)
-        );
-
+        
+        let arguments_in_function_local = null;
         const testCasesInput = processedData.testCases;
         console.log("test cases are ", testCasesInput);
         let formattedTestCases = [];
         if (Array.isArray(testCasesInput)) {
           formattedTestCases = testCasesInput.map((tc, index) => {
             const { output, keys, ...rest } = tc;
+            arguments_in_function_local = keys;
             console.log("output is ", output);
             return {
               id: index,
@@ -150,6 +150,12 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
           );
         }
 
+        setArgumentFunc(arguments_in_function_local);
+        setCode(
+          processedData.defaultCode?.[initialLang] ||
+            getDefaultCodeComment(initialLang)
+        );
+
         setTestResults(formattedTestCases);
         setLoading(false);
       } catch (err) {
@@ -165,18 +171,33 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
     if (problem) {
       setCode(
         problem.defaultCode?.[selectedLanguage] ||
-          getDefaultCodeComment(selectedLanguage)
+          getDefaultCodeComment(selectedLanguage , )
       );
     }
   }, [selectedLanguage, problem]);
 
-  const getDefaultCodeComment = (lang) => {
+  const getDefaultCodeComment = (lang ) => {
+    console.log("lang is ", lang);
+    let objTemplate = "";
     switch (lang) {
       case "python":
-        return "# Write your Python code here\n";
+        objTemplate = "# Write your Python code here\n";
+        if (arguments_in_function != ""){
+          const args = arguments_in_function.join(', ');
+          objTemplate = `def server_side_runner(${args}):\n\t# Write your Python code here\n`;
+
+        }
+        return objTemplate;
       case "c++":
         return "// Write your C++ code here\n";
       case "javascript":
+        objTemplate = "// Write your Javascript code here\n";
+        if (arguments_in_function != ""){
+          const args = arguments_in_function.join(', ');
+          objTemplate = `function server_side_runner(${args}):\n\t// Write your Javascript code here\n`;
+
+        }
+        return objTemplate;
       default:
         return "// Write your JavaScript code here\n";
     }
@@ -225,6 +246,44 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
     setActiveTab("console");
 
     try {
+      if (lang == "python"){
+        const response = await fetch("/api/run-python-test", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            code: code,
+            input: firstInput.slice(0 , 3),
+            keys: vps,
+          }),
+        });
+      }else if (lang == "javascript"){
+        const response = await fetch("/api/run-test", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            code: code,
+            input: firstInput.slice(0 , 3),
+            keys: vps,
+          }),
+        });
+      }else{
+        const response = await fetch("/api/run-test", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            code: code,
+            input: firstInput.slice(0 , 3),
+            keys: vps,
+          }),
+        });
+      }
+      
         const response = await fetch("/api/run-python-test", {
             method: "POST",
             headers: {

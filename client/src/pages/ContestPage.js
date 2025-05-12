@@ -164,7 +164,12 @@ const ContestPage = () => {
             <div className={styles.cardGrid}>
                 {filteredContests.length > 0 ? (
                     filteredContests.map(contest => {
-                        const isJoined = contest.participants.includes(user.username);
+                        console.log("participants is ", contest)
+                        console.log("usernm is ", user.username)
+                        const isJoined = (contest.participants || []).some(
+                            participant => participant.username === user?.username
+                        );
+                        
 
                         return (
                             <div key={contest._id} className={styles.card}>

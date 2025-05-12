@@ -71,9 +71,13 @@ router.put('/:id/join', async (req, res) => {
           return res.status(404).json({ error: 'Contest not found.' });
       }
 
-      // Prevent duplicate participants
-      if (!contest.participants.includes(username)) {
-          contest.participants.push(username);
+      // Check if the user has already joined
+      const alreadyJoined = contest.participants.some(
+          participant => participant.username === username
+      );
+
+      if (!alreadyJoined) {
+          contest.participants.push({ username, attempted: [] , curr_score: 0.0, latest_time: new Date()});
           await contest.save();
       }
 
@@ -83,6 +87,7 @@ router.put('/:id/join', async (req, res) => {
       res.status(500).json({ error: 'Failed to join contest.' });
   }
 });
+
 
 
 // Delete a contest
