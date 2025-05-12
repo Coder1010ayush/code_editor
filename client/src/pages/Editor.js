@@ -205,155 +205,170 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
 
   const handleRunCode = async () => {
     if (!problem) {
-      setConsoleOutput("Cannot run: Problem data is not loaded.");
-      setActiveTab("console");
-      return;
+        setConsoleOutput("Cannot run: Problem data is not loaded.");
+        setActiveTab("console");
+        return;
     }
 
-    // let firstInput = testResults[0]?.input;
     const firstInput = testResults.map((result) => result.input);
+    const vps = testResults[0]?.keys;
 
-    let vps = testResults[0]?.keys;
-    console.log("first input is ", firstInput);
     if (!firstInput) {
-      setConsoleOutput("No input available from test cases to run.");
-      setActiveTab("console");
-      return;
+        setConsoleOutput("No input available from test cases to run.");
+        setActiveTab("console");
+        return;
     }
 
-    console.log(
-      "Running code:",
-      selectedLanguage,
-      code,
-      "with input:",
-      firstInput
-    );
     setConsoleOutput(
-      `Running code with input:\n${JSON.stringify(firstInput)}\n...\n`
+        `Running code with input:\n${JSON.stringify(firstInput)}\n...\n`
     );
     setActiveTab("console");
 
     try {
-      const response = await fetch("/api/run-python-test", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          code: code,
-          input: firstInput.slice(0 , 3),
-          keys: vps,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          `Server error: ${response.status} - ${
-            errorData?.message || "Failed to run code on server."
-          }`
-        );
-      }
-      const result = await response.json();
-      if (result.error) {
-        setConsoleOutput((prev) => prev + `Execution Error:\n${result.error}`);
-      } else if (result.results) {
-        // Assuming the backend sends back { results: [...] }
-        let outputString = "Execution Finished:\n";
-        result.results.forEach((testResult, index) => {
-          outputString += `\nTest Case ${index + 1}:\n`;
-          outputString += `  Input: ${JSON.stringify(
-            testResult.input,
-            null,
-            2
-          )}\n`;
-          if (testResult.error) {
-            outputString += `  Error: ${testResult.error}\n`;
-          } else {
-            outputString += `  Output: ${JSON.stringify(
-              testResult.actualOutput,
-              null,
-              2
-            )}\n`;
-          }
+        const response = await fetch("/api/run-python-test", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                code: code,
+                input: firstInput,
+                keys: vps,
+            }),
         });
-        setConsoleOutput((prev) => prev + outputString);
-      } else {
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(
+                `Server error: ${response.status} - ${
+                    errorData?.message || "Failed to run code on server."
+                }`
+            );
+        }
+
+        const result = await response.json();
+        if (result.error) {
+            setConsoleOutput((prev) => prev + `Execution Error:\n${result.error}`);
+        } else if (result.results) {
+            let outputString = "Execution Finished:\n";
+            const updatedTestResults = [...testResults];
+
+            result.results.forEach((testResult, index) => {
+                const expected = testResults[index]?.expected;
+                const actual = testResult.actualOutput;
+
+                const passed =
+                    JSON.stringify(actual) === JSON.stringify(expected);
+
+                updatedTestResults[index].status = passed ? "passed" : "failed";
+
+                outputString += `\nTest Case ${index + 1}:\n`;
+                outputString += `  Input: ${JSON.stringify(testResult.input, null, 2)}\n`;
+                outputString += `  Expected: ${JSON.stringify(expected, null, 2)}\n`;
+                outputString += `  Actual: ${JSON.stringify(actual, null, 2)}\n`;
+                outputString += `  Status: ${passed ? "✅ Passed" : "❌ Failed"}\n`;
+            });
+
+            setTestResults(updatedTestResults); // update state
+            setConsoleOutput((prev) => prev + outputString);
+        } else {
+            setConsoleOutput(
+                (prev) =>
+                    prev +
+                    `Execution Finished:\nUnexpected result format: ${JSON.stringify(
+                        result
+                    )}`
+            );
+        }
+    } catch (err) {
+        console.error("Run Error:", err);
         setConsoleOutput(
-          (prev) =>
-            prev +
-            `Execution Finished:\nUnexpected result format: ${JSON.stringify(
-              result
-            )}`
+            (prev) =>
+                prev +
+                `Execution Error:\n${
+                    err.message || "Failed to communicate with the server."
+                }`
         );
-      }
-    } catch (err) {
-      console.error("Run Error:", err);
-      setConsoleOutput(
-        (prev) =>
-          prev +
-          `Execution Error:\n${
-            err.message || "Failed to communicate with the server."
-          }`
-      );
     }
-  };
+};
 
-  const handleSubmitCode = async () => {
-    if (!problem || !testResults || testResults.length === 0) {
-      setConsoleOutput(
-        "Cannot submit: Problem data or test cases are missing."
-      );
-      setError("Cannot submit: Problem data or test cases are missing.");
-      setActiveTab("console");
-      return;
-    }
 
-    console.log("Submitting code:", selectedLanguage, code);
-    setConsoleOutput("Submitting code and running test cases...\n");
-    setActiveTab("testcase");
+const handleSubmitCode = async () => {
+  if (!problem || !testResults || testResults.length === 0) {
+    setConsoleOutput(
+      "Cannot submit: Problem data or test cases are missing."
+    );
+    setError("Cannot submit: Problem data or test cases are missing.");
+    setActiveTab("console");
+    return;
+  }
 
-    const runningTests = testResults.map((tc) => ({
-      ...tc,
-      status: "running",
-      output: "Running...",
-    }));
-    setTestResults(runningTests);
+  console.log("Submitting code:", selectedLanguage, code);
+  setConsoleOutput("Submitting code and running test cases...\n");
+  setActiveTab("testcase");
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+  const runningTests = testResults.map((tc) => ({
+    ...tc,
+    status: "running",
+    output: "Running...",
+  }));
+  setTestResults(runningTests);
 
-      const response = await fetch(`/api/submit/${problemId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ language: selectedLanguage, code }),
-      });
-      const submissionResult = await response.json();
-      setTestResults(submissionResult);
-      setConsoleOutput(
-        (prev) =>
-          prev +
-          "Finished running all test cases.\nSee Testcase tab for results.\n"
-      );
-    } catch (err) {
-      console.error("Submit Error:", err);
-      setConsoleOutput(
-        (prev) =>
-          prev + `Submission Error:\n${err.message || "Failed to submit code."}`
-      );
-      setTestResults((prev) =>
-        prev.map((tc) =>
-          tc.status === "running"
-            ? {
-                ...tc,
-                status: "error",
-                output: `Submission failed: ${err.message}`,
-              }
-            : tc
-        )
-      );
-    }
-  };
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const response = await fetch("/api/run-python-test", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        code: code,
+        input: testResults.map((t) => t.input),
+        keys: testResults[0]?.keys,
+      }),
+    });
+
+    const result = await response.json();
+
+    const updated = testResults.map((tc, index) => {
+      const actual = result.results?.[index]?.actualOutput;
+      const expected = tc.expected;
+
+      const passed = JSON.stringify(actual) === JSON.stringify(expected);
+
+      return {
+        ...tc,
+        actualOutput: actual,
+        error: result.results?.[index]?.error,
+        status: passed ? "passed" : "failed",
+      };
+    });
+
+    setTestResults(updated);
+    setConsoleOutput(
+      (prev) => prev + "Finished running all test cases.\nSee Testcase tab for results.\n"
+    );
+  } catch (err) {
+    console.error("Submit Error:", err);
+    setConsoleOutput(
+      (prev) =>
+        prev + `Submission Error:\n${err.message || "Failed to submit code."}`
+    );
+    setTestResults((prev) =>
+      prev.map((tc) =>
+        tc.status === "running"
+          ? {
+              ...tc,
+              status: "error",
+              output: `Submission failed: ${err.message}`,
+            }
+          : tc
+      )
+    );
+  }
+};
+
+
+
 
   const runMockTests = async (userCode, tests) => {
     const results = [];
@@ -703,7 +718,7 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
               aria-selected={activeTab === "testcase"}
             >
               <FontAwesomeIcon icon={faListAlt} className={styles.icon} /> Test
-              Cases ({testResults.length})
+              Cases (3)
             </button>
             <button
               className={`${styles.tabButton} ${
@@ -723,7 +738,7 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
             {activeTab === "testcase" && (
               <div className={styles.testCasesContainer}>
                 {testResults.length > 0 ? (
-                  testResults.map((tc, index) => (
+                  testResults.slice(0,3).map((tc, index) => (
                     <div
                       key={tc.id || index}
                       className={`${styles.testCaseItem} ${

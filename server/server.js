@@ -136,7 +136,7 @@ if __name__ == "__main__":
         const inputsToRun = req.body.input; // Renamed for clarity, was req.body.input in JS example
         const keys = req.body.keys;
         const functionName = req.body.functionName || 'server_side_runner'; // Configurable function name, defaults to server_side_runner
-        const pythonExecutable = req.body.pythonExecutable || 'python3'; // Configurable Python executable
+        const pythonExecutable = req.body.pythonExecutable || 'python'; // Configurable Python executable
         const timeoutMs = req.body.timeoutMs || 5000; // Default 5 seconds timeout
 
         if (!userCode) {
