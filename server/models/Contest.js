@@ -1,5 +1,44 @@
 const mongoose = require('mongoose');
 
+
+// Schema for individual attempted question
+const AttemptedSchema = new mongoose.Schema({
+    qid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Questions',
+        required: true
+    },
+    sid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Submissions',
+        required: true
+    },
+    marks: {
+        type: Number,
+        default: 0
+    },
+    latest_time: {
+        type: Date,
+        default: Date.now
+    },
+    curr_score: {
+        type: Number,
+        default: 0
+    }
+}, { _id: false });
+
+// Schema for each participant
+const ParticipantSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true
+    },
+    attempted: {
+        type: [AttemptedSchema],
+        default: []
+    }
+}, { _id: false });
+
 const contestSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -14,12 +53,10 @@ const contestSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    participants: [
-        {
-            type: String, // Usernames like "shasha14_soe"
-            required: true,
-        }
-    ],
+    participants: {
+        type: [ParticipantSchema],
+        default: []
+    },
     questions: [
         {
             type: mongoose.Schema.Types.ObjectId,
