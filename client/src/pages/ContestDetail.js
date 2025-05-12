@@ -89,13 +89,6 @@ const ContestDetail = () => {
             <div className={styles.editorContainer}>
                 {selectedQuestion ? (
                     <CodeEditorPage problemId={selectedQuestion._id} />
-
-                    // <Link to={`/editor/${selectedQuestion._id}`} className={styles.cardTitle}>
-                    //     <h3>
-                    //         <FontAwesomeIcon icon={faPuzzlePiece} className={styles.icon} />
-                    //             {selectedQuestion.title}
-                    //     </h3>
-                    // </Link>
                 ) : (
                     !loading && <div>Select a question to start solving!</div>
                 )}

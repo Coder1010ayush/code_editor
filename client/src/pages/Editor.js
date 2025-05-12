@@ -212,6 +212,7 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
 
     // let firstInput = testResults[0]?.input;
     const firstInput = testResults.map((result) => result.input);
+
     let vps = testResults[0]?.keys;
     console.log("first input is ", firstInput);
     if (!firstInput) {
@@ -240,7 +241,7 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
         },
         body: JSON.stringify({
           code: code,
-          input: firstInput,
+          input: firstInput.slice(0 , 3),
           keys: vps,
         }),
       });

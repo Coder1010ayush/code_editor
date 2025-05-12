@@ -58,6 +58,33 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+router.put('/:id/join', async (req, res) => {
+  const { username } = req.body;
+
+  if (!username) {
+      return res.status(400).json({ error: 'Username is required.' });
+  }
+
+  try {
+      const contest = await Contest.findById(req.params.id);
+      if (!contest) {
+          return res.status(404).json({ error: 'Contest not found.' });
+      }
+
+      // Prevent duplicate participants
+      if (!contest.participants.includes(username)) {
+          contest.participants.push(username);
+          await contest.save();
+      }
+
+      res.json(contest);
+  } catch (error) {
+      console.error('Join contest error:', error);
+      res.status(500).json({ error: 'Failed to join contest.' });
+  }
+});
+
+
 // Delete a contest
 router.delete("/:id", async (req, res) => {
   try {

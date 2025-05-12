@@ -108,3 +108,20 @@
 .searchBox:focus {
     border-color: #888;
 }
+
+.joinButton {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #00bcd4;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.joinButton:hover {
+    background-color: #0097a7;
+}
