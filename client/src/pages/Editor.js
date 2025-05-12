@@ -123,6 +123,7 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
         if (Array.isArray(testCasesInput)) {
           formattedTestCases = testCasesInput.map((tc, index) => {
             const { output, keys, ...rest } = tc;
+            console.log("output is ", output);
             return {
               id: index,
               status: "pending",
@@ -566,7 +567,6 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
                 ),
               }}
             >
-              {/* Using dangerouslySetInnerHTML here ONLY for simple inline code formatting */}
             </p>
           )}
 
@@ -767,9 +767,9 @@ const CodeEditorPage = ({ problemId: propProblemId }) => {
                         </div>
                       )}
                       {/* Show Expected only if failed or passed (not pending/running) */}
-                      {tc.status === "failed" && tc.expected !== undefined && (
+                      {tc.expected !== undefined && (
                         <div className={styles.testCaseDetail}>
-                          <strong>Expected:</strong>
+                          <strong>Expected Output :</strong>
                           <pre className={styles.expectedOutput}>
                             {String(tc.expected)}
                           </pre>
