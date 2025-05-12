@@ -103,4 +103,28 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+  // Update contest route
+  router.put('/update-contest/:id', async (req, res) => {
+    const contestId = req.params.id;
+    const updates = req.body; // Expecting JSON with fields to update
+
+    try {
+      const result = await Contest.findByIdAndUpdate(
+        contestId,
+        { $set: updates },
+        { new: true } // return updated document
+      );
+
+      if (!result) {
+        return res.status(404).json({ error: 'Contest not found' });
+      }
+
+      res.json({ message: 'Contest updated successfully', contest: result });
+    } catch (error) {
+      console.error('Error updating contest:', error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
+
+
 module.exports = router;

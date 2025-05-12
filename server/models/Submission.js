@@ -17,7 +17,7 @@ const submissionSchema = new mongoose.Schema({
     },
     result: {
         type: String,
-        enum: ['Passed', 'Failed'],
+        enum: ['Success', 'Failed'],
         required: true,
     },
     timestamp: {
@@ -30,7 +30,7 @@ const submissionSchema = new mongoose.Schema({
         trim: true,
     },
 }, {
-    timestamps: true,
+    timestamps: false,
 });
 
 module.exports = mongoose.model('Submission', submissionSchema, 'Submissions');

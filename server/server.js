@@ -11,6 +11,7 @@ const contestRoutes = require('./routes/contestRoutes');
 const { spawn } = require('child_process');
 const bodyParser = require('body-parser');
 const addContestRoutes = require('./routes/addContestRoutes');
+const submissionRoutes = require('./routes/submissionRoutes');
 const vm = require('vm'); 
 const Problem = require('./models/Problem'); 
 const fs = require('fs').promises; // Using promises for async file operations
@@ -303,6 +304,7 @@ if __name__ == "__main__":
     app.use('/api/problems', problemRoutes);
     app.use('/api/contests', contestRoutes);
     app.use('/api/add-contest', addContestRoutes);
+    app.use('/api/submit', submissionRoutes);
 
 
     // Simple Root Route (Optional)

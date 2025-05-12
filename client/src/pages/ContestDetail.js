@@ -3,11 +3,10 @@ import { useParams } from 'react-router-dom';
 import styles from './ContestDetail.module.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom'; // No need for useLocation now
-import CodeEditorPage from './Editor.js'; // Make sure this is the correct relative path
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
 import { FaAppleAlt } from 'react-icons/fa';
-
+import CodeEditorPage from './Editor';
 
 const ContestDetail = () => {
     const { id } = useParams();
@@ -88,7 +87,7 @@ const ContestDetail = () => {
 
             <div className={styles.editorContainer}>
                 {selectedQuestion ? (
-                    <CodeEditorPage problemId={selectedQuestion._id} />
+                    <CodeEditorPage problemId={selectedQuestion._id } _contest_id={id} />
                 ) : (
                     !loading && <div>Select a question to start solving!</div>
                 )}
