@@ -31,6 +31,8 @@ const DashboardPage = () => {
             }else if(optionAction == "create_contest"){
                 console.log("we are here to parse the tree.")
                 navigate("/addContest")
+            }else{
+                navigate("/previous-contests")
             }
         };
 

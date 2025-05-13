@@ -17,6 +17,8 @@ import AddProblems from "./pages/AddProblems";
 import CreateContest from "./pages/CreateContest";
 import ContestPage from "./pages/ContestPage";
 import ContestDetail from "./pages/ContestDetail";
+import PreviousContestPage from "./pages/PreviousContest";
+import LeaderBoard from "./pages/LeaderBoard";
 
 // Keep DashboardPage and NotFoundPage (or move them to /pages too)
 const NotFoundPage = () => (
@@ -96,10 +98,25 @@ function App() {
             <Route path="/addContest" element={<CreateContest />} />
             {/* Add other protected routes here */}
           </Route>
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/prev_contest" element={<PreviousContestPage />} />
+            {/* Add other protected routes here */}
+          </Route>
+
           <Route path="/contest/:id" element={<ContestDetail />} />
+
+          
+
+          <Route path="/previous-contests" element={<PreviousContestPage />} />
+          <Route path="/leaderboard" element={<LeaderBoard />} />
+          <Route path="*" element={<Navigate to="/previous-contests" />} />
+
 
           {/* Catch-all Not Found Route */}
           <Route path="*" element={<NotFoundPage />} />
+
+
         </Routes>
       </main>
       <Footer /> {/* Add Footer */}

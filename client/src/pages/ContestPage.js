@@ -85,9 +85,6 @@
 // export default ContestPage;
 
 
-
-
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './ContestPage.module.css';

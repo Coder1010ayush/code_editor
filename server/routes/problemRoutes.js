@@ -46,5 +46,35 @@ router.get('/:problemId', async (req, res) => {
     }
 });
 
+router.post('/', async (req, res) => {
+    const { title, question, difficulty, category, descr, test_cases } = req.body;
+
+    // Basic validation (you might want more comprehensive validation)
+    if (!title || !question || !difficulty || !category || !descr || !test_cases) {
+        return res.status(400).json({ error: 'Missing required problem fields' });
+    }
+
+    try {
+        const newProblem = new Problem({
+            title,
+            question,
+            difficulty,
+            category,
+            descr,      
+            test_cases, 
+        });
+
+        const savedProblem = await newProblem.save();
+
+        res.status(201).json(savedProblem); 
+    } catch (error) {
+        console.error('Error adding new problem:', error);
+        if (error.name === 'ValidationError') {
+             return res.status(400).json({ error: error.message });
+        }
+        res.status(500).json({ error: 'Failed to add new problem' });
+    }
+});
+
 
 module.exports = router;

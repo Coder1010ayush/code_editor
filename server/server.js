@@ -18,6 +18,7 @@ const fs = require('fs').promises; // Using promises for async file operations
 const path = require('path');
 const os = require('os');
 const { v4: uuidv4 } = require('uuid');
+const util = require('util');
 
 dotenv.config();
 const dbConnectionPromise = connectDB();
@@ -163,7 +164,6 @@ if __name__ == "__main__":
                 let stdoutData = '';
                 let stderrData = '';
 
-                // Arguments for python3 -c "<code>" <input_json_str> <keys_json_str> <target_function_name>
                 const scriptArgs = [
                     '-c',
                     fullPythonScript,
@@ -298,6 +298,14 @@ if __name__ == "__main__":
         console.log('Test execution completed, sending response:', { results });
         res.json({ results });
     });
+
+
+    app.post('/api/log', (req, res) => {
+        const userCode = req.body;
+        console.log("data received is", util.inspect(userCode, { depth: null, colors: true }));
+        res.sendStatus(200);
+    });
+    
 
     // --- Mount Routers ---
     app.use('/api/auth', authRoutes);

@@ -69,9 +69,12 @@ function Navbar() {
           <Link to="/problems" className={styles.navLink}>
             Problems
           </Link>
-          <Link to="/mock-interview" className={styles.navLink}>
-            Grades
+          
+          <Link to="/prev_contest" className={styles.navLink}>
+            Previous Contest
+
           </Link>
+
           <Link to="/contest" className={styles.navLink}>
             Contest
           </Link>

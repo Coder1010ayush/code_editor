@@ -312,7 +312,7 @@
 
 
 
-
+import axios from "axios";
 import React, { useState } from 'react';
 import styles from './AddProblems.module.css';
 
@@ -384,9 +384,62 @@ const AddProblems = () => {
     setExamples(newExamples);
   };
 
-
+  function transformTestCases(testCases) {
+    return testCases.map(testCase => {
+      const entry = {};
+  
+      // Add each argument as key-value pair (parsing by type)
+      testCase.arguments.forEach(arg => {
+        let value = arg.value;
+        switch (arg.type) {
+          case 'String':
+            value = String(value);
+            break;
+          case 'Number':
+            value = Number(value);
+            break;
+          case 'Boolean':
+            value = value === 'true';
+            break;
+          case 'Array':
+            value = JSON.parse(value);
+            break;
+          case 'Object':
+            value = JSON.parse(value);
+            break;
+          default:
+            // fallback as string
+            value = String(value);
+        }
+        entry[arg.name] = value;
+      });
+  
+      // Parse output based on its type
+      let outputValue = testCase.expectedOutput.value;
+      switch (testCase.expectedOutput.type) {
+        case 'Array':
+        case 'Object':
+          outputValue = JSON.parse(outputValue);
+          break;
+        case 'Number':
+          outputValue = Number(outputValue);
+          break;
+        case 'Boolean':
+          outputValue = outputValue === 'true';
+          break;
+        case 'String':
+        default:
+          outputValue = String(outputValue);
+      }
+  
+      entry.output = outputValue;
+      entry.keys = testCase.arguments.map(arg => arg.name);
+      return entry;
+    });
+  }
+  
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const problemData = {
       title,
@@ -394,15 +447,40 @@ const AddProblems = () => {
       difficulty,
       category,
       descr: {
-        extra,
         header,
+        examples,
+        extra,
         constraints,
       },
-      test_cases: testCases,
-      example: examples,
+      test_cases: transformTestCases(testCases),
     };
     console.log('Problem Data:', problemData);
-    // Here you would typically send problemData to your backend API
+    console.log('testcases are : ' , testCases);
+    // /api/log
+    try {
+      const response = await fetch('/api/problems', { 
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(problemData),
+      });
+
+      if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Failed to add problem:', errorData);
+          alert(`Error: ${errorData.error || 'Could not add problem'}`); 
+          return;
+      }
+
+      const addedProblem = await response.json();
+      console.log('Problem added successfully:', addedProblem);
+      alert('Problem added successfully!'); 
+    } catch (error) {
+        console.error('Error sending problem data:', error);
+        alert('An unexpected error occurred while adding the problem.');
+    }
+
   };
 
   return (
