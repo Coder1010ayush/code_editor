@@ -86,7 +86,6 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
       fetch(`/api/submit/${problemId}?username=${user.username}`)
         .then((res) => {
           if (!res.ok) throw new Error("Failed to fetch submissions");
-          console.log("res is " , res);
           return res.json();
         })
         .then((data) => {
@@ -94,7 +93,6 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
           setLoadingSubmissions(false);
         })
         .catch((err) => {
-          console.log("error found " , err);
           setErrorSubmissions(err.message);
           setLoadingSubmissions(false);
         });
@@ -103,7 +101,7 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
 
 
 
-  console.log("problem ids are ", problemId);
+  // console.log("problem ids are ", problemId);
 
   useEffect(() => {
     if (!problemId) {
@@ -150,13 +148,13 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
         
         let arguments_in_function_local = null;
         const testCasesInput = processedData.testCases;
-        console.log("test cases are ", testCasesInput);
+        // console.log("test cases are ", testCasesInput);
         let formattedTestCases = [];
         if (Array.isArray(testCasesInput)) {
           formattedTestCases = testCasesInput.map((tc, index) => {
             const { output, keys, ...rest } = tc;
             arguments_in_function_local = keys;
-            console.log("output is ", output);
+            // console.log("output is ", output);
             return {
               id: index,
               status: "pending",
@@ -166,10 +164,10 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
               keys: keys,
             };
           });
-          console.log(
-            "formattedTestCases is looking like this ",
-            formattedTestCases
-          );
+          // console.log(
+          //   "formattedTestCases is looking like this ",
+          //   formattedTestCases
+          // );
         } else if (testCasesInput && typeof testCasesInput === "object") {
           console.warn("Processing potentially older test case structure.");
           formattedTestCases = Object.values(testCasesInput).map(
@@ -210,7 +208,7 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
   }, [selectedLanguage, problem]);
 
   const getDefaultCodeComment = (lang ) => {
-    console.log("lang is ", lang);
+    // console.log("lang is ", lang);
     let objTemplate = "";
     switch (lang) {
       case "python":
@@ -283,15 +281,29 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
     let passCount = 0;
 
     try {
-      const response = await fetch("/api/run-python-test", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          code: code,
-          input: inputsToRun,
-          keys: vps,
-        }),
-      });
+      let response = null;
+      if (selectedLanguage == "python"){
+          response = await fetch("/api/run-python-test", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code: code,
+            input: inputsToRun,
+            keys: vps,
+          }),
+        });
+      }
+      else{
+          response = await fetch("/api/run-test", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code: code,
+            input: inputsToRun,
+            keys: vps,
+          }),
+        });
+      }
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -307,6 +319,7 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
       if (result.error) {
         setConsoleOutput((prev) => prev + `Execution Error:\n${result.error}`);
       } else if (result.results) {
+        // console.log("result response data is ", result.results);
         let outputString = "Execution Finished:\n";
         const updatedTestResults = [...testResults];
 
@@ -352,9 +365,9 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
   function updateContestObject(contest, { sid, qid, kind, marks, username }) {
     // can be more optimised to O(n) , for now it is fine not too slow
     const kindWeight = {
-        easy: 1,
-        medium: 2,
-        hard: 3
+        Easy: 1,
+        Medium: 2,
+        Hard: 3
     };
 
     if (!kindWeight[kind]) {
@@ -365,9 +378,11 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
     if (!participant) {
         throw new Error(`Participant with username "${username}" not found`);
     }
+    console.log("it is fine");
 
     // javascript util function shines 
     let attemptedEntry = participant.attempted.find(attempt => attempt.qid.toString() === qid.toString());
+    console.log("it is fine also");
     if (attemptedEntry) {
         // simple hack
         if (marks > attemptedEntry.marks) {
@@ -387,7 +402,7 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
     participant.curr_score = newScore;
 
     return contest;
-}
+  }
 
 
 
@@ -415,8 +430,9 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
 
     // contest submission will be handled here
     if (_contest_id != null){
-      console.log("problem is " , problem);
-      console.log("contest id is " , _contest_id);
+
+      // console.log("problem is handle submit " , problem);
+      // console.log("contest id is handle submit " , _contest_id);
 
       try {
       
@@ -434,25 +450,48 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
             lang: selectedLanguage,
           }),
         });
-        alert("Code submitted successfully!");
+        // alert("Code submitted successfully!");
         const data = await response.json();
         const submissionId = data._id; 
 
         // fetching contest data 
-        const contest_res = await fetch(`/api/contests/${_contest_id}`); // assuming the server is running on the same domain
-        const oldcontest = await contest_res.json();
-        const marks  = parseInt(passedCount/testResults.length * 100);
+        let new_contest = null;
+        try {
+          const contest_res = await fetch(`/api/contests/${_contest_id}`); // assuming the server is running on the same domain
+          const oldcontest = await contest_res.json();
+          console.log("old contest is ", oldcontest);
+          const marks  = parseInt(passedCount/testResults.length * 100);
 
-        new_contest = updateContestObject(oldcontest , {
-          sid: submissionId,
-          qid: question._id,
-          kind: question.difficulty, 
-          marks: marks,
-          username: user.username
-        })
+          try {
+            new_contest = updateContestObject(oldcontest , {
+              sid: submissionId,
+              qid: problem._id,
+              kind: problem.difficulty, 
+              marks: marks,
+              username: user.username
+            })
+          } catch (error) {
+            console.log("error in updateContestObject fnc is " , error);
+          }
+          try {
+            fetch(`/api/contests/${_contest_id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(new_contest),
+            })
+              .then(res => res.json())
+              .then(data => console.log("Updated contest:", data))
+              .catch(err => console.error("Update failed:", err));
 
-
-        
+            alert("successfully added to the contest")
+    
+          } catch (error) {
+            alert("failed to added to the contest")
+          }
+          console.log("new contest data is ", new_contest);
+        } catch (error) {
+          alert("test cases failed to run");
+        }
 
       } catch (error) {
         alert("test cases failed to run");
@@ -464,6 +503,7 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
 
     }else{
       // normal submission will be handled here.
+      console.log("jsab hfcufy yt jkvsbhc  sgyh hxjhdfsbxdsghhbn ");
     }
 
   
@@ -520,6 +560,7 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
         category: "Array",
         description: {
           header:
+        
             "Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`.\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\nYou can return the answer in any order.",
           example: [
             {
@@ -905,7 +946,7 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
                       <div className={styles.testCaseDetail}>
                         <strong>Input:</strong>
                         <pre>
-                          {console.log("tc.input is ", tc.input)}
+                          {/* {console.log("tc.input is ", tc.input)} */}
                           {tc.input && JSON.stringify(tc.input, null, 2)}
                         </pre>
                       </div>
