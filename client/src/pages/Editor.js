@@ -72,6 +72,35 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
   const [arguments_in_function , setArgumentFunc] = useState("");
   const{ user } = useAuth();
 
+  const [selectedCode, setSelectedCode] = useState(null); // to display code on the right
+  const [loadingSubmissions, setLoadingSubmissions] = useState(false);
+  const [errorSubmissions, setErrorSubmissions] = useState(null);
+  const [submissions, setSubmissions] = useState([]); // Array of submissions
+  const [showSubmissions, setShowSubmissions] = useState(false); // State to toggle submission listconst [showSubmissions, setShowSubmissions] = useState(false);
+
+
+
+  useEffect(() => {
+  if (showSubmissions && user?.username && problemId) {
+    setLoadingSubmissions(true);
+    fetch(`/api/submit/${problemId}?username=${user.username}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch submissions");
+        console.log("res is " , res);
+        return res.json();
+      })
+      .then((data) => {
+        setSubmissions(data);
+        setLoadingSubmissions(false);
+      })
+      .catch((err) => {
+        console.log("error is " , err);
+        setErrorSubmissions(err.message);
+        setLoadingSubmissions(false);
+      });
+  }
+}, [showSubmissions, user?.username, problem?._id]);
+
 
 
   console.log("problem ids are ", problemId);
@@ -363,79 +392,79 @@ const handleSubmitCode = async (inContest = "") => {
     // const data = await response.json();
     // const submissionId = data._id; // Assuming backend returns { _id: '...' }
 
-    if(inContest !== "" && inContest !== null){
+//     if(inContest !== "" && inContest !== null){
 
-      const fetchContestData = async (contestId) => {
-      try {
-        const response = await fetch(`/api/contests/${contestId}`); // assuming the server is running on the same domain
-        const oldcontest = await response.json();
+//       const fetchContestData = async (contestId) => {
+//       try {
+//         const response = await fetch(`/api/contests/${contestId}`); // assuming the server is running on the same domain
+//         const oldcontest = await response.json();
 
-        if (response.ok) {
-          return oldcontest;
-          // Process the contest data as needed
-        } else {
-          console.error('Error fetching contest:', oldcontest.message);
-          return null;
-        }
-      } catch (error) {
-        console.error('Error fetching contest data:', error);
-        return null;
-      }
-    };
+//         if (response.ok) {
+//           return oldcontest;
+//           // Process the contest data as needed
+//         } else {
+//           console.error('Error fetching contest:', oldcontest.message);
+//           return null;
+//         }
+//       } catch (error) {
+//         console.error('Error fetching contest data:', error);
+//         return null;
+//       }
+//     };
 
-      // Call the function with the contestId you want to fetch
-      const oldcontest = fetchContestData(inContest);
-      console.log("old contest is ", oldcontest);
+//       // Call the function with the contestId you want to fetch
+//       const oldcontest = fetchContestData(inContest);
+//       console.log("old contest is ", oldcontest);
 
-      const isJoined = (oldcontest.participants || []).some(
-  participant => participant.username === user?.username
-);
+//       const isJoined = (oldcontest.participants || []).some(
+//   participant => participant.username === user?.username
+// );
 
-      if (isJoined) {
-        const thisMark = parseInt(passedCount/testResults.length * 100);
-        const newAttempt = { qid: problemId, sid: submissionId, marks: thisMark }; // this should be passed in as per your logic
+//       if (isJoined) {
+//         const thisMark = parseInt(passedCount/testResults.length * 100);
+//         const newAttempt = { qid: problemId, sid: submissionId, marks: thisMark }; // this should be passed in as per your logic
 
-        const updatedContest = {
-          ...oldcontest,
-          participants: oldcontest.participants.map(participant => {
-            if (participant.username === user?.username) {
-              let curr_score = participant.curr_score;
-              // Check if the attempt already exists
-              const existingIndex = participant.attempted.findIndex(
-          attempt => attempt.qid === newAttempt.qid && attempt.marks <= newAttempt.marks
-        );
+//         const updatedContest = {
+//           ...oldcontest,
+//           participants: oldcontest.participants.map(participant => {
+//             if (participant.username === user?.username) {
+//               let curr_score = participant.curr_score;
+//               // Check if the attempt already exists
+//               const existingIndex = participant.attempted.findIndex(
+//           attempt => attempt.qid === newAttempt.qid && attempt.marks <= newAttempt.marks
+//         );
 
-              let updatedAttempts = [...participant.attempted];
+//               let updatedAttempts = [...participant.attempted];
 
-              if (existingIndex !== -1) {
-                curr_score -= (attempt.marks)* + newAttempt.marks;
-                // Update sid and marks if attempt with qid exists
-                updatedAttempts[existingIndex] = {
-                  ...updatedAttempts[existingIndex],
-                  sid: newAttempt.sid,
-                  marks: newAttempt.marks,
-                };
-            } else {
+//               if (existingIndex !== -1) {
+//                 curr_score -= (attempt.marks)* + newAttempt.marks;
+//                 // Update sid and marks if attempt with qid exists
+//                 updatedAttempts[existingIndex] = {
+//                   ...updatedAttempts[existingIndex],
+//                   sid: newAttempt.sid,
+//                   marks: newAttempt.marks,
+//                 };
+//             } else {
 
-              // If not already attempted, add it
-              const updatedAttempts = isAlreadyAttempted
-                ? participant.attempted
-                : [...participant.attempted, newAttempt];
+//               // If not already attempted, add it
+//               const updatedAttempts = isAlreadyAttempted
+//                 ? participant.attempted
+//                 : [...participant.attempted, newAttempt];
 
-              let latest_time = Date.now;
+//               let latest_time = Date.now;
 
-              return {
-                ...participant,
-                attempted: updatedAttempts,
-                curr_score,
-                latest_time
-              };
+//               return {
+//                 ...participant,
+//                 attempted: updatedAttempts,
+//                 curr_score,
+//                 latest_time
+//               };
 
-          }
-            return participant;
-          }),
-        };
-}
+//           }
+//             return participant;
+//           }),
+//         };
+// }
 
 
 
@@ -455,7 +484,7 @@ const handleSubmitCode = async (inContest = "") => {
 //   console.log('Updated Contest:', data);
 // });
 
-    }
+    // }
 
     setConsoleOutput(
       (prev) =>
@@ -662,6 +691,30 @@ const handleSubmitCode = async (inContest = "") => {
     >
       {/* Left Panel: Problem Description */}
       <div className={styles.leftPanel}>
+
+
+        <button onClick={() => setShowSubmissions(!showSubmissions)}>Your Submissions</button>
+
+        {/* Place the submission list right below the button */}
+        {showSubmissions && (
+          <div className={styles.submissionList}>
+            {loadingSubmissions && <p>Loading...</p>}
+            {errorSubmissions && <p>Error: {errorSubmissions}</p>}
+            {!loadingSubmissions && submissions.length === 0 && <p>No submissions found.</p>}
+            {!loadingSubmissions &&
+              submissions.map((sub) => (
+                <div
+                  key={sub.id}
+                  className={styles.submissionItem}
+                  onClick={() => setCode(sub.submitted_code)}
+                >
+                  <p><strong>{new Date(sub.date).toLocaleString()}</strong></p>
+                  <p>Status: {sub.result}</p>
+                </div>
+              ))}
+          </div>
+        )}
+
         <h1 className={styles.title}>{problem.title || "Problem Title"}</h1>
         <div className={styles.meta}>
           <span className={`${styles.difficulty} ${difficultyClass}`}>

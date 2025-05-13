@@ -8,7 +8,7 @@ const submissionSchema = new mongoose.Schema({
     },
     question_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Question',   // <-- Reference to Questions model
+        ref: 'Questions',   // <-- Reference to Questions model
         required: true,
     },
     submitted_code: {
