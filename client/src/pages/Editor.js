@@ -504,6 +504,22 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
     }else{
       // normal submission will be handled here.
       console.log("jsab hfcufy yt jkvsbhc  sgyh hxjhdfsbxdsghhbn ");
+      const passedCount = await handleRunCode(false); 
+      const isSuccess = passedCount === testResults.length;
+
+      let response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: user.username,     
+          question_id: problem._id,
+          submitted_code: code,
+          result: isSuccess ? 'Success' : 'Failed',
+          lang: selectedLanguage,
+        }),
+      });
+      alert("Code submitted successfully!");
+
     }
 
   
