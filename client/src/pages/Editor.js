@@ -350,6 +350,7 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
   };
 
   function updateContestObject(contest, { sid, qid, kind, marks, username }) {
+    // can be more optimised to O(n) , for now it is fine not too slow
     const kindWeight = {
         easy: 1,
         medium: 2,
@@ -360,27 +361,23 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
         throw new Error(`Invalid kind: ${kind}`);
     }
 
-    // Find the participant
     const participant = contest.participants.find(p => p.username === username);
     if (!participant) {
         throw new Error(`Participant with username "${username}" not found`);
     }
 
-    // Find attempted entry
+    // javascript util function shines 
     let attemptedEntry = participant.attempted.find(attempt => attempt.qid.toString() === qid.toString());
-
     if (attemptedEntry) {
-        // Update only if new marks are greater
+        // simple hack
         if (marks > attemptedEntry.marks) {
             attemptedEntry.marks = marks;
             attemptedEntry.sid = sid;
         }
     } else {
-        // Add new attempt entry
         participant.attempted.push({ qid, sid, kind, marks });
     }
 
-    // Recalculate curr_score
     let newScore = 0;
     for (const attempt of participant.attempted) {
         const weight = kindWeight[attempt.kind];
