@@ -16,6 +16,10 @@ const AttemptedSchema = new mongoose.Schema({
     marks: {
         type: Number,
         default: 0
+    },
+    kind: {
+        type: String,
+        required: true
     }
 }, { _id: false });
 

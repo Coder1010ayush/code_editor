@@ -257,258 +257,220 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
     setIsWhiteMode((prevMode) => !prevMode);
   };
 
-const handleRunCode = async (limit = true) => {
-  if (!problem) {
-    setConsoleOutput("Cannot run: Problem data is not loaded.");
-    setActiveTab("console");
-    return 0;
-  }
-
-  const totalInputs = testResults.map((result) => result.input);
-  const vps = testResults[0]?.keys;
-
-  if (!totalInputs) {
-    setConsoleOutput("No input available from test cases to run.");
-    setActiveTab("console");
-    return 0;
-  }
-
-  const inputsToRun = limit ? totalInputs.slice(0, 3) : totalInputs;
-
-  setConsoleOutput(
-    `Running code with input:\n${JSON.stringify(inputsToRun)}\n...\n`
-  );
-  setActiveTab("console");
-
-  let passCount = 0;
-
-  try {
-    const response = await fetch("/api/run-python-test", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        code: code,
-        input: inputsToRun,
-        keys: vps,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        `Server error: ${response.status} - ${
-          errorData?.message || "Failed to run code on server."
-        }`
-      );
+  const handleRunCode = async (limit = true) => {
+    if (!problem) {
+      setConsoleOutput("Cannot run: Problem data is not loaded.");
+      setActiveTab("console");
+      return 0;
     }
 
-    const result = await response.json();
+    const totalInputs = testResults.map((result) => result.input);
+    const vps = testResults[0]?.keys;
 
-    if (result.error) {
-      setConsoleOutput((prev) => prev + `Execution Error:\n${result.error}`);
-    } else if (result.results) {
-      let outputString = "Execution Finished:\n";
-      const updatedTestResults = [...testResults];
+    if (!totalInputs) {
+      setConsoleOutput("No input available from test cases to run.");
+      setActiveTab("console");
+      return 0;
+    }
 
-      result.results.forEach((testResult, index) => {
-        const expected = testResults[index]?.expected;
-        const actual = testResult.actualOutput;
+    const inputsToRun = limit ? totalInputs.slice(0, 3) : totalInputs;
 
-        const passed = JSON.stringify(actual) === JSON.stringify(expected);
-        if (passed) passCount++;
+    setConsoleOutput(
+      `Running code with input:\n${JSON.stringify(inputsToRun)}\n...\n`
+    );
+    setActiveTab("console");
 
-        updatedTestResults[index].status = passed ? "passed" : "failed";
+    let passCount = 0;
 
-        outputString += `\nTest Case ${index + 1}:\n`;
-        if(limit){
-        outputString += `  Input: ${JSON.stringify(testResult.input, null, 2)}\n`;
-        outputString += `  Expected: ${JSON.stringify(expected, null, 2)}\n`;
-        outputString += `  Actual: ${JSON.stringify(actual, null, 2)}\n`;
-        }
-        outputString += `  Status: ${passed ? "✅ Passed" : "❌ Failed"}\n`;
+    try {
+      const response = await fetch("/api/run-python-test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: code,
+          input: inputsToRun,
+          keys: vps,
+        }),
       });
 
-      setTestResults(updatedTestResults);
-      setConsoleOutput((prev) => prev + outputString);
-    } else {
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          `Server error: ${response.status} - ${
+            errorData?.message || "Failed to run code on server."
+          }`
+        );
+      }
+
+      const result = await response.json();
+
+      if (result.error) {
+        setConsoleOutput((prev) => prev + `Execution Error:\n${result.error}`);
+      } else if (result.results) {
+        let outputString = "Execution Finished:\n";
+        const updatedTestResults = [...testResults];
+
+        result.results.forEach((testResult, index) => {
+          const expected = testResults[index]?.expected;
+          const actual = testResult.actualOutput;
+
+          const passed = JSON.stringify(actual) === JSON.stringify(expected);
+          if (passed) passCount++;
+
+          updatedTestResults[index].status = passed ? "passed" : "failed";
+
+          outputString += `\nTest Case ${index + 1}:\n`;
+          if(limit){
+          outputString += `  Input: ${JSON.stringify(testResult.input, null, 2)}\n`;
+          outputString += `  Expected: ${JSON.stringify(expected, null, 2)}\n`;
+          outputString += `  Actual: ${JSON.stringify(actual, null, 2)}\n`;
+          }
+          outputString += `  Status: ${passed ? "✅ Passed" : "❌ Failed"}\n`;
+        });
+
+        setTestResults(updatedTestResults);
+        setConsoleOutput((prev) => prev + outputString);
+      } else {
+        setConsoleOutput(
+          (prev) =>
+            prev +
+            `Execution Finished:\nUnexpected result format: ${JSON.stringify(result)}`
+        );
+      }
+    } catch (err) {
+      console.error("Run Error:", err);
       setConsoleOutput(
         (prev) =>
           prev +
-          `Execution Finished:\nUnexpected result format: ${JSON.stringify(result)}`
+          `Execution Error:\n${err.message || "Failed to communicate with the server."}`
       );
     }
-  } catch (err) {
-    console.error("Run Error:", err);
-    setConsoleOutput(
-      (prev) =>
-        prev +
-        `Execution Error:\n${err.message || "Failed to communicate with the server."}`
-    );
-  }
 
-  return passCount;
-};
+    return passCount;
+  };
+
+  function updateContestObject(contest, { sid, qid, kind, marks, username }) {
+    const kindWeight = {
+        easy: 1,
+        medium: 2,
+        hard: 3
+    };
+
+    if (!kindWeight[kind]) {
+        throw new Error(`Invalid kind: ${kind}`);
+    }
+
+    // Find the participant
+    const participant = contest.participants.find(p => p.username === username);
+    if (!participant) {
+        throw new Error(`Participant with username "${username}" not found`);
+    }
+
+    // Find attempted entry
+    let attemptedEntry = participant.attempted.find(attempt => attempt.qid.toString() === qid.toString());
+
+    if (attemptedEntry) {
+        // Update only if new marks are greater
+        if (marks > attemptedEntry.marks) {
+            attemptedEntry.marks = marks;
+            attemptedEntry.sid = sid;
+        }
+    } else {
+        // Add new attempt entry
+        participant.attempted.push({ qid, sid, kind, marks });
+    }
+
+    // Recalculate curr_score
+    let newScore = 0;
+    for (const attempt of participant.attempted) {
+        const weight = kindWeight[attempt.kind];
+        newScore += (attempt.marks * weight) / 100;
+    }
+
+    participant.curr_score = newScore;
+
+    return contest;
+}
 
 
 
-const handleSubmitCode = async (inContest = "") => {
-  if (!problem || !testResults || testResults.length === 0) {
-    setConsoleOutput("Cannot submit: Problem data or test cases are missing.");
-    setError("Cannot submit: Problem data or test cases are missing.");
-    setActiveTab("console");
-    return;
-  }
+  const handleSubmitCode = async () => {
+    if (!problem || !testResults || testResults.length === 0) {
+      setConsoleOutput("Cannot submit: Problem data or test cases are missing.");
+      setError("Cannot submit: Problem data or test cases are missing.");
+      setActiveTab("console");
+      return;
+    }
 
-  console.log("Submitting code:", selectedLanguage, code);
-  setConsoleOutput("Submitting code and running test cases...\n");
-  setActiveTab("testcase");
+    // setting up test cases and tab setup here 
+    // console.log("Submitting code:", selectedLanguage, code);
+    setConsoleOutput("Submitting code and running test cases...\n");
+    setActiveTab("testcase");
 
-  const runningTests = testResults.map((tc) => ({
-    ...tc,
-    status: "running",
-    output: "Running...",
-  }));
-  setTestResults(runningTests);
+    const runningTests = testResults.map((tc) => ({
+      ...tc,
+      status: "running",
+      output: "Running...",
+    }));
+    setTestResults(runningTests);
 
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 500));
     
-    const passedCount = await handleRunCode(false); // full test run
-    const isSuccess = passedCount === testResults.length;
 
-    // // Send to backend
-    // await fetch('/api/submit', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({
-    //     username: user.username,     // make sure currentUser is defined
-    //     question_id: problem._id,
-    //     submitted_code: code,
-    //     result: isSuccess ? 'Success' : 'Failed',
-    //     lang: selectedLanguage,
-    //   }),
-    // });
-    // alert("Code submitted successfully!");
-    // const data = await response.json();
-    // const submissionId = data._id; // Assuming backend returns { _id: '...' }
+    // contest submission will be handled here
+    if (_contest_id != null){
+      console.log("problem is " , problem);
+      console.log("contest id is " , _contest_id);
 
-//     if(inContest !== "" && inContest !== null){
+      try {
+      
+        const passedCount = await handleRunCode(false); 
+        const isSuccess = passedCount === testResults.length;
 
-//       const fetchContestData = async (contestId) => {
-//       try {
-//         const response = await fetch(`/api/contests/${contestId}`); // assuming the server is running on the same domain
-//         const oldcontest = await response.json();
+        let response = await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: user.username,     
+            question_id: problem._id,
+            submitted_code: code,
+            result: isSuccess ? 'Success' : 'Failed',
+            lang: selectedLanguage,
+          }),
+        });
+        alert("Code submitted successfully!");
+        const data = await response.json();
+        const submissionId = data._id; 
 
-//         if (response.ok) {
-//           return oldcontest;
-//           // Process the contest data as needed
-//         } else {
-//           console.error('Error fetching contest:', oldcontest.message);
-//           return null;
-//         }
-//       } catch (error) {
-//         console.error('Error fetching contest data:', error);
-//         return null;
-//       }
-//     };
+        // fetching contest data 
+        const contest_res = await fetch(`/api/contests/${_contest_id}`); // assuming the server is running on the same domain
+        const oldcontest = await contest_res.json();
+        const marks  = parseInt(passedCount/testResults.length * 100);
 
-//       // Call the function with the contestId you want to fetch
-//       const oldcontest = fetchContestData(inContest);
-//       console.log("old contest is ", oldcontest);
+        new_contest = updateContestObject(oldcontest , {
+          sid: submissionId,
+          qid: question._id,
+          kind: question.difficulty, 
+          marks: marks,
+          username: user.username
+        })
 
-//       const isJoined = (oldcontest.participants || []).some(
-//   participant => participant.username === user?.username
-// );
 
-//       if (isJoined) {
-//         const thisMark = parseInt(passedCount/testResults.length * 100);
-//         const newAttempt = { qid: problemId, sid: submissionId, marks: thisMark }; // this should be passed in as per your logic
+        
 
-//         const updatedContest = {
-//           ...oldcontest,
-//           participants: oldcontest.participants.map(participant => {
-//             if (participant.username === user?.username) {
-//               let curr_score = participant.curr_score;
-//               // Check if the attempt already exists
-//               const existingIndex = participant.attempted.findIndex(
-//           attempt => attempt.qid === newAttempt.qid && attempt.marks <= newAttempt.marks
-//         );
-
-//               let updatedAttempts = [...participant.attempted];
-
-//               if (existingIndex !== -1) {
-//                 curr_score -= (attempt.marks)* + newAttempt.marks;
-//                 // Update sid and marks if attempt with qid exists
-//                 updatedAttempts[existingIndex] = {
-//                   ...updatedAttempts[existingIndex],
-//                   sid: newAttempt.sid,
-//                   marks: newAttempt.marks,
-//                 };
-//             } else {
-
-//               // If not already attempted, add it
-//               const updatedAttempts = isAlreadyAttempted
-//                 ? participant.attempted
-//                 : [...participant.attempted, newAttempt];
-
-//               let latest_time = Date.now;
-
-//               return {
-//                 ...participant,
-//                 attempted: updatedAttempts,
-//                 curr_score,
-//                 latest_time
-//               };
-
-//           }
-//             return participant;
-//           }),
-//         };
-// }
+      } catch (error) {
+        alert("test cases failed to run");
+      }
 
 
 
-//       await fetch()
-//       await fetch(`/api/update-contest/${inContest}`, {
-//       method: 'POST',
-//       headers: {
-//       'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify({
-//       status: 'closed',
-//       'descr.rules.0': 'New rule text',
-//     })
-// })
-// .then(res => res.json())
-// .then(data => {
-//   console.log('Updated Contest:', data);
-// });
 
-    // }
 
-    setConsoleOutput(
-      (prev) =>
-        prev + `\nPrivate Testcases Passed: ${passedCount}/${testResults.length}\n`
-    );
-  } catch (err) {
-    console.error("Submit Error:", err);
-    setConsoleOutput(
-      (prev) =>
-        prev + `Submission Error:\n${err.message || "Failed to submit code."}`
-    );
-    setTestResults((prev) =>
-      prev.map((tc) =>
-        tc.status === "running"
-          ? {
-              ...tc,
-              status: "error",
-              output: `Submission failed: ${err.message}`,
-            }
-          : tc
-      )
-    );
-  }
-};
+    }else{
+      // normal submission will be handled here.
+    }
+
+  
+  };
 
 
 
@@ -713,26 +675,11 @@ const handleSubmitCode = async (inContest = "") => {
         {/* Place the submission list right below the button */}
         {showSubmissions && (
           <div className={styles.submissionList}>
-
-            {/* {loadingSubmissions && <p>Loading...</p>}
-            {errorSubmissions && <p>Error: {errorSubmissions}</p>}
-            {!loadingSubmissions && submissions.length === 0 && <p>No submissions found.</p>}
-            {!loadingSubmissions &&
-              submissions.map((sub) => (
-                <div
-                  key={sub.id}
-                  className={styles.submissionItem}
-                  onClick={() => setCode(sub.submitted_code)}
-                >
-                  <p><strong>{new Date(sub.date).toLocaleString()}</strong></p>
-                  <p>Status: {sub.result}</p>
-                </div>
-              ))} */}
       
             {!loadingSubmissions &&
               submissions.map((sub) => (
                 <div
-                  key={sub._id} // Use sub._id as the key
+                  key={sub._id} 
                   className={styles.submissionItem}
                   onClick={() => {
                     setSelectedLanguage(sub.lang)
@@ -740,11 +687,8 @@ const handleSubmitCode = async (inContest = "") => {
                     }
                   }
                 >
-                  {/* Use the correct field name: sub.timestamp */}
                   <p><strong>{new Date(sub.timestamp).toLocaleString()}</strong></p>
                   <p>Status: {sub.result}</p>
-                  {/* You could also display language if you want */}
-                  {/* <p>Language: {sub.lang}</p> */}
                 </div>
               ))}
 
@@ -1025,7 +969,7 @@ const handleSubmitCode = async (inContest = "") => {
             </button>
             <button
               className={`${styles.button} ${styles.submitButton}`}
-              onClick={() => handleSubmitCode(_contest_id)}
+              onClick={() => handleSubmitCode()}
               disabled={
                 loading || !problem || !testResults || testResults.length === 0
               }
