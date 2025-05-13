@@ -81,25 +81,25 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
 
 
   useEffect(() => {
-  if (showSubmissions && user?.username && problemId) {
-    setLoadingSubmissions(true);
-    fetch(`/api/submit/${problemId}?username=${user.username}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch submissions");
-        console.log("res is " , res);
-        return res.json();
-      })
-      .then((data) => {
-        setSubmissions(data);
-        setLoadingSubmissions(false);
-      })
-      .catch((err) => {
-        console.log("error is " , err);
-        setErrorSubmissions(err.message);
-        setLoadingSubmissions(false);
-      });
-  }
-}, [showSubmissions, user?.username, problem?._id]);
+    if (showSubmissions && user?.username && problemId) {
+      setLoadingSubmissions(true);
+      fetch(`/api/submit/${problemId}?username=${user.username}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to fetch submissions");
+          console.log("res is " , res);
+          return res.json();
+        })
+        .then((data) => {
+          setSubmissions(data);
+          setLoadingSubmissions(false);
+        })
+        .catch((err) => {
+          console.log("error found " , err);
+          setErrorSubmissions(err.message);
+          setLoadingSubmissions(false);
+        });
+    }
+  }, [showSubmissions, user?.username, problem?._id]);
 
 
 
@@ -693,12 +693,28 @@ const handleSubmitCode = async (inContest = "") => {
       <div className={styles.leftPanel}>
 
 
-        <button onClick={() => setShowSubmissions(!showSubmissions)}>Your Submissions</button>
+      <button
+        onClick={() => setShowSubmissions(!showSubmissions)}
+        style={{
+          padding: '10px 20px', // Add padding
+          backgroundColor: '#007bff', // A pleasant blue background
+          color: 'white', // White text color
+          border: 'none', // Remove default border
+          borderRadius: '5px', // Slightly rounded corners
+          cursor: 'pointer', // Show pointer cursor on hover
+          fontSize: '16px', // Slightly larger font
+          margin: '10px 0', // Add some margin top and bottom
+          // Add more styles as you like!
+        }}
+      >
+        Your Submissions
+      </button>
 
         {/* Place the submission list right below the button */}
         {showSubmissions && (
           <div className={styles.submissionList}>
-            {loadingSubmissions && <p>Loading...</p>}
+
+            {/* {loadingSubmissions && <p>Loading...</p>}
             {errorSubmissions && <p>Error: {errorSubmissions}</p>}
             {!loadingSubmissions && submissions.length === 0 && <p>No submissions found.</p>}
             {!loadingSubmissions &&
@@ -711,7 +727,27 @@ const handleSubmitCode = async (inContest = "") => {
                   <p><strong>{new Date(sub.date).toLocaleString()}</strong></p>
                   <p>Status: {sub.result}</p>
                 </div>
+              ))} */}
+      
+            {!loadingSubmissions &&
+              submissions.map((sub) => (
+                <div
+                  key={sub._id} // Use sub._id as the key
+                  className={styles.submissionItem}
+                  onClick={() => {
+                    setSelectedLanguage(sub.lang)
+                    setCode(sub.submitted_code)
+                    }
+                  }
+                >
+                  {/* Use the correct field name: sub.timestamp */}
+                  <p><strong>{new Date(sub.timestamp).toLocaleString()}</strong></p>
+                  <p>Status: {sub.result}</p>
+                  {/* You could also display language if you want */}
+                  {/* <p>Language: {sub.lang}</p> */}
+                </div>
               ))}
+
           </div>
         )}
 

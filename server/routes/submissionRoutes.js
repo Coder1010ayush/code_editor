@@ -24,17 +24,29 @@ router.post('/', async (req, res) => {
 });
 
 router.get("/:problemId", async (req, res) => {
-  const problemId = new mongoose.Types.ObjectId(req.params.problemId);
-  const { username } = req.query;
-  console.log("Fetching submissions for problemId:", problemId, "and username:", username);
+  try { 
+    const problemId = new mongoose.Types.ObjectId(req.params.problemId); 
+    const { username } = req.query;
 
-  const submissions = await Submission.find({
-    problemId,
-    username,
-  }).sort({ date: -1 }); // newest first
+    console.log("Fetching submissions for question_id:", problemId, "and username:", username);
 
-  console.log("Submissions:", submissions);
-  res.json(submissions);
+    const submissions = await Submission.find({
+      question_id: problemId,
+      username: username,
+    })
+    .sort({ timestamp: -1 }); 
+    console.log(`Found ${submissions.length} submissions.`); 
+    console.log(`Sumbmissions are ${submissions}`);
+
+    res.json(submissions);
+  } catch (error) {
+    console.error("Error fetching submissions:", error);
+    if (error.name === 'BSONTypeError') {
+         res.status(400).json({ message: "Invalid Problem ID format" });
+    } else {
+         res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
 });
 
 
