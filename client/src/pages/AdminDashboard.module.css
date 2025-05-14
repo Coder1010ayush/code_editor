@@ -1,63 +1,193 @@
-/* pages/AdminDashboard.module.css */
+/* AdminDashboard.module.css */
+
+/* Theme variables are expected to be defined globally for light/dark modes */
 
 .dashboardContainer {
-    max-width: 900px; /* Limit the width for better readability */
-    margin: 40px auto; /* Center the container */
-    padding: 30px;
-    background-color: #ffffff; /* White background */
-    border-radius: 12px; /* Slightly rounded corners for the container */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Subtle shadow */
-    font-family: sans-serif; /* Use a common sans-serif font */
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 50px 60px;
+    background: linear-gradient(135deg, var(--bg-color) 0%, var(--container-bg) 100%);
+    color: var(--text-color);
+    border-radius: 28px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 55px;
+    transition: background 0.5s ease, color 0.5s ease, box-shadow 0.5s ease;
+    animation: fadeInUp 1s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header {
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-align: center;
+    color: var(--primary-color);
+    letter-spacing: -1.2px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.header::after {
+    content: "";
+    display: block;
+    width: 140px;
+    height: 6px;
+    background: linear-gradient(90deg, #7b2ff7, #f107a3);
+    margin: 20px auto 0;
+    border-radius: 3px;
 }
 
 .userInfo {
-    display: flex; /* Arrange image and name side-by-side */
-    align-items: center; /* Vertically align items */
-    padding-bottom: 20px; /* Space below user info */
-    margin-bottom: 30px; /* Space before options list */
-    border-bottom: 1px solid #eee; /* Separator line */
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid var(--filter-border);
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.userInfo:hover {
+    background-color: var(--filter-bg);
 }
 
 .avatar {
-    width: 80px; /* Size of the image */
-    height: 80px;
-    border-radius: 50%; /* Make it round */
-    object-fit: cover; /* Crop image to fit without distortion */
-    margin-right: 20px; /* Space between image and name */
-    border: 3px solid #0070f3; /* Add a small border with a brand color */
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--primary-color);
+    box-shadow: 0 8px 30px rgba(123, 47, 247, 0.35);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 40px rgba(241, 7, 163, 0.6);
 }
 
 .userName h2 {
-    margin: 0; /* Remove default margin from h2 */
-    font-size: 1.8em; /* Larger font for name */
-    color: #333; /* Darker text color */
+    font-size: 2.8rem;
+    font-weight: 900;
+    margin: 0;
+    color: var(--text-color);
+    letter-spacing: -0.8px;
 }
 
+/* Options List */
 .optionsList {
-    display: grid; /* Use grid for flexible layout */
-    gap: 20px; /* Space between grid items */
-    /* You can adjust columns based on preference or screen size */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
-    list-style: none; /* Remove default list bullets */
-    padding: 0; /* Remove default padding */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 35px;
+    padding: 0;
+    list-style: none;
 }
 
 .optionItem {
-    background-color: #f9f9f9; /* Light background for each option */
-    padding: 20px;
-    border-radius: 8px; /* Rounded corners for options */
-    border: 1px solid #ddd; /* Subtle border */
-    cursor: pointer; /* Indicate it's clickable */
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transition for hover effects */
-    text-align: center; /* Center the text */
-    font-size: 1.1em;
-    color: #555;
-    font-weight: 600;
+    background: linear-gradient(145deg, var(--container-bg), var(--container-bg));
+    border-radius: 20px;
+    padding: 30px 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    transition: box-shadow 0.4s ease, transform 0.3s ease;
+    user-select: none;
+    border: none;
+    outline: none;
 }
 
-.optionItem:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* More prominent shadow on hover */
-    background-color: #eef; /* Slightly different background on hover */
-    color: #005bb5; /* Change text color on hover */
+.optionItem:hover,
+.optionItem:focus {
+    box-shadow: 0 18px 50px rgba(123, 47, 247, 0.3);
+    transform: translateY(-8px);
+    outline: none;
+    position: relative;
+    z-index: 1;
+}
+
+.optionItem:focus-visible {
+    outline: 4px solid #f107a3;
+    outline-offset: 4px;
+}
+
+.optionIcon {
+    font-size: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 1000px) {
+    .dashboardContainer {
+        padding: 35px 30px;
+        max-width: 95%;
+    }
+
+    .header {
+        font-size: 2.8rem;
+        margin-bottom: 30px;
+    }
+
+    .userInfo {
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+        padding: 30px 0;
+    }
+
+    .avatar {
+        width: 95px;
+        height: 95px;
+    }
+
+    .userName h2 {
+        font-size: 2.2rem;
+        text-align: center;
+    }
+
+    .optionsList {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .optionItem {
+        font-size: 1.3rem;
+        padding: 25px 20px;
+    }
+}
+
+/* Dark mode specific enhancements */
+body.dark .dashboardContainer {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    box-shadow: 0 18px 60px rgba(241, 7, 163, 0.9);
+    border: 1px solid rgba(241, 7, 163, 0.5);
+}
+
+body.dark .optionItem {
+    box-shadow: 0 14px 40px rgba(241, 7, 163, 0.5);
+    transition: box-shadow 0.4s ease;
+}
+
+body.dark .optionItem:hover,
+body.dark .optionItem:focus {
+    box-shadow: 0 30px 80px rgba(241, 7, 163, 1);
 }
