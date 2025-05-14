@@ -19,6 +19,24 @@ A full-stack web-based code editor platform built with a React frontend and a No
 
 ---
 
+## Code Structure
+.
+├── client/                 # React frontend
+│   ├── components/         # Shared components (Navbar, Login, etc.)
+│   ├── context/            # Auth context
+│   ├── pages/              # All route-based pages (Dashboard, Editor, Contest, etc.)
+│   ├── services/           # API service functions
+│   ├── App.js              # Entry point for React
+│   └── index.js
+├── server/
+│   ├── models/             # Mongoose models (User, Contest, Submission, etc.)
+│   ├── controllers/        # Business logic for routes
+│   ├── routes/             # Express routes (auth, contests, problems, submissions)
+│   ├── middleware/         # Custom middleware (auth checks, error handlers)
+│   └── server.js           # Main entry point for Express server
+|   |_____ tests              # this contain all the test cases for api routing
+
+
 ## Getting Started
 
 ### 1. Clone the repository
