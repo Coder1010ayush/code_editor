@@ -49,5 +49,18 @@ router.get("/:problemId", async (req, res) => {
   }
 });
 
+router.get("/user/:username", async (req, res) => {
+  try {
+    const { username } = req.params;
 
+    console.log(`Fetching all submissions for username: ${username}`);
+
+    const submissions = await Submission.find({ username }).sort({ timestamp: -1 });
+
+    res.json(submissions);
+  } catch (error) {
+    console.error("Error fetching submissions by username:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 module.exports = router;

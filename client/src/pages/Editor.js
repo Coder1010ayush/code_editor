@@ -72,11 +72,11 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
   const [arguments_in_function , setArgumentFunc] = useState("");
   const{ user } = useAuth();
 
-  const [selectedCode, setSelectedCode] = useState(null); // to display code on the right
+  const [selectedCode, setSelectedCode] = useState(null); 
   const [loadingSubmissions, setLoadingSubmissions] = useState(false);
   const [errorSubmissions, setErrorSubmissions] = useState(null);
-  const [submissions, setSubmissions] = useState([]); // Array of submissions
-  const [showSubmissions, setShowSubmissions] = useState(false); // State to toggle submission listconst [showSubmissions, setShowSubmissions] = useState(false);
+  const [submissions, setSubmissions] = useState([]); 
+  const [showSubmissions, setShowSubmissions] = useState(false); 
 
 
 
@@ -89,7 +89,8 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
           return res.json();
         })
         .then((data) => {
-          setSubmissions(data);
+          const latest = data?.[0]; 
+          setSubmissions(latest ? [latest] : []); 
           setLoadingSubmissions(false);
         })
         .catch((err) => {
@@ -97,11 +98,8 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
           setLoadingSubmissions(false);
         });
     }
-  }, [showSubmissions, user?.username, problem?._id]);
-
-
-
-  // console.log("problem ids are ", problemId);
+  }, [showSubmissions, user?.username, problemId]);
+  
 
   useEffect(() => {
     if (!problemId) {
@@ -121,12 +119,6 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
     const fetchProblem = async () => {
       try {
         const res = await fetch(`/api/problems/${problemId}`);
-        // await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
-        // const mockData = getMockProblemData(problemId);
-        // if (!mockData) {
-        //      throw new Error('Problem not found (Mock).');
-        // }
-        // const data = res; // Use mock data
 
         if (!res.ok) {
           if (res.status === 404) {
@@ -164,10 +156,7 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
               keys: keys,
             };
           });
-          // console.log(
-          //   "formattedTestCases is looking like this ",
-          //   formattedTestCases
-          // );
+
         } else if (testCasesInput && typeof testCasesInput === "object") {
           console.warn("Processing potentially older test case structure.");
           formattedTestCases = Object.values(testCasesInput).map(
@@ -208,7 +197,6 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
   }, [selectedLanguage, problem]);
 
   const getDefaultCodeComment = (lang ) => {
-    // console.log("lang is ", lang);
     let objTemplate = "";
     switch (lang) {
       case "python":
@@ -225,7 +213,7 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
         objTemplate = "// Write your Javascript code here\n";
         if (arguments_in_function != ""  && arguments_in_function != null){
           const args = arguments_in_function.join(', ');
-          objTemplate = `function server_side_runner(${args}):\n\t// Write your Javascript code here\n`;
+          objTemplate = `function server_side_runner(${args}){\n\t// Write your Javascript code here\n}`;
 
         }
         return objTemplate;
@@ -319,7 +307,6 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
       if (result.error) {
         setConsoleOutput((prev) => prev + `Execution Error:\n${result.error}`);
       } else if (result.results) {
-        // console.log("result response data is ", result.results);
         let outputString = "Execution Finished:\n";
         const updatedTestResults = [...testResults];
 
@@ -415,7 +402,6 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
     }
 
     // setting up test cases and tab setup here 
-    // console.log("Submitting code:", selectedLanguage, code);
     setConsoleOutput("Submitting code and running test cases...\n");
     setActiveTab("testcase");
 
@@ -425,17 +411,9 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
       output: "Running...",
     }));
     setTestResults(runningTests);
-
-    
-
     // contest submission will be handled here
     if (_contest_id != null){
-
-      // console.log("problem is handle submit " , problem);
-      // console.log("contest id is handle submit " , _contest_id);
-
       try {
-      
         const passedCount = await handleRunCode(false); 
         const isSuccess = passedCount === testResults.length;
 
@@ -450,14 +428,14 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
             lang: selectedLanguage,
           }),
         });
-        // alert("Code submitted successfully!");
+        alert("Code submitted successfully!");
         const data = await response.json();
         const submissionId = data._id; 
 
         // fetching contest data 
         let new_contest = null;
         try {
-          const contest_res = await fetch(`/api/contests/${_contest_id}`); // assuming the server is running on the same domain
+          const contest_res = await fetch(`/api/contests/${_contest_id}`); 
           const oldcontest = await contest_res.json();
           console.log("old contest is ", oldcontest);
           const marks  = parseInt(passedCount/testResults.length * 100);
@@ -497,10 +475,6 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
         alert("test cases failed to run");
       }
 
-
-
-
-
     }else{
       // normal submission will be handled here.
       console.log("jsab hfcufy yt jkvsbhc  sgyh hxjhdfsbxdsghhbn ");
@@ -521,138 +495,8 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
       alert("Code submitted successfully!");
 
     }
-
+  };
   
-  };
-
-
-
-
-
-  const runMockTests = async (userCode, tests) => {
-    const results = [];
-    for (const testCase of tests) {
-      await new Promise((resolve) =>
-        setTimeout(resolve, 200 + Math.random() * 300)
-      );
-
-      let status = "failed";
-      let output = `Mock Output for Input: ${testCase.input?.substring(
-        0,
-        30
-      )}...`;
-
-      if (testCase.expected) {
-        if (Math.random() > 0.35) {
-          status = "passed";
-          output = testCase.expected;
-        } else {
-          status = "failed";
-          output = `Wrong Answer. Got: "${testCase.expected
-            .split("")
-            .reverse()
-            .join("")
-            .substring(0, 15)}..."`;
-        }
-      } else {
-        status = "passed";
-        output = "Execution Completed (No specific output check)";
-      }
-
-      results.push({
-        ...testCase,
-        status: status,
-        output: output,
-      });
-    }
-    return results;
-  };
-  const getMockProblemData = (id) => {
-    const problems = {
-      1: {
-        _id: "1",
-        title: "Two Sum",
-        difficulty: "Easy",
-        category: "Array",
-        description: {
-          header:
-        
-            "Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`.\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\nYou can return the answer in any order.",
-          example: [
-            {
-              input: "nums = [2, 7, 11, 15], target = 9",
-              output: "[0, 1]",
-              explanation: "Because nums[0] + nums[1] == 9, we return [0, 1].",
-            },
-            { input: "nums = [3, 2, 4], target = 6", output: "[1, 2]" },
-            { input: "nums = [3, 3], target = 6", output: "[0, 1]" },
-          ],
-          constraints:
-            "2 <= nums.length <= 10^4\n-10^9 <= nums[i] <= 10^9\n-10^9 <= target <= 10^9\nOnly one valid answer exists.",
-          extra:
-            "Follow-up: Can you come up with an algorithm that is less than O(n^2) time complexity?",
-        },
-        defaultCode: {
-          javascript:
-            "// Write your JavaScript code here\nfunction twoSum(nums, target) {\n\n};",
-          python:
-            "# Write your Python code here\ndef twoSum(nums, target):\n    pass\n",
-          "c++":
-            "// Write your C++ code here\n#include <vector>\n#include <unordered_map>\n\nstd::vector<int> twoSum(std::vector<int>& nums, int target) {\n    \n}\n",
-        },
-        testCases: [
-          // Example test cases structure
-          {
-            input: "nums = [2, 7, 11, 15], target = 9",
-            expectedOutput: "[0, 1]",
-          },
-          { input: "nums = [3, 2, 4], target = 6", expectedOutput: "[1, 2]" },
-          {
-            input: "nums = [-1, -3, 5, 10], target = 4",
-            expectedOutput: "[0, 2]",
-          },
-          { input: "nums = [0, 0], target = 0", expectedOutput: "[0, 1]" },
-        ],
-      },
-      2: {
-        _id: "2",
-        title: "Add Two Numbers",
-        difficulty: "Medium",
-        category: "Linked List",
-        description: {
-          // Structured description
-          header:
-            "You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.\nYou may assume the two numbers do not contain any leading zero, except the number 0 itself.",
-          example: [
-            {
-              input: "l1 = [2,4,3], l2 = [5,6,4]",
-              output: "[7,0,8]",
-              explanation: "342 + 465 = 807.",
-            },
-            { input: "l1 = [0], l2 = [0]", output: "[0]" },
-            {
-              input: "l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]",
-              output: "[8,9,9,9,0,0,0,1]",
-            },
-          ],
-          constraints:
-            "The number of nodes in each linked list is in the range [1, 100].\n0 <= Node.val <= 9\nIt is guaranteed that the list represents a number that does not have leading zeros.",
-          extra: "",
-        },
-        defaultCode: {
-          javascript: `// Definition for singly-linked list.\n// function ListNode(val, next) {\n//     this.val = (val===undefined ? 0 : val)\n//     this.next = (next===undefined ? null : next)\n// }\n/**\n * @param {ListNode} l1\n * @param {ListNode} l2\n * @return {ListNode}\n */\nvar addTwoNumbers = function(l1, l2) {\n    \n};`,
-          python: `# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\ndef addTwoNumbers(l1, l2):\n    pass`,
-          "c++": `// Definition for singly-linked list.\n// struct ListNode {\n//     int val;\n//     ListNode *next;\n//     ListNode() : val(0), next(nullptr) {}\n//     ListNode(int x) : val(x), next(nullptr) {}\n//     ListNode(int x, ListNode *next) : val(x), next(next) {}\n// };\nclass Solution {\npublic:\n    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {\n        \n    }\n};`,
-        },
-        testCases: [
-          { input: "l1 = [2,4,3], l2 = [5,6,4]", expectedOutput: "[7,0,8]" },
-          { input: "l1 = [0], l2 = [0]", expectedOutput: "[0]" },
-          { input: "l1 = [9,9,9], l2 = [1]", expectedOutput: "[0,0,0,1]" },
-        ],
-      },
-    };
-    return problems[id];
-  };
   if (loading) {
     return (
       <div className={styles.loading}>
@@ -728,24 +572,48 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
 
         {/* Place the submission list right below the button */}
         {showSubmissions && (
-          <div className={styles.submissionList}>
-      
+          <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem', backgroundColor: '#121212' }}>
             {!loadingSubmissions &&
               submissions.map((sub) => (
                 <div
-                  key={sub._id} 
-                  className={styles.submissionItem}
+                  key={sub._id}
                   onClick={() => {
                     setSelectedLanguage(sub.lang)
                     setCode(sub.submitted_code)
-                    }
-                  }
+                  }}
+                  style={{
+                    border: '1px solid #333',
+                    borderRadius: '8px',
+                    padding: '1rem',
+                    backgroundColor: '#1e1e1e',
+                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s, background 0.2s',
+                    color: '#e0e0e0',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#2a2a2a'
+                    e.currentTarget.style.transform = 'scale(1.01)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#1e1e1e'
+                    e.currentTarget.style.transform = 'scale(1)'
+                  }}
                 >
-                  <p><strong>{new Date(sub.timestamp).toLocaleString()}</strong></p>
-                  <p>Status: {sub.result}</p>
+                  <p style={{ margin: 0, fontWeight: 'bold', fontSize: '1rem', color: '#ffffff' }}>
+                    {new Date(sub.timestamp).toLocaleString()}
+                  </p>
+                  <p style={{ margin: '0.5rem 0', color: '#aaaaaa' }}>Language: {sub.lang}</p>
+                  <p
+                    style={{
+                      margin: 0,
+                      color: sub.result === 'Accepted' ? '#4caf50' : '#f44336',
+                    }}
+                  >
+                    Status: {sub.result}
+                  </p>
                 </div>
               ))}
-
           </div>
         )}
 

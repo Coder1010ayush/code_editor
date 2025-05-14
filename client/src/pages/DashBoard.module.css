@@ -383,3 +383,52 @@ body.dark {
         font-size: 0.85rem;
     }
 }
+
+.submissionCards {
+    display: block;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.submissionCard {
+    background-color: #1E1E1E; /* Dark background for cards */
+    border: 1px solid #333; /* Slightly lighter border */
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Darker shadow for contrast */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.submissionCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2); /* Light hover shadow */
+}
+
+.submissionStatus {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #E0E0E0; /* Light gray text */
+}
+
+.successStatus {
+    color: #4CAF50; /* Green for success */
+}
+
+.failStatus {
+    color: #F44336; /* Red for failure */
+}
+
+.submissionCard p {
+    color: #B0B0B0; /* Lighter text color for card contents */
+}
+
+.submissionCard strong {
+    color: #E0E0E0; /* Light gray text for strong labels */
+}
+
+.submissionCard:hover {
+    background-color: #2C2C2C; /* Slightly lighter background on hover */
+}

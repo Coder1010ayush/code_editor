@@ -19,6 +19,7 @@ import ContestPage from "./pages/ContestPage";
 import ContestDetail from "./pages/ContestDetail";
 import PreviousContestPage from "./pages/PreviousContest";
 import LeaderBoard from "./pages/LeaderBoard";
+import SubmissionDetailPage from "./pages/SubmissionDetails";
 
 // Keep DashboardPage and NotFoundPage (or move them to /pages too)
 const NotFoundPage = () => (
@@ -110,6 +111,7 @@ function App() {
 
           <Route path="/previous-contests" element={<PreviousContestPage />} />
           <Route path="/leaderboard" element={<LeaderBoard />} />
+          <Route path="/submission-detail" element={<SubmissionDetailPage />} />
           <Route path="*" element={<Navigate to="/previous-contests" />} />
 
 
