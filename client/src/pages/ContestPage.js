@@ -163,7 +163,7 @@ const ContestPage = () => {
                     filteredContests.map(contest => {
                         // console.log("participants is ", contest)
                         // console.log("usernm is ", user.username)
-                        const isJoined = (contest.participants || []).some(
+                        const isJoined = user.role != "Admin" && (contest.participants || []).some(
                             participant => participant.username === user?.username
                         );
                         

@@ -88,7 +88,10 @@ const DashboardPage = () => {
                     <h3>Community Stats</h3>
                     <ul>
                         <li>Views: <span>0</span></li>
-                        <li>Solutions: <span>{user.no_easy + user.no_med + user.no_hard}</span></li>
+                        <li>Solutions: <span>
+                            {(Number(user.no_easy) || 0) + (Number(user.no_med) || 0) + (Number(user.no_hard) || 0)}
+                            </span>
+                        </li>
                         <li>Discuss: <span>0</span></li>
                         <li>Reputation: <span>0</span></li>
                     </ul>
@@ -123,9 +126,10 @@ const DashboardPage = () => {
                             <span>Solved</span>
                         </div>
                         <div className={styles.levels}>
-                            <p><span className={styles.easy}>Easy:</span> {user.no_easy} / 873</p>
-                            <p><span className={styles.medium}>Medium:</span> {user.no_med} / 1826</p>
-                            <p><span className={styles.hard}>Hard:</span> {user.no_hard} / 822</p>
+                        <p><span className={styles.easy}>Easy:</span> {isNaN(user.no_easy) ? 0 : user.no_easy} / 873</p>
+                        <p><span className={styles.medium}>Medium:</span> {isNaN(user.no_med) ? 0 : user.no_med} / 1826</p>
+                        <p><span className={styles.hard}>Hard:</span> {isNaN(user.no_hard) ? 0 : user.no_hard} / 822</p>
+
                         </div>
                     </div>
                     <div className={styles.badgeCard}>

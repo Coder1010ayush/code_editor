@@ -26,12 +26,11 @@ import {
   faMoon,
 } from "@fortawesome/free-solid-svg-icons";
 
-const supportedLanguages = ["javascript", "python", "c++"];
+const supportedLanguages = ["javascript", "python"];
 
 const languageMap = {
   javascript: "javascript",
   python: "python",
-  "c++": "c_cpp",
 };
 
 const parseDescription = (description) => {
@@ -207,8 +206,8 @@ const CodeEditorPage = ({ problemId: propProblemId , _contest_id }) => {
 
         }
         return objTemplate;
-      case "c++":
-        return "// Write your C++ code here\n";
+      // case "c++":
+      //   return "// Write your C++ code here\n";
       case "javascript":
         objTemplate = "// Write your Javascript code here\n";
         if (arguments_in_function != ""  && arguments_in_function != null){
